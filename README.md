@@ -1,10 +1,4 @@
-# 🔥 Dante's Ad Forge
-
-**The in-house ad machine for Dante's Liquors — Hollywood, FL, inside Sedano's Plaza.**
-
-One HTML file. No installs, no accounts, no design software, no excuses. Open it, drop a bottle photo, and walk out with a finished ad in the full Inferno brand style — same fonts, same colors, same fight-poster attitude, every single time.
-
-**Live tool:** https://premohq.github.io/dantes-ad-forge/
+#  Dante's Ad Forge
 
 ---
 
@@ -60,20 +54,6 @@ Everything is one self-contained `index.html`:
 - Video export uses `canvas.captureStream()` + `MediaRecorder`, trying MP4 codecs first and falling back through VP9/VP8 WebM.
 - GIF export loads gif.js from a CDN on demand and encodes with web workers.
 - Zero backend. Nothing gets uploaded anywhere — photos never leave the browser. What happens in the Forge stays in the Forge.
-
----
-
-## Running It
-
-**Easiest:** use the live GitHub Pages link above. Done.
-
-**Local:** clone the repo and open `index.html` in a browser. That's the whole install.
-
-```
-git clone https://github.com/premohq/dantes-ad-forge.git
-```
-
-Needs an internet connection the first time for Google Fonts and (only if you export a GIF) the gif.js CDN.
 
 ---
 
