@@ -63,6 +63,4 @@ Everything is one self-contained `index.html`:
 - PNG export works everywhere.
 - If a browser can't record video, the Forge tells you instead of pretending. Fuhgeddaboudit and switch to Chrome.
 
----
-
-*Dante's Liquors · 2305 FL-7, Hollywood · Inside Sedano's Plaza*
+---*
