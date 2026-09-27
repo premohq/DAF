@@ -1,0 +1,839 @@
+{
+ "photoDir": "photos",
+ "concepts": [
+  {
+   "id": "01_la-puerta-negra-reposado",
+   "photo": "IMG_6667.JPEG",
+   "p": [
+    620,
+    1400
+   ],
+   "cw": 1330,
+   "crop": {
+    "p45": {
+     "a": [
+      0.5,
+      0.47
+     ]
+    },
+    "sq": {
+     "a": [
+      0.5,
+      0.43
+     ]
+    },
+    "reel": {
+     "a": [
+      0.5,
+      0.5
+     ]
+    },
+    "wide": {
+     "cw": 1330,
+     "a": [
+      0.5,
+      0.42
+     ]
+    }
+   },
+   "badge": "NEW ARRIVAL",
+   "gold": false,
+   "n1": "LA PUERTA NEGRA",
+   "n2": "REPOSADO TEQUILA",
+   "sub": "100% Puro de Agave · 1 Liter bottle",
+   "price": [
+    "14",
+    "99"
+   ],
+   "tag": "1 LITER",
+   "win": {
+    "l1": "NEW! · 1 Liter",
+    "l2": "La Puerta Negra Reposado",
+    "nc": "orange",
+    "pc": "yellow",
+    "p": [
+     640,
+     1150
+    ],
+    "cw": 1330,
+    "box": [
+     180,
+     0,
+     1150,
+     2364
+    ]
+   }
+  },
+  {
+   "id": "02_la-puerta-negra-blanco",
+   "photo": "IMG_6665.JPEG",
+   "p": [
+    620,
+    1450
+   ],
+   "cw": 1330,
+   "crop": {
+    "p45": {
+     "a": [
+      0.5,
+      0.47
+     ]
+    },
+    "sq": {
+     "a": [
+      0.5,
+      0.43
+     ]
+    },
+    "reel": {
+     "a": [
+      0.5,
+      0.5
+     ]
+    },
+    "wide": {
+     "a": [
+      0.5,
+      0.42
+     ]
+    }
+   },
+   "badge": "NEW ARRIVAL",
+   "gold": true,
+   "n1": "LA PUERTA NEGRA",
+   "n2": "BLANCO TEQUILA",
+   "sub": "100% Puro de Agave · 1 Liter bottle",
+   "price": [
+    "13",
+    "99"
+   ],
+   "tag": "1 LITER",
+   "win": {
+    "l1": "NEW! · 1 Liter",
+    "l2": "La Puerta Negra Blanco",
+    "nc": "black",
+    "pc": "lime",
+    "p": [
+     640,
+     1150
+    ],
+    "cw": 1330,
+    "box": [
+     170,
+     0,
+     1140,
+     2364
+    ]
+   }
+  },
+  {
+   "id": "03_la-puerta-negra-duo",
+   "photo": "IMG_6666.JPEG",
+   "p": [
+    560,
+    1420
+   ],
+   "cw": 1330,
+   "crop": {
+    "p45": {},
+    "sq": {},
+    "reel": {},
+    "wide": {}
+   },
+   "badge": "NEW · TWO STYLES",
+   "gold": false,
+   "n1": "LA PUERTA NEGRA",
+   "n2": "REPOSADO + BLANCO",
+   "sub": "Reposado $14.99 · Blanco $13.99",
+   "price": [
+    "13",
+    "99"
+   ],
+   "tag": "FROM",
+   "split": {
+    "halves": [
+     {
+      "photo": "IMG_6667.JPEG",
+      "region": [
+       290,
+       560,
+       970,
+       2300
+      ],
+      "regions": {
+       "reel": [
+        290,
+        0,
+        970,
+        2364
+       ]
+      },
+      "a": [
+       0.5,
+       0.5
+      ]
+     },
+     {
+      "photo": "IMG_6665.JPEG",
+      "region": [
+       300,
+       600,
+       980,
+       2340
+      ],
+      "regions": {
+       "reel": [
+        300,
+        0,
+        980,
+        2364
+       ]
+      },
+      "a": [
+       0.5,
+       0.5
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "04_new-on-the-shelf",
+   "photo": "IMG_6663.JPEG",
+   "p": [
+    760,
+    1250
+   ],
+   "cw": 1330,
+   "crop": {
+    "p45": {
+     "a": [
+      0.5,
+      0.44
+     ]
+    },
+    "sq": {
+     "a": [
+      0.5,
+      0.42
+     ]
+    },
+    "reel": {
+     "a": [
+      0.5,
+      0.47
+     ]
+    },
+    "wide": {
+     "a": [
+      0.5,
+      0.45
+     ]
+    }
+   },
+   "badge": "JUST LANDED",
+   "gold": true,
+   "n1": "NEW ON THE SHELF",
+   "n2": "LA PUERTA NEGRA TEQUILA",
+   "sub": "Reposado $14.99 · Blanco $13.99 · 1 Liter bottles",
+   "price": null,
+   "tag": ""
+  },
+  {
+   "id": "05_patron-reposado-2-for",
+   "photo": "IMG_6713.JPEG",
+   "p": [
+    650,
+    1560
+   ],
+   "cw": 1064,
+   "crop": {
+    "p45": {
+     "a": [
+      0.5,
+      0.47
+     ]
+    },
+    "sq": {
+     "cw": 1100,
+     "a": [
+      0.5,
+      0.44
+     ]
+    },
+    "reel": {
+     "mode": "panel"
+    },
+    "wide": {
+     "cw": 1330,
+     "p": [
+      650,
+      1380
+     ],
+     "a": [
+      0.5,
+      0.45
+     ]
+    }
+   },
+   "badge": "2 FOR $41.99",
+   "gold": true,
+   "n1": "PATRÓN",
+   "n2": "REPOSADO · 375 ML",
+   "sub": "Two bottles, one price · 100% de Agave",
+   "price": [
+    "41",
+    "99"
+   ],
+   "tag": "2 FOR",
+   "win": {
+    "l1": "375 mL · 2 FOR",
+    "l2": "Patrón Reposado",
+    "nc": "orange",
+    "pc": "yellow",
+    "region": [
+     150,
+     990,
+     1150,
+     2364
+    ],
+    "a": [
+     0.5,
+     0
+    ]
+   }
+  },
+  {
+   "id": "06_casamigos-2-pack",
+   "photo": "IMG_6718.JPEG",
+   "p": [
+    760,
+    790
+   ],
+   "cw": 560,
+   "crop": {
+    "p45": {
+     "a": [
+      0.5,
+      0.44
+     ]
+    },
+    "sq": {
+     "cw": 620,
+     "a": [
+      0.5,
+      0.42
+     ]
+    },
+    "reel": {
+     "cw": 640,
+     "a": [
+      0.5,
+      0.44
+     ]
+    },
+    "wide": {
+     "mode": "panel"
+    }
+   },
+   "badge": "SALE",
+   "gold": false,
+   "n1": "CASAMIGOS",
+   "n2": "2-PACK · 2 × 375 ML",
+   "sub": "Tequila gift pack · Easy to share",
+   "price": [
+    "39",
+    "99"
+   ],
+   "tag": "SALE",
+   "win": {
+    "l1": "2-Pack · 2 × 375 mL",
+    "l2": "Casamigos Tequila",
+    "nc": "red",
+    "pc": "orange",
+    "p": [
+     760,
+     780
+    ],
+    "cw": 560
+   },
+   "darken": 1.12
+  },
+  {
+   "id": "07_teremana-blanco",
+   "photo": "IMG_6717.JPEG",
+   "p": [
+    900,
+    860
+   ],
+   "cw": 600,
+   "crop": {
+    "p45": {
+     "cw": 760,
+     "p": [
+      900,
+      440
+     ],
+     "a": [
+      0.5,
+      0
+     ]
+    },
+    "sq": {
+     "cw": 800,
+     "p": [
+      900,
+      440
+     ],
+     "a": [
+      0.5,
+      0
+     ]
+    },
+    "reel": {
+     "cw": 760,
+     "p": [
+      900,
+      380
+     ],
+     "a": [
+      0.5,
+      0
+     ]
+    },
+    "wide": {
+     "mode": "panel"
+    }
+   },
+   "badge": "WEEKLY PICK",
+   "gold": true,
+   "n1": "TEREMANA",
+   "n2": "BLANCO TEQUILA · 1 LITER",
+   "sub": "Small batch tequila · 1 Liter bottle",
+   "price": [
+    "29",
+    "99"
+   ],
+   "tag": "1 LITER",
+   "win": {
+    "l1": "Blanco · 1 Liter",
+    "l2": "Teremana Tequila",
+    "nc": "orange",
+    "pc": "pink",
+    "p": [
+     900,
+     850
+    ],
+    "cw": 600
+   }
+  },
+  {
+   "id": "08_absolut-1-75",
+   "photo": "IMG_6717.JPEG",
+   "p": [
+    425,
+    1400
+   ],
+   "cw": 560,
+   "crop": {
+    "p45": {
+     "a": [
+      0.5,
+      0.44
+     ]
+    },
+    "sq": {
+     "cw": 600,
+     "a": [
+      0.5,
+      0.42
+     ]
+    },
+    "reel": {
+     "cw": 620,
+     "a": [
+      0.5,
+      0.45
+     ]
+    },
+    "wide": {
+     "mode": "panel"
+    }
+   },
+   "badge": "BIG BOTTLE",
+   "gold": false,
+   "n1": "ABSOLUT",
+   "n2": "VODKA · 1.75 L HANDLE",
+   "sub": "Product of Sweden · Party-size handle",
+   "price": [
+    "32",
+    "99"
+   ],
+   "tag": "1.75 L",
+   "win": {
+    "l1": "1.75 L Handle",
+    "l2": "Absolut Vodka",
+    "nc": "red",
+    "pc": "yellow",
+    "p": [
+     425,
+     1500
+    ],
+    "cw": 620
+   }
+  },
+  {
+   "id": "09_fris-vodka-1-75",
+   "photo": "IMG_6717.JPEG",
+   "p": [
+    900,
+    1420
+   ],
+   "cw": 640,
+   "crop": {
+    "p45": {
+     "region": [
+      560,
+      1165,
+      1260,
+      2364
+     ],
+     "a": [
+      0.5,
+      0
+     ]
+    },
+    "sq": {
+     "region": [
+      560,
+      1165,
+      1260,
+      2364
+     ],
+     "a": [
+      0.5,
+      0
+     ]
+    },
+    "reel": {
+     "region": [
+      560,
+      1165,
+      1260,
+      2364
+     ],
+     "a": [
+      0.5,
+      0
+     ]
+    },
+    "wide": {
+     "mode": "panel"
+    }
+   },
+   "badge": "SALE",
+   "gold": false,
+   "n1": "FRÏS VODKA",
+   "n2": "1.75 L HANDLE",
+   "sub": "Smooth as ice · Stock-up price",
+   "price": [
+    "10",
+    "99"
+   ],
+   "tag": "SALE",
+   "win": {
+    "l1": "1.75 L · SALE",
+    "l2": "Fris Vodka",
+    "nc": "black",
+    "pc": "orange",
+    "region": [
+     560,
+     1165,
+     1260,
+     2364
+    ],
+    "a": [
+     0.5,
+     0
+    ]
+   }
+  },
+  {
+   "id": "10_barton-vodka-1-75",
+   "photo": "IMG_6718.JPEG",
+   "p": [
+    500,
+    1660
+   ],
+   "cw": 640,
+   "crop": {
+    "p45": {
+     "region": [
+      130,
+      1548,
+      900,
+      2364
+     ],
+     "a": [
+      0.5,
+      0
+     ]
+    },
+    "sq": {
+     "region": [
+      130,
+      1548,
+      900,
+      2364
+     ],
+     "a": [
+      0.5,
+      0
+     ]
+    },
+    "reel": {
+     "mode": "panel"
+    },
+    "wide": {
+     "mode": "panel"
+    }
+   },
+   "badge": "SALE",
+   "gold": true,
+   "n1": "BARTON VODKA",
+   "n2": "1.75 L HANDLE",
+   "sub": "House-party handle · Stock-up price",
+   "price": [
+    "10",
+    "49"
+   ],
+   "tag": "SALE",
+   "win": {
+    "l1": "1.75 L · SALE",
+    "l2": "Barton Vodka",
+    "nc": "orange",
+    "pc": "lime",
+    "region": [
+     130,
+     1548,
+     900,
+     2364
+    ],
+    "a": [
+     0.5,
+     0
+    ]
+   }
+  },
+  {
+   "id": "11_handle-sale",
+   "photo": "IMG_6718.JPEG",
+   "p": [
+    700,
+    1720
+   ],
+   "cw": 920,
+   "crop": {
+    "p45": {},
+    "sq": {},
+    "reel": {},
+    "wide": {}
+   },
+   "badge": "HANDLE SALE",
+   "gold": false,
+   "n1": "BIG BOTTLES",
+   "n2": "1.75 L VODKA FROM",
+   "sub": "Barton $10.49 · Frïs $10.99",
+   "price": [
+    "10",
+    "49"
+   ],
+   "tag": "FROM",
+   "split": {
+    "dir": {
+     "reel": "v"
+    },
+    "halves": [
+     {
+      "photo": "IMG_6718.JPEG",
+      "region": [
+       130,
+       1548,
+       900,
+       2364
+      ],
+      "a": [
+       0.5,
+       0
+      ]
+     },
+     {
+      "photo": "IMG_6717.JPEG",
+      "region": [
+       560,
+       1165,
+       1260,
+       2364
+      ],
+      "a": [
+       0.5,
+       0
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "12_visit-dantes",
+   "photo": "IMG_6718.JPEG",
+   "p": [
+    665,
+    900
+   ],
+   "cw": 1330,
+   "crop": {
+    "p45": {
+     "a": [
+      0.5,
+      0.42
+     ]
+    },
+    "sq": {
+     "a": [
+      0.5,
+      0.4
+     ]
+    },
+    "reel": {
+     "a": [
+      0.5,
+      0.4
+     ]
+    },
+    "wide": {
+     "a": [
+      0.5,
+      0.38
+     ]
+    }
+   },
+   "badge": "HOLLYWOOD, FL",
+   "gold": true,
+   "n1": "DANTE'S LIQUORS",
+   "n2": "INSIDE SEDANO'S PLAZA",
+   "sub": "Tequila · Vodka · Whiskey · Scotch · Wine · Cold Beer",
+   "price": null,
+   "tag": ""
+  }
+ ],
+ "carousel": [
+  {
+   "id": "00_cover",
+   "photo": "IMG_6717.JPEG",
+   "p": [
+    665,
+    1000
+   ],
+   "cw": 1330,
+   "crop": {
+    "p45": {
+     "a": [
+      0.5,
+      0.4
+     ]
+    }
+   },
+   "badge": "SWIPE FOR DEALS",
+   "gold": false,
+   "n1": "THIS WEEK'S DEALS",
+   "n2": "NEW TEQUILA + BIG BOTTLES",
+   "sub": "La Puerta Negra · Patrón · Casamigos · Teremana · Absolut",
+   "price": null,
+   "tag": ""
+  },
+  {
+   "id": "99_closer",
+   "photo": null,
+   "badge": "SEE YOU SOON",
+   "gold": true,
+   "n1": "COME SEE US",
+   "n2": "INSIDE SEDANO'S PLAZA",
+   "sub": "21+ only · Please drink responsibly",
+   "price": null,
+   "tag": ""
+  }
+ ],
+ "roundup": {
+  "id": "13_weekly-deals-list",
+  "photo": "IMG_6718.JPEG",
+  "badge": "THIS WEEK",
+  "kicker": "NEW ARRIVALS + WEEKLY DEALS",
+  "title": "THIS WEEK AT DANTE'S",
+  "rows": [
+   {
+    "name": "La Puerta Negra Reposado",
+    "detail": "Tequila · 1 Liter",
+    "pill": "NEW",
+    "pre": "",
+    "dol": "14",
+    "cts": "99"
+   },
+   {
+    "name": "La Puerta Negra Blanco",
+    "detail": "Tequila · 1 Liter",
+    "pill": "NEW",
+    "pre": "",
+    "dol": "13",
+    "cts": "99"
+   },
+   {
+    "name": "Teremana Blanco",
+    "detail": "Small batch tequila · 1 Liter",
+    "pill": "",
+    "pre": "",
+    "dol": "29",
+    "cts": "99"
+   },
+   {
+    "name": "Casamigos 2-Pack",
+    "detail": "Tequila · 2 × 375 mL",
+    "pill": "SALE",
+    "pre": "",
+    "dol": "39",
+    "cts": "99"
+   },
+   {
+    "name": "Patrón Reposado",
+    "detail": "Tequila · 375 mL",
+    "pill": "DEAL",
+    "pre": "2 FOR",
+    "dol": "41",
+    "cts": "99"
+   },
+   {
+    "name": "Absolut Vodka",
+    "detail": "1.75 L handle",
+    "pill": "",
+    "pre": "",
+    "dol": "32",
+    "cts": "99"
+   },
+   {
+    "name": "Frïs Vodka",
+    "detail": "1.75 L handle",
+    "pill": "SALE",
+    "pre": "",
+    "dol": "10",
+    "cts": "99"
+   },
+   {
+    "name": "Barton Vodka",
+    "detail": "1.75 L handle",
+    "pill": "SALE",
+    "pre": "",
+    "dol": "10",
+    "cts": "49"
+   }
+  ]
+ }
+}
