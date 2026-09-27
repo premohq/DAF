@@ -37,7 +37,8 @@ These ads were rendered with [Dante's Ad Forge](https://premohq.github.io/DAF/) 
 Every ad uses the Forge's own renderer (Inferno treatment, embers, header, price card, and window-display format). The build adds:
 
 - **Pre-cropped, sharpened photos.** Crops are done in full resolution with Lanczos resampling and light sharpening, so the Forge draws each photo 1:1 instead of stretching it in the browser.
-- **Crops that avoid other products' tags.** For example, the Frïs ad no longer shows the Teremana "$29.99" stars.
+- **Whole-product framing.** Each product fits completely in the clear space between the header and the text, so no bottle tops are cut off and nothing is buried under the price card. Where a photo runs out, a blurred extension of the scene fills the edge.
+- **Stray tags removed.** Other products' handwritten price tags, and printed box text that sat under a headline, are blurred and muted. For example, the Frïs ad no longer shows the Teremana "$29.99" stars.
 - **Price-card captions** ("2 FOR", "SALE", "FROM", "1 LITER") above the gold price card.
 - **Split-screen layouts** for the Reposado + Blanco and Barton + Frïs ads.
 - **Product panels** for 16:9 and some Reels: a sharp product shot over a blurred copy of the scene, instead of a blurry upscaled crop.
