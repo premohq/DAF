@@ -105,11 +105,11 @@ canvas#mstage{background:#fff}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .row+.row{margin-top:10px}
 label.lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--smoke);display:block;margin:0 0 5px}
-input[type=text]{
+input[type=text],input[type=password]{
   width:100%;background:#120d0b;border:1px solid var(--line);border-radius:9px;
   color:var(--bone);padding:10px 12px;font-family:Oswald,Arial,sans-serif;font-size:15px;letter-spacing:.03em;
 }
-input[type=text]:focus{outline:2px solid rgba(227,178,100,.55);outline-offset:1px;border-color:var(--gold)}
+input[type=text]:focus,input[type=password]:focus{outline:2px solid rgba(227,178,100,.55);outline-offset:1px;border-color:var(--gold)}
 input[type=range]{width:100%;accent-color:var(--ember)}
 .field{flex:1;min-width:150px}
 .mini{width:76px}
@@ -144,7 +144,7 @@ input[type=range]{width:100%;accent-color:var(--ember)}
 }
 .btn+.btn{margin-top:9px}
 .note{font-size:12px;color:var(--smoke);line-height:1.5;margin:9px 0 0}
-#status{min-height:18px;font-size:12px;letter-spacing:.06em;color:var(--gold-br);margin-top:9px}
+#status,#mstatus,#astatus{min-height:18px;font-size:12px;letter-spacing:.06em;color:var(--gold-br);margin-top:9px;line-height:1.5}
 
 .foot{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
@@ -152,6 +152,49 @@ input[type=range]{width:100%;accent-color:var(--ember)}
 }
 .dot{width:14px;height:14px;border-radius:4px;border:1px solid rgba(255,255,255,.14)}
 @media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto} }
+
+/* ---------- AI studio ---------- */
+.tab .new{display:inline-block;margin-left:8px;padding:2px 7px 1px;border-radius:999px;background:var(--ember);color:var(--bone);font-size:10px;letter-spacing:.12em;vertical-align:1px}
+.scenes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.scene{
+  appearance:none;text-align:left;cursor:pointer;border:1px solid var(--line);background:#120d0b;
+  color:var(--bone);border-radius:11px;padding:10px 12px;font-family:Oswald,Arial,sans-serif;
+}
+.scene b{display:block;font-weight:600;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.scene span{display:block;margin-top:3px;font-size:12px;color:var(--smoke);letter-spacing:.02em}
+.scene.on{border-color:var(--ember-br);background:linear-gradient(180deg,rgba(200,16,46,.30),rgba(200,16,46,.10))}
+.scene:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.athumb{display:flex;align-items:center;gap:12px;margin-top:12px}
+.athumb img{width:60px;height:80px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid var(--line)}
+.athumb span{flex:1;font-size:13px;color:#DCCFC0;line-height:1.4}
+details.how{margin-top:12px;border-top:1px solid var(--line);padding-top:11px}
+details.how summary{cursor:pointer;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+details.how ol{margin:10px 0 0;padding-left:20px;font-size:13px;line-height:1.55;color:#DCCFC0}
+details.how li+li{margin-top:6px}
+details.how .btn{margin-top:10px}
+textarea{
+  width:100%;min-height:130px;margin-top:10px;background:#120d0b;border:1px solid var(--line);border-radius:9px;
+  color:#DCCFC0;padding:10px 12px;font-family:Oswald,Arial,sans-serif;font-size:13px;line-height:1.45;resize:vertical;
+}
+.aview{width:100%;min-height:300px;display:flex;align-items:center;justify-content:center;position:relative}
+.aview img{max-width:100%;max-height:70vh;border-radius:8px;display:block;box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px rgba(227,178,100,.14)}
+.aempty{text-align:center;color:var(--smoke);font-size:13px;line-height:1.6;padding:30px 18px;max-width:340px}
+.aempty b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:22px;letter-spacing:.05em;color:var(--bone);margin-bottom:6px}
+.aview.busy::after{
+  content:"";position:absolute;inset:0;border-radius:8px;pointer-events:none;
+  background:linear-gradient(110deg,transparent 30%,rgba(227,178,100,.14) 50%,transparent 70%);
+  background-size:220% 100%;animation:shimmer 1.4s linear infinite;
+}
+@keyframes shimmer{from{background-position:120% 0}to{background-position:-120% 0}}
+.agal{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 4px}
+.agal:empty{display:none}
+.agal button{flex:0 0 auto;width:64px;height:80px;padding:0;border:2px solid var(--line);border-radius:8px;background:#0e0a09;cursor:pointer;overflow:hidden}
+.agal button.on{border-color:var(--gold)}
+.agal img{width:100%;height:100%;object-fit:cover;display:block}
+.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.btnrow .btn+.btn{margin-top:0}
+.btnrow .wide{grid-column:1/-1}
+@media(max-width:640px){.aview{min-height:200px}}
 </style>
 </head>
 <body>
@@ -172,11 +215,131 @@ input[type=range]{width:100%;accent-color:var(--ember)}
 </header>
 
 <nav class="tabs" aria-label="Ad type">
-  <button class="tab on" data-tab="social" type="button">Social Media Ads</button>
+  <button class="tab on" data-tab="ai" type="button">AI Studio<span class="new">New</span></button>
+  <button class="tab" data-tab="social" type="button">Social Media Ads</button>
   <button class="tab" data-tab="monitor" type="button">Window Display Ads</button>
 </nav>
 
-<main class="wrap" id="tab-social">
+<main class="wrap" id="tab-ai">
+
+  <section class="panel">
+
+    <div class="card">
+      <h3>1 · Product</h3>
+      <input type="file" id="afile" accept="image/*" hidden>
+      <button class="btn ghost" id="apick" type="button">Upload bottle photo</button>
+      <div class="athumb" id="athumb" hidden>
+        <img id="athumbImg" alt="Product reference">
+        <span>The AI copies the bottle and label from this photo.</span>
+        <button class="chip" id="aclear" type="button">Remove</button>
+      </div>
+      <div class="row" style="margin-top:12px"><div class="field"><label class="lbl" for="aname">Product name</label>
+        <input type="text" id="aname" value="" placeholder="e.g. Casamigos Blanco Tequila 750 mL" maxlength="60"></div></div>
+      <p class="note">A clear photo of the real bottle gives the most accurate label. With only a name, the AI draws the bottle from memory and the label may be wrong.</p>
+    </div>
+
+    <div class="card">
+      <h3>2 · Scene</h3>
+      <div class="scenes" id="ascenes"></div>
+      <div class="row" style="margin-top:12px"><div class="field"><label class="lbl" for="aextra">Extra direction (optional)</label>
+        <input type="text" id="aextra" value="" placeholder="e.g. fresh limes and coarse salt beside it" maxlength="160"></div></div>
+    </div>
+
+    <div class="card">
+      <h3>3 · Shape &amp; model</h3>
+      <div class="chips" id="afmts">
+        <button class="chip on" data-f="p45" type="button">4:5 Post</button>
+        <button class="chip" data-f="reel" type="button">9:16 Reel · Window</button>
+        <button class="chip" data-f="wide" type="button">16:9 Wide</button>
+        <button class="chip" data-f="sq" type="button">1:1 Square</button>
+      </div>
+      <div class="chips" id="amodels" style="margin-top:10px">
+        <button class="chip on" data-m="nb2" type="button">Nano Banana 2 · Google</button>
+        <button class="chip" data-m="nbpro" type="button">Nano Banana Pro · Google</button>
+        <button class="chip" data-m="gpt" type="button">GPT Image 2.5 · ChatGPT</button>
+        <button class="chip" data-m="grok" type="button">Grok Imagine 2</button>
+      </div>
+      <div class="chips" id="asizes" style="margin-top:10px">
+        <button class="chip" data-s="1K" type="button">1K</button>
+        <button class="chip on" data-s="2K" type="button">2K</button>
+        <button class="chip" data-s="4K" type="button">4K</button>
+      </div>
+      <p class="note">2K is plenty for social posts. Pick 4K for the window monitors. Nano Banana Pro is the most detailed and the slowest.</p>
+    </div>
+
+    <div class="card">
+      <h3>4 · Engine</h3>
+      <div class="chips" id="aengines">
+        <button class="chip on" data-e="puter" type="button">Puter · free sign-in</button>
+        <button class="chip" data-e="google" type="button">Google key</button>
+      </div>
+      <div id="aPuterBox">
+        <p class="note">No setup. You sign in to a free Puter account once, and every account gets a free monthly allowance. Puter's terms cover personal and demo use, so switch to a Google key for paid client ads.</p>
+        <button class="btn ghost" id="aPuterIn" type="button" style="margin-top:10px">Sign in to Puter</button>
+      </div>
+      <div id="aGoogleBox" hidden>
+        <div class="chips" id="akinds" style="margin-top:12px">
+          <button class="chip on" data-k="vertex" type="button">Vertex AI · free 90 days</button>
+          <button class="chip" data-k="studio" type="button">AI Studio key</button>
+        </div>
+        <div class="row" style="margin-top:10px"><div class="field"><label class="lbl" for="akey">API key</label>
+          <input type="password" id="akey" value="" autocomplete="off" spellcheck="false" placeholder="Paste your Google API key"></div></div>
+        <label class="switch" style="margin-top:10px"><input type="checkbox" id="aremember" checked> Remember on this device</label>
+        <details class="how">
+          <summary>Get the free Google key (2 minutes)</summary>
+          <ol>
+            <li>Open <a href="https://console.cloud.google.com/expressmode" target="_blank" rel="noopener">console.cloud.google.com/expressmode</a> and sign in with a personal Gmail account that has never used Google Cloud.</li>
+            <li>Accept the terms. Google sets up Vertex AI express mode and shows you an API key. Copy it.</li>
+            <li>Paste it above with <b>Vertex AI · free 90 days</b> selected.</li>
+          </ol>
+          <p class="note">Free for 90 days within Google's limits, no card needed, and Google's terms allow commercial use. One free period per person, so don't open extra accounts to restart it. After that, turning on billing costs roughly 7–15¢ per image. The key stays in this browser and is only ever sent to Google.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>5 · Generate</h3>
+      <div class="chips" id="acount">
+        <button class="chip" data-n="1" type="button">1 image</button>
+        <button class="chip on" data-n="2" type="button">2 images</button>
+        <button class="chip" data-n="4" type="button">4 images</button>
+      </div>
+      <button class="btn" id="agen" type="button" style="margin-top:12px">Generate</button>
+      <div id="astatus" role="status"></div>
+      <details class="how">
+        <summary>No allowance left? Use the free Gemini app</summary>
+        <ol>
+          <li>Tap the button below. It copies your prompt and opens Gemini.</li>
+          <li>In Gemini, attach your bottle photo, paste the prompt and send.</li>
+          <li>Download the image, then bring it back here with <b>Add a finished image</b>.</li>
+        </ol>
+        <button class="btn ghost" id="agemini" type="button">Copy prompt &amp; open Gemini</button>
+        <input type="file" id="aimp" accept="image/*" hidden>
+        <button class="btn ghost" id="aimport" type="button">Add a finished image</button>
+        <label class="lbl" for="aprompt" style="margin-top:12px">Prompt</label>
+        <textarea id="aprompt" readonly></textarea>
+      </details>
+    </div>
+
+  </section>
+
+  <section class="stagecol">
+    <div class="stagebox">
+      <div class="aview" id="aview">
+        <div class="aempty" id="aempty"><b>CINEMATIC SHOTS, MADE HERE</b>Upload the bottle, pick a scene and press Generate. Your images show up here, ready to send to the Social or Window ads.</div>
+      </div>
+    </div>
+    <div class="agal" id="agal"></div>
+    <div class="btnrow" id="aactions" hidden>
+      <button class="btn" id="aToSocial" type="button">Use in Social ad</button>
+      <button class="btn" id="aToWindow" type="button">Use in Window ad</button>
+      <button class="btn ghost wide" id="asave" type="button">Download image</button>
+    </div>
+  </section>
+
+</main>
+
+<main class="wrap" id="tab-social" hidden>
 
   <section class="panel">
 
@@ -276,19 +439,28 @@ input[type=range]{width:100%;accent-color:var(--ember)}
   <section class="panel">
 
     <div class="card">
-      <h3>1 · Photo</h3>
+      <h3>1 · Look</h3>
+      <div class="chips" id="mstyles">
+        <button class="chip on" data-s="classic" type="button">Classic white</button>
+        <button class="chip" data-s="cine" type="button">Cinematic</button>
+      </div>
+      <p class="note" id="mstylenote">Classic: the product photo on white, exactly like the current window ads.</p>
+    </div>
+
+    <div class="card">
+      <h3>2 · Photo</h3>
       <input type="file" id="mfile" accept="image/*" hidden>
       <button class="btn ghost" id="mpick" type="button">Upload product photo</button>
       <div class="row" style="margin-top:12px">
         <div class="field"><label class="lbl" for="mzoom">Zoom</label>
           <input type="range" id="mzoom" min="0.5" max="3" step="0.01" value="1"></div>
       </div>
-      <p class="note">Product photos on a white background work best. Drag the preview to position; pinch or scroll to zoom.</p>
+      <p class="note" id="mphotonote">Product photos on a white background work best. Drag the preview to position; pinch or scroll to zoom.</p>
       <button class="btn ghost" id="mrecenter" type="button" style="margin-top:4px">Re-center photo</button>
     </div>
 
     <div class="card">
-      <h3>2 · Orientation</h3>
+      <h3>3 · Orientation</h3>
       <div class="chips" id="mors">
         <button class="chip" data-o="land" type="button">Landscape · 3840×2160</button>
         <button class="chip on" data-o="port" type="button">Portrait · 2160×3840</button>
@@ -297,7 +469,7 @@ input[type=range]{width:100%;accent-color:var(--ember)}
     </div>
 
     <div class="card">
-      <h3>3 · Text</h3>
+      <h3>4 · Text</h3>
       <div class="row"><div class="field"><label class="lbl" for="ml1">Size / offer line</label>
         <input type="text" id="ml1" value="750 mL" maxlength="30"></div></div>
       <div class="row"><div class="field"><label class="lbl" for="ml2">Product name</label>
@@ -312,11 +484,11 @@ input[type=range]{width:100%;accent-color:var(--ember)}
           <button class="chip" data-c="black" type="button">Black</button>
         </div></div></div>
       <div class="row"><div class="field"><label class="lbl" for="mcredit">Credit line</label>
-        <input type="text" id="mcredit" value="A&amp;M Partners 2025" maxlength="40"></div></div>
+        <input type="text" id="mcredit" value="A&amp;M Partners 2026" maxlength="40"></div></div>
     </div>
 
     <div class="card">
-      <h3>4 · Price</h3>
+      <h3>5 · Price</h3>
       <label class="switch"><input type="checkbox" id="mpriceOn" checked> Show price</label>
       <div class="row" id="mpriceRow" style="margin-top:12px">
         <div class="mini"><label class="lbl" for="mdol">Dollars</label><input type="text" id="mdol" value="39" inputmode="numeric" maxlength="4"></div>
@@ -334,10 +506,30 @@ input[type=range]{width:100%;accent-color:var(--ember)}
     </div>
 
     <div class="card">
-      <h3>5 · Export</h3>
+      <h3>6 · Export</h3>
       <button class="btn" id="mpng" type="button">Export image · PNG</button>
-      <div id="mstatus" role="status"></div>
       <p class="note">Exports at full monitor resolution — 3840×2160 landscape or 2160×3840 portrait — matching the existing window display files.</p>
+      <div class="row" style="margin-top:14px">
+        <div class="field"><label class="lbl">Loop video length</label>
+          <div class="chips" id="mdurs">
+            <button class="chip" data-d="6" type="button">6s</button>
+            <button class="chip on" data-d="10" type="button">10s</button>
+            <button class="chip" data-d="15" type="button">15s</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field"><label class="lbl">Video size</label>
+          <div class="chips" id="mreses">
+            <button class="chip on" data-r="1080" type="button">1080p · recommended</button>
+            <button class="chip" data-r="2160" type="button">4K</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn ghost" id="mprev" type="button" style="margin-top:12px">Preview loop</button>
+      <button class="btn" id="mvid" type="button">Export loop video · MP4</button>
+      <div id="mstatus" role="status"></div>
+      <p class="note">A seamless loop for the window screens: the scene drifts and glows while the name and price stay put. Same orientation as the PNG. 1080p plays on any screen and keeps files small.</p>
     </div>
 
   </section>
@@ -398,22 +590,99 @@ function rounded(c,x,y,w,h,r){r=Math.min(r,h/2,w/2);c.beginPath();c.moveTo(x+r,y
 function fitPx(c,text,fam,wt,px,maxW,minPx){let s=px;
   for(let i=0;i<28;i++){c.font=font(s,fam,wt);if(c.measureText(text).width<=maxW||s<=minPx)break;s*=0.955}
   return s}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const scripts={};
+function loadScript(src){
+  return scripts[src]||(scripts[src]=new Promise((res,rej)=>{
+    const s=document.createElement('script');s.src=src;s.onload=res;
+    s.onerror=()=>{delete scripts[src];rej(new Error('could not load '+src))};
+    document.head.appendChild(s)}));
+}
+const LS={
+  get(k){try{return localStorage.getItem(k)||''}catch(e){return ''}},
+  set(k,v){try{if(v)localStorage.setItem(k,v);else localStorage.removeItem(k)}catch(e){}}
+};
+function b64Blob(b64,type){const bin=atob(b64),u=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new Blob([u],{type})}
+
+/* ---------- video encoding ----------
+   Frame-accurate MP4: every frame is drawn on its own clock, so exports stay smooth
+   even on slow phones. H.264 first (plays everywhere), VP9-in-MP4 as a backup.
+   Returns null when the browser has no WebCodecs, so callers fall back to recording. */
+const MUX_SRC='https://cdn.jsdelivr.net/npm/mp4-muxer@5.2.2/build/mp4-muxer.js';
+async function pickEncoder(w,h,fps){
+  if(typeof VideoEncoder==='undefined'||typeof VideoFrame==='undefined')return null;
+  const bitrate=Math.round(Math.min(40e6,w*h*fps*0.18));
+  const list=[['avc1.640033','avc'],['avc1.4d0033','avc'],['avc1.420033','avc'],
+              ['avc1.640028','avc'],['avc1.42e028','avc'],['vp09.00.51.08','vp9']];
+  for(const [codec,mux] of list){
+    const cfg={codec,width:w,height:h,bitrate,framerate:fps};
+    if(mux==='avc')cfg.avc={format:'avc'};
+    try{const s=await VideoEncoder.isConfigSupported(cfg);if(s.supported)return {cfg,mux}}catch(e){}
+  }
+  return null;
+}
+async function encodeMP4(cv,fps,frames,drawAt,prog){
+  const pe=await pickEncoder(cv.width,cv.height,fps);
+  if(!pe)return null;
+  await loadScript(MUX_SRC);
+  const target=new Mp4Muxer.ArrayBufferTarget();
+  const mux=new Mp4Muxer.Muxer({target,fastStart:'in-memory',firstTimestampBehavior:'offset',
+    video:{codec:pe.mux,width:cv.width,height:cv.height,frameRate:fps}});
+  let fail=null;
+  const enc=new VideoEncoder({output:(ch,meta)=>mux.addVideoChunk(ch,meta),error:e=>{fail=e}});
+  enc.configure(pe.cfg);
+  const us=1e6/fps;
+  for(let i=0;i<frames;i++){
+    if(fail)throw fail;
+    drawAt(i/fps);
+    const vf=new VideoFrame(cv,{timestamp:Math.round(i*us),duration:Math.round(us)});
+    enc.encode(vf,{keyFrame:i%(fps*2)===0});vf.close();
+    while(enc.encodeQueueSize>6)await sleep(4);
+    if(i%6===0||i===frames-1){if(prog)prog((i+1)/frames);await sleep(0)}
+  }
+  await enc.flush();if(fail)throw fail;
+  enc.close();mux.finalize();
+  return {blob:new Blob([target.buffer],{type:'video/mp4'}),codec:pe.mux};
+}
+/* real-time fallback: plays the animation once while MediaRecorder captures the canvas */
+async function recordCanvas(cv,dur,drawAt){
+  if(!cv.captureStream||!window.MediaRecorder)throw new Error('This browser cannot record video. Please use Chrome or Safari.');
+  const cands=['video/mp4;codecs=avc1.42E01E','video/mp4;codecs=avc1','video/mp4',
+               'video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
+  const mime=cands.find(m=>{try{return MediaRecorder.isTypeSupported(m)}catch(e){return false}});
+  if(!mime)throw new Error('No video codec available in this browser.');
+  const rec=new MediaRecorder(cv.captureStream(30),{mimeType:mime,videoBitsPerSecond:12000000});
+  const chunks=[];rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  const stopped=new Promise(r=>{rec.onstop=r});
+  rec.start(120);
+  const t0=performance.now();
+  await new Promise(res=>{const loop=n=>{const t=(n-t0)/1000;
+    drawAt(Math.min(t,dur));
+    if(t>=dur)res();else requestAnimationFrame(loop)};
+    requestAnimationFrame(loop)});
+  rec.stop();await stopped;
+  return {blob:new Blob(chunks,{type:mime}),ext:mime.indexOf('mp4')>-1?'mp4':'webm'};
+}
 
 /* ---------- crop / photo ---------- */
-function cropBox(kb){
-  const [W,H]=FMT[st.fmt],R=W/H,z=st.zoom*(kb||1);let cw,ch;
-  if(st.iw/st.ih>R){ch=st.ih/z;cw=ch*R}else{cw=st.iw/z;ch=cw/R}
-  cw=Math.min(cw,st.iw);ch=Math.min(ch,st.ih);
-  let x=st.cx*st.iw-cw/2,y=st.cy*st.ih-ch/2;
-  x=Math.max(0,Math.min(st.iw-cw,x));y=Math.max(0,Math.min(st.ih-ch,y));
+/* cover-crop of image state s (iw, ih, cx, cy) for frame ratio R at zoom z */
+function coverBox(s,R,z){
+  let cw,ch;
+  if(s.iw/s.ih>R){ch=s.ih/z;cw=ch*R}else{cw=s.iw/z;ch=cw/R}
+  cw=Math.min(cw,s.iw);ch=Math.min(ch,s.ih);
+  let x=s.cx*s.iw-cw/2,y=s.cy*s.ih-ch/2;
+  x=Math.max(0,Math.min(s.iw-cw,x));y=Math.max(0,Math.min(s.ih-ch,y));
   return {x,y,cw,ch};
 }
-function clampCenter(){
-  if(!st.img)return;const b=cropBox(1);
-  const fw=b.cw/st.iw,fh=b.ch/st.ih;
-  st.cx=Math.max(fw/2,Math.min(1-fw/2,st.cx));
-  st.cy=Math.max(fh/2,Math.min(1-fh/2,st.cy));
+function clampCover(s,R,z){
+  if(!s.img)return;const b=coverBox(s,R,z);
+  const fw=b.cw/s.iw,fh=b.ch/s.ih;
+  s.cx=Math.max(fw/2,Math.min(1-fw/2,s.cx));
+  s.cy=Math.max(fh/2,Math.min(1-fh/2,s.cy));
 }
+function cropBox(kb){const [W,H]=FMT[st.fmt];return coverBox(st,W/H,st.zoom*(kb||1))}
+function clampCenter(){const [W,H]=FMT[st.fmt];clampCover(st,W/H,st.zoom)}
 function infernoBG(c,W,H){
   c.fillStyle='#0d0908';c.fillRect(0,0,W,H);
   let g=c.createRadialGradient(W/2,H*1.05,W*0.05,W/2,H*1.05,H*0.85);
@@ -625,13 +894,14 @@ stage.addEventListener('wheel',e=>{e.preventDefault();
 },{passive:false});
 
 /* ---------- uploads ---------- */
+function setSocialImage(img){
+  st.img=img;st.iw=img.naturalWidth;st.ih=img.naturalHeight;
+  st.cx=st.cy=0.5;st.zoom=1;$('#zoom').value=1;
+  $('#drop').classList.add('hide');draw();
+}
 function loadFile(f){
   if(!f||!f.type.startsWith('image/'))return;
-  const url=URL.createObjectURL(f),img=new Image();
-  img.onload=()=>{st.img=img;st.iw=img.naturalWidth;st.ih=img.naturalHeight;
-    st.cx=st.cy=0.5;st.zoom=1;$('#zoom').value=1;
-    $('#drop').classList.add('hide');draw()};
-  img.src=url;
+  const img=new Image();img.onload=()=>setSocialImage(img);img.src=URL.createObjectURL(f);
 }
 $('#file').addEventListener('change',e=>loadFile(e.target.files[0]));
 $('#pick').addEventListener('click',()=>$('#file').click());
@@ -640,7 +910,7 @@ $('#drop').addEventListener('click',()=>$('#file').click());
 document.addEventListener('drop',e=>{
   const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];
   if(!f)return;
-  if(activeTab==='monitor')mLoadFile(f);else loadFile(f);
+  if(activeTab==='monitor')mLoadFile(f);else if(activeTab==='ai')aLoadFile(f);else loadFile(f);
 });
 
 /* ---------- bindings ---------- */
@@ -658,12 +928,12 @@ $('#bEmber').addEventListener('click',()=>{st.badgeGold=false;
   $('#bEmber').classList.add('on');$('#bGold').classList.remove('on');draw()});
 $('#bGold').addEventListener('click',()=>{st.badgeGold=true;
   $('#bGold').classList.add('on');$('#bEmber').classList.remove('on');draw()});
-$('#fmts').addEventListener('click',e=>{
-  const b=e.target.closest('.chip');if(!b)return;
-  [...$('#fmts').children].forEach(x=>x.classList.remove('on'));b.classList.add('on');
-  st.fmt=b.dataset.f;const[W,H]=FMT[st.fmt];stage.width=W;stage.height=H;
+function setFmt(f){
+  [...$('#fmts').children].forEach(x=>x.classList.toggle('on',x.dataset.f===f));
+  st.fmt=f;const[W,H]=FMT[f];stage.width=W;stage.height=H;
   initEmbers(W,H);clampCenter();draw();
-});
+}
+$('#fmts').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)setFmt(b.dataset.f)});
 $('#durs').addEventListener('click',e=>{
   const b=e.target.closest('.chip');if(!b)return;
   [...$('#durs').children].forEach(x=>x.classList.remove('on'));b.classList.add('on');
@@ -691,27 +961,22 @@ $('#prev').addEventListener('click',()=>{if(busy)return;stopAnim();
 
 $('#vid').addEventListener('click',async()=>{
   if(busy)return;stopAnim();
-  if(!stage.captureStream||!window.MediaRecorder){msg('This browser cannot record video. Please use Chrome or Safari.');return}
-  const cands=['video/mp4;codecs=avc1.42E01E','video/mp4;codecs=avc1','video/mp4',
-               'video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
-  const mime=cands.find(m=>{try{return MediaRecorder.isTypeSupported(m)}catch(e){return false}});
-  if(!mime){msg('No video codec available in this browser.');return}
-  setBusy(true);msg('Recording video in real time\u2026');
+  const dur=st.dur,W=stage.width,H=stage.height;
+  const frame=t=>render(ctx,W,H,{anim:true,t:Math.min(t,dur),dur});
+  setBusy(true);msg('Rendering video\u2026');
   try{
-    const stream=stage.captureStream(30);
-    const rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:12000000});
-    const chunks=[];rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
-    const stopped=new Promise(r=>{rec.onstop=r});
-    rec.start(120);
-    const dur=st.dur,t0=performance.now();
-    await new Promise(res=>{const loop=n=>{const t=(n-t0)/1000;
-      render(ctx,stage.width,stage.height,{anim:true,t:Math.min(t,dur),dur});
-      if(t>=dur+0.3)res();else requestAnimationFrame(loop)};
-      requestAnimationFrame(loop)});
-    rec.stop();await stopped;
-    const ext=mime.indexOf('mp4')>-1?'mp4':'webm';
-    dl(new Blob(chunks,{type:mime}),'dantes_'+slug()+'_reel.'+ext);
-    msg(ext==='mp4'?'MP4 exported. Ready for Reels \u2014 audio can be added in the Instagram app.'
+    const r=await encodeMP4(stage,30,Math.round((dur+0.3)*30),frame,
+      p=>msg('Rendering video\u2026 '+Math.round(p*100)+'%')).catch(()=>null);
+    if(r){
+      dl(r.blob,'dantes_'+slug()+'_reel.mp4');
+      msg(r.codec==='avc'?'MP4 exported. Ready for Reels \u2014 audio can be added in the Instagram app.'
+        :'MP4 exported (VP9). Plays on Android and desktop; export from Chrome or Safari for an iPhone-friendly file.');
+      return;
+    }
+    msg('Recording video in real time\u2026');
+    const rr=await recordCanvas(stage,dur+0.3,frame);
+    dl(rr.blob,'dantes_'+slug()+'_reel.'+rr.ext);
+    msg(rr.ext==='mp4'?'MP4 exported. Ready for Reels \u2014 audio can be added in the Instagram app.'
       :'WebM exported \u2014 this browser does not support MP4 encoding. Compatible with most platforms; use Chrome or Safari for MP4.');
   }catch(err){msg('Recording error: '+err.message)}
   finally{setBusy(false);draw()}
@@ -760,10 +1025,10 @@ const MCOL={
   names:{orange:'#F7941D',yellow:'#F9EE3F',lime:'#BFF23C',pink:'#FF9BDE',red:'#E8112D',black:'#141110'},
   prices:{yellow:'#F9EE3F',lime:'#BFF23C',pink:'#FF9BDE',orange:'#F7941D'}
 };
-const mSt={or:'port',img:null,iw:0,ih:0,zoom:1,ox:0,oy:0,
+const mSt={or:'port',style:'classic',img:null,iw:0,ih:0,zoom:1,ox:0,oy:0,cx:.5,cy:.5,cz:1,
   l1:'750 mL',l2:'Casamigos Blanco',nc:'orange',
   price:true,dol:'39',cts:'99',pc:'yellow',
-  credit:'A&M Partners 2025'};
+  credit:'A&M Partners 2026',dur:10,res:1080};
 const mstage=$('#mstage'), mctx=mstage.getContext('2d');
 const moff=document.createElement('canvas');
 
@@ -809,10 +1074,10 @@ function mDrawPrice(c,W,S,yb){
 }
 
 /* ----- photo ----- */
-function mPhoto(c,W,H,S){
+function mPhoto(c,W,H,S,kb){
   if(!mSt.img)return;
   const z={x:190*S,y:480*S,w:W-380*S,h:2180*S};
-  const sc=Math.min(z.w/mSt.iw,z.h/mSt.ih)*mSt.zoom;
+  const sc=Math.min(z.w/mSt.iw,z.h/mSt.ih)*mSt.zoom*(kb||1);
   const dw=mSt.iw*sc,dh=mSt.ih*sc;
   const cx=z.x+z.w/2+mSt.ox*S,cy=z.y+z.h/2+mSt.oy*S;
   c.save();
@@ -822,6 +1087,7 @@ function mPhoto(c,W,H,S){
 }
 function mClamp(){
   if(!mSt.img)return;
+  if(mSt.style==='cine'){clampCover(mSt,MBASE_W/MBASE_H,mSt.cz);return}
   const z={w:MBASE_W-380,h:2180};
   const sc=Math.min(z.w/mSt.iw,z.h/mSt.ih)*mSt.zoom;
   const mX=(mSt.iw*sc+z.w)/2,mY=(mSt.ih*sc+z.h)/2;
@@ -829,28 +1095,88 @@ function mClamp(){
   mSt.oy=Math.max(-mY,Math.min(mY,mSt.oy));
 }
 
+/* ----- cinematic look: full-bleed scene behind the window layout -----
+   Everything that moves is periodic in the loop length, so frame 0 and the
+   frame after the last are identical and the exported video loops seamlessly. */
+let mEm=null,mGlow=null;
+function mInitFx(){
+  let s=20251020;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;
+  mEm=[];for(let i=0;i<64;i++)mEm.push({x:rnd(),m:1+Math.floor(rnd()*2),n:1+Math.floor(rnd()*2),
+    ph:rnd(),len:0.3+rnd()*0.45,y0:0.8+rnd()*0.22,sz:0.7+rnd()*1.5,tw:1+Math.floor(rnd()*4),
+    dr:rnd()-0.5,seed:rnd()*1000});
+  mGlow=document.createElement('canvas');mGlow.width=mGlow.height=64;
+  const g=mGlow.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
+  r.addColorStop(0,'rgba(255,220,160,1)');r.addColorStop(0.22,'rgba(255,150,70,0.7)');r.addColorStop(1,'rgba(255,80,30,0)');
+  g.fillStyle=r;g.fillRect(0,0,64,64);
+}
+function mEmbers(c,W,H,t,dur){
+  if(!mEm)mInitFx();
+  const S=W/1080;
+  c.save();c.globalCompositeOperation='lighter';
+  for(const e of mEm){
+    const q=(t/dur)*e.m+e.ph,trip=Math.floor(q),p=q-trip,k=trip%e.m;
+    const jx=Math.sin((e.seed+k*7.13)*12.9898)*0.18;
+    const x=W*((e.x+jx+1)%1)+Math.sin(2*Math.PI*(e.n*t/dur+e.ph))*56*S*e.dr;
+    const y=H*(e.y0-e.len*p);
+    const a=Math.pow(Math.sin(Math.PI*p),0.8)*(0.6+0.4*Math.sin(2*Math.PI*e.tw*t/dur+e.seed))*0.85;
+    if(a<0.01)continue;
+    const r=e.sz*14*S;
+    c.globalAlpha=a;c.drawImage(mGlow,x-r,y-r,2*r,2*r);
+  }
+  c.restore();
+}
+function mSweep(c,W,H,ph){
+  const tt=(ph-0.16)/0.32;if(tt<=0||tt>=1)return;
+  c.save();c.globalCompositeOperation='lighter';
+  c.translate(W/2,H/2);c.rotate(-0.38);
+  const D=Math.hypot(W,H)*1.2,x=-D/2+D*sstep(tt),bw=W*0.3;
+  const g=c.createLinearGradient(x-bw,0,x+bw,0);
+  g.addColorStop(0,'rgba(255,236,210,0)');g.addColorStop(0.5,'rgba(255,236,210,0.11)');g.addColorStop(1,'rgba(255,236,210,0)');
+  c.fillStyle=g;c.fillRect(-D/2,-D/2,D,D);c.restore();
+}
+function mScene(c,W,H,anim,t,dur,breathe){
+  c.fillStyle='#0d0908';c.fillRect(0,0,W,H);
+  if(mSt.img){const b=coverBox(mSt,W/H,mSt.cz*(1+0.04*breathe));
+    c.drawImage(mSt.img,b.x,b.y,b.cw,b.ch,0,0,W,H)}
+  else infernoBG(c,W,H);
+  /* scrims keep the lockup, name and price readable on any scene */
+  let g=c.createLinearGradient(0,0,0,H*0.26);
+  g.addColorStop(0,'rgba(9,6,5,0.82)');g.addColorStop(1,'rgba(9,6,5,0)');
+  c.fillStyle=g;c.fillRect(0,0,W,H*0.26);
+  g=c.createLinearGradient(0,H*0.58,0,H);
+  g.addColorStop(0,'rgba(9,6,5,0)');g.addColorStop(0.42,'rgba(9,6,5,0.66)');g.addColorStop(1,'rgba(9,6,5,0.92)');
+  c.fillStyle=g;c.fillRect(0,H*0.58,W,H*0.42+1);
+  g=c.createRadialGradient(W/2,H*0.45,W*0.45,W/2,H*0.5,H*0.72);
+  g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,0.45)');
+  c.fillStyle=g;c.fillRect(0,0,W,H);
+  if(anim){mEmbers(c,W,H,t,dur);mSweep(c,W,H,t/dur)}
+}
+
 /* ----- portrait master composition ----- */
-function mRenderP(c,W,H){
-  const S=W/MBASE_W;
+function mRenderP(c,W,H,o){
+  o=o||{};
+  const S=W/MBASE_W,cine=mSt.style==='cine',anim=!!o.anim,dur=o.dur||mSt.dur;
+  const ph=anim?(o.t||0)/dur:0,breathe=(1-Math.cos(2*Math.PI*ph))/2;
   c.setTransform(1,0,0,1,0,0);
-  c.fillStyle='#FFFFFF';c.fillRect(0,0,W,H);
-  mPhoto(c,W,H,S);
+  if(cine)mScene(c,W,H,anim,o.t||0,dur,breathe);
+  else{c.fillStyle='#FFFFFF';c.fillRect(0,0,W,H);mPhoto(c,W,H,S,1+0.03*breathe)}
   /* red keyline */
   rounded(c,52*S,52*S,W-104*S,H-104*S,95*S);
   c.lineWidth=15*S;c.strokeStyle=MCOL.border;c.stroke();
   /* brand lockup */
+  const ink=cine?COL.BONE:MCOL.ink;
   c.textBaseline='alphabetic';c.textAlign='left';
   const tr=16*S;
   c.font=font(150*S,'zil',700);
   const nm="DANTE'S",nw=trkW(c,nm,tr),fs=180*S,fw=fs*0.5,gp=34*S;
   const lock=fw+gp+nw,x0=(W-lock)/2,headY=140*S;
-  flame(c,x0-fs*0.25,headY,fs,'#C8102E');
+  flame(c,x0-fs*0.25,headY,fs,cine?COL.GOLD:'#C8102E');
   const ch=cap(c,'D'),tBase=headY+fs*0.50+ch/2;
-  c.font=font(150*S,'zil',700);c.fillStyle=MCOL.ink;
+  c.font=font(150*S,'zil',700);c.fillStyle=ink;
   trk(c,x0+fw+gp,tBase,nm,tr);
   c.font=font(60*S,'osw',600);
   const ltr=56*S,lw=trkW(c,'LIQUORS',ltr);
-  c.fillStyle=MCOL.ink;
+  c.fillStyle=ink;
   trk(c,(W-lw)/2,tBase+100*S,'LIQUORS',ltr);
   /* product text */
   const maxW=(W-380*S)*0.94;
@@ -861,11 +1187,13 @@ function mRenderP(c,W,H){
     y+=p1*0.78;mOut(c,l1,W/2,y,p1,nFill,'center');y+=p1*0.30}
   if(l2){const p2=mFit(c,l2,190*S,maxW,90*S);
     y+=p2*0.82;mOut(c,l2,W/2,y,p2,nFill,'center')}
-  /* price */
-  if(mSt.price)mDrawPrice(c,W,S,3560*S);
+  /* price (pulses twice per loop when animated) */
+  if(mSt.price){const pz=1+0.035*(1-Math.cos(4*Math.PI*ph))/2;
+    c.save();c.translate(W/2,3400*S);c.scale(pz,pz);c.translate(-W/2,-3400*S);
+    mDrawPrice(c,W,S,3560*S);c.restore()}
   /* credit */
   const cr=(mSt.credit||'').trim();
-  if(cr){c.save();c.font=font(34*S,'osw',600);c.fillStyle=MCOL.ink;
+  if(cr){c.save();c.font=font(34*S,'osw',600);c.fillStyle=ink;
     c.textAlign='right';c.fillText(cr,W-95*S,H-72*S);c.restore()}
 }
 let mPW=1080; /* portrait-master preview width in device px */
@@ -879,16 +1207,16 @@ function mCalcPW(){
   const target=mSt.or==='port'?availW*dpr:availW*dpr*(MBASE_W/MBASE_H);
   return Math.max(360,Math.min(1080,Math.round(target)));
 }
-function mDraw(){
+function mDraw(o){
   mPW=mCalcPW();
   const pw=mPW, ph=Math.round(pw*MBASE_H/MBASE_W);
   if(mSt.or==='port'){
     if(mstage.width!==pw||mstage.height!==ph){mstage.width=pw;mstage.height=ph}
-    mRenderP(mctx,pw,ph);
+    mRenderP(mctx,pw,ph,o);
   }else{
     if(mstage.width!==ph||mstage.height!==pw){mstage.width=ph;mstage.height=pw}
     moff.width=pw;moff.height=ph;
-    mRenderP(moff.getContext('2d'),pw,ph);
+    mRenderP(moff.getContext('2d'),pw,ph,o);
     mctx.setTransform(1,0,0,1,0,0);mctx.clearRect(0,0,ph,pw);
     mctx.translate(ph,0);mctx.rotate(Math.PI/2);
     mctx.drawImage(moff,0,0);
@@ -902,44 +1230,49 @@ window.addEventListener('resize',()=>{
 });
 
 /* ----- monitor interactions ----- */
+/* classic zooms the product inside its zone; cinematic zooms the full-bleed scene */
+const mZ=()=>mSt.style==='cine'?mSt.cz:mSt.zoom;
+function mSetZ(v){
+  if(mSt.style==='cine')mSt.cz=Math.max(1,Math.min(3,v));else mSt.zoom=Math.max(0.5,Math.min(3,v));
+  $('#mzoom').value=mZ();mClamp();mDraw();
+}
 const mpts=new Map();let mpinch=null;
 mstage.addEventListener('pointerdown',e=>{
   mstage.setPointerCapture(e.pointerId);
   mpts.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(mpts.size===2){const a=[...mpts.values()];
-    mpinch={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),z:mSt.zoom}}
+    mpinch={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),z:mZ()}}
 });
 mstage.addEventListener('pointermove',e=>{
   if(!mpts.has(e.pointerId))return;
   const prev=mpts.get(e.pointerId);
   mpts.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(mpts.size===2&&mpinch){const a=[...mpts.values()];
-    const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);
-    mSt.zoom=Math.max(0.5,Math.min(3,mpinch.z*d/mpinch.d));
-    $('#mzoom').value=mSt.zoom;mClamp();mDraw();return}
+    mSetZ(mpinch.z*Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)/mpinch.d);return}
   if(!mSt.img)return;
   const r=mstage.getBoundingClientRect(),sc=mstage.width/r.width;
   let dx=(e.clientX-prev.x)*sc,dy=(e.clientY-prev.y)*sc;
   if(mSt.or==='land'){const t=dx;dx=dy;dy=-t}
-  mSt.ox+=dx*(MBASE_W/mPW);mSt.oy+=dy*(MBASE_W/mPW);
+  dx*=MBASE_W/mPW;dy*=MBASE_W/mPW;
+  if(mSt.style==='cine'){const b=coverBox(mSt,MBASE_W/MBASE_H,mSt.cz);
+    mSt.cx-=dx*(b.cw/MBASE_W)/mSt.iw;mSt.cy-=dy*(b.ch/MBASE_H)/mSt.ih}
+  else{mSt.ox+=dx;mSt.oy+=dy}
   mClamp();mDraw();
 });
 function mEndPt(e){mpts.delete(e.pointerId);if(mpts.size<2)mpinch=null}
 mstage.addEventListener('pointerup',mEndPt);
 mstage.addEventListener('pointercancel',mEndPt);
-mstage.addEventListener('wheel',e=>{e.preventDefault();
-  mSt.zoom=Math.max(0.5,Math.min(3,mSt.zoom*(1-e.deltaY*0.0012)));
-  $('#mzoom').value=mSt.zoom;mClamp();mDraw();
-},{passive:false});
+mstage.addEventListener('wheel',e=>{e.preventDefault();mSetZ(mZ()*(1-e.deltaY*0.0012))},{passive:false});
 
 /* ----- monitor uploads ----- */
+function setWindowImage(img){
+  mSt.img=img;mSt.iw=img.naturalWidth;mSt.ih=img.naturalHeight;
+  mSt.ox=0;mSt.oy=0;mSt.zoom=1;mSt.cx=mSt.cy=0.5;mSt.cz=1;$('#mzoom').value=1;
+  $('#mdrop').classList.add('hide');mDraw();
+}
 function mLoadFile(f){
   if(!f||!f.type.startsWith('image/'))return;
-  const url=URL.createObjectURL(f),img=new Image();
-  img.onload=()=>{mSt.img=img;mSt.iw=img.naturalWidth;mSt.ih=img.naturalHeight;
-    mSt.ox=0;mSt.oy=0;mSt.zoom=1;$('#mzoom').value=1;
-    $('#mdrop').classList.add('hide');mDraw()};
-  img.src=url;
+  const img=new Image();img.onload=()=>setWindowImage(img);img.src=URL.createObjectURL(f);
 }
 $('#mfile').addEventListener('change',e=>mLoadFile(e.target.files[0]));
 $('#mpick').addEventListener('click',()=>$('#mfile').click());
@@ -951,8 +1284,9 @@ function mBind(id,key){const el=$(id);el.addEventListener('input',()=>{mSt[key]=
 mBind('#ml1','l1');mBind('#ml2','l2');mBind('#mcredit','credit');
 $('#mdol').addEventListener('input',e=>{mSt.dol=e.target.value.replace(/\D/g,'')||'0';mDraw()});
 $('#mcts').addEventListener('input',e=>{mSt.cts=e.target.value.replace(/\D/g,'').slice(0,2)||'00';mDraw()});
-$('#mzoom').addEventListener('input',e=>{mSt.zoom=+e.target.value;mClamp();mDraw()});
-$('#mrecenter').addEventListener('click',()=>{mSt.ox=0;mSt.oy=0;mSt.zoom=1;$('#mzoom').value=1;mDraw()});
+$('#mzoom').addEventListener('input',e=>mSetZ(+e.target.value));
+$('#mrecenter').addEventListener('click',()=>{
+  mSt.ox=0;mSt.oy=0;mSt.zoom=1;mSt.cx=mSt.cy=0.5;mSt.cz=1;$('#mzoom').value=1;mDraw()});
 $('#mpriceOn').addEventListener('change',e=>{mSt.price=e.target.checked;
   $('#mpriceRow').style.display=mSt.price?'flex':'none';mDraw()});
 $('#mpcols').addEventListener('click',e=>{
@@ -969,6 +1303,65 @@ $('#mors').addEventListener('click',e=>{
   const b=e.target.closest('.chip');if(!b)return;
   [...$('#mors').children].forEach(x=>x.classList.remove('on'));b.classList.add('on');
   mSt.or=b.dataset.o;mDraw();
+});
+function setMStyle(s){
+  mSt.style=s;mStopAnim();
+  [...$('#mstyles').children].forEach(x=>x.classList.toggle('on',x.dataset.s===s));
+  const cine=s==='cine',z=$('#mzoom');
+  z.min=cine?1:0.5;z.value=mZ();
+  $('#mstylenote').textContent=cine
+    ?'Cinematic: a full-screen scene (an AI Studio image works best) behind your logo, name and price.'
+    :'Classic: the product photo on white, exactly like the current window ads.';
+  $('#mphotonote').textContent=cine
+    ?'Use a full scene, like an AI Studio image. Drag the preview to position; pinch or scroll to zoom.'
+    :'Product photos on a white background work best. Drag the preview to position; pinch or scroll to zoom.';
+  mClamp();mDraw();
+}
+$('#mstyles').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)setMStyle(b.dataset.s)});
+$('#mdurs').addEventListener('click',e=>{
+  const b=e.target.closest('.chip');if(!b)return;
+  [...$('#mdurs').children].forEach(x=>x.classList.toggle('on',x===b));mSt.dur=+b.dataset.d;
+});
+$('#mreses').addEventListener('click',e=>{
+  const b=e.target.closest('.chip');if(!b)return;
+  [...$('#mreses').children].forEach(x=>x.classList.toggle('on',x===b));mSt.res=+b.dataset.r;
+});
+
+/* ----- monitor loop video ----- */
+let mAnimId=null;
+function mStopAnim(){if(mAnimId){cancelAnimationFrame(mAnimId);mAnimId=null;mDraw()}}
+$('#mprev').addEventListener('click',()=>{
+  if(busy)return;mStopAnim();
+  const t0=performance.now(),dur=mSt.dur;
+  const loop=n=>{const t=(n-t0)/1000;
+    if(t>=dur*2){mAnimId=null;mDraw();mMsg('');return}
+    mDraw({anim:true,t:t%dur,dur});mAnimId=requestAnimationFrame(loop)};
+  mMsg('Playing the loop twice so you can see the seam…');mAnimId=requestAnimationFrame(loop);
+});
+$('#mvid').addEventListener('click',async()=>{
+  if(busy)return;mStopAnim();
+  const pw=mSt.res===2160?2160:1080,ph=pw*16/9,dur=mSt.dur,land=mSt.or==='land';
+  const master=document.createElement('canvas');master.width=pw;master.height=ph;
+  const mc=master.getContext('2d');
+  let out=master,oc=null;
+  if(land){out=document.createElement('canvas');out.width=ph;out.height=pw;oc=out.getContext('2d')}
+  const frame=t=>{mRenderP(mc,pw,ph,{anim:true,t,dur});
+    if(oc){oc.setTransform(1,0,0,1,0,0);oc.translate(ph,0);oc.rotate(Math.PI/2);
+      oc.drawImage(master,0,0);oc.setTransform(1,0,0,1,0,0)}};
+  const name='dantes_monitor_'+mSlug()+'_'+out.width+'x'+out.height+'_loop';
+  setBusy(true);mMsg('Rendering loop…');
+  try{
+    const r=await encodeMP4(out,30,Math.round(dur*30),frame,
+      p=>mMsg('Rendering loop… '+Math.round(p*100)+'%')).catch(()=>null);
+    if(r){dl(r.blob,name+'.mp4');
+      mMsg('Loop exported at '+out.width+'×'+out.height+(r.codec==='avc'?' (H.264 MP4).':' (VP9 MP4; if a screen will not play it, export from Chrome or Safari).'));
+      return}
+    mMsg('Recording loop in real time…');
+    const rr=await recordCanvas(out,dur,frame);
+    dl(rr.blob,name+'.'+rr.ext);
+    mMsg('Loop exported as '+rr.ext.toUpperCase()+' at '+out.width+'×'+out.height+'.');
+  }catch(err){mMsg('Video export failed: '+err.message)}
+  finally{setBusy(false);mDraw()}
 });
 
 /* ----- monitor export ----- */
@@ -989,20 +1382,297 @@ $('#mpng').addEventListener('click',()=>{
   }else{mMsg('Export failed. Please try again.')}},'image/png');
 });
 
+/* ================= AI Studio ================= */
+/* Cinematic product shots from Google's Nano Banana models (plus GPT Image and
+   Grok through Puter), with the uploaded bottle as the reference image.
+   Engines: Puter.js (each person's free monthly allowance, no setup) or a Google
+   key (Vertex AI express mode free tier, or a billed AI Studio key). Keys stay
+   in this browser and are only ever sent to Google. */
+const SCENES=[
+  {id:'inferno',name:'Inferno',sub:'Embers, smoke, fire glow',
+   scene:'The bottle stands on a slab of black volcanic stone with glowing orange embers in its cracks, in a dark studio. Fiery sparks and embers drift upward around it, soft smoke curls behind the bottle, a deep red-orange glow rises from below, and a warm golden rim light traces the edges of the glass. Near-black background with faint ember bokeh.'},
+  {id:'gold',name:'Gold Luxe',sub:'Black marble, gold light',
+   scene:'The bottle stands on a polished black marble pedestal with thin gold veins. A warm golden spotlight falls from above, fine gold dust floats in the air, and soft golden bokeh glows in the dark background. Elegant, expensive, high contrast.'},
+  {id:'ice',name:'Ice Cold',sub:'Frost, mist, blue backlight',
+   scene:'The bottle stands on a block of clear ice with frost on its surface. A cold blue-white backlight makes the glass glow, fresh condensation droplets bead on the bottle, icy mist swirls around the base, and the background is deep navy with cool bokeh.'},
+  {id:'neon',name:'Neon Night',sub:'Miami pink and teal',
+   scene:'Night scene: the bottle stands on a glossy wet black surface. Magenta neon rim light from the left and teal neon rim light from the right, soft haze, neon reflections on the surface, and out-of-focus palm silhouettes and city lights behind.'},
+  {id:'bar',name:'Bar Top',sub:'Upscale bar at night',
+   scene:'The bottle stands on a dark polished wooden bar top in an upscale cocktail bar at night. Warm amber backlight, out-of-focus shelves of bottles and warm string lights behind, and a crystal rocks glass with one large clear ice cube placed off to one side, not covering the bottle.'},
+  {id:'spot',name:'Spotlight',sub:'Hard light, smoke, black floor',
+   scene:'A single hard spotlight from directly above in a black room. Slow, thick smoke catches the light around the bottle, the shadows are dramatic, and a glossy black floor shows a clean reflection of the bottle.'},
+  {id:'agave',name:'Agave Sunset',sub:'Golden hour, for tequila',
+   scene:'Golden hour in a blue agave field in Jalisco. The bottle stands on a weathered oak barrel top in the foreground, agave rows and distant hills softly out of focus behind, and warm sunlight from behind the bottle makes the liquid glow.'},
+  {id:'white',name:'Studio White',sub:'Clean packshot, classic window ads',clean:true,
+   scene:'A professional e-commerce packshot on a pure white seamless background. Soft, even studio lighting, crisp edges, and a subtle reflection with a soft contact shadow under the bottle. Straight-on view with the whole bottle visible.'}
+];
+/* composition notes line the shot up with the Forge layouts (logo on top, text and price below) */
+const ACOMP={
+  p45:'Vertical 4:5 frame. The bottle stands upright and centered, filling about 55% of the frame height, its base about 28% up from the bottom edge. Keep the top 12% and the bottom 25% of the frame dark and uncluttered so a logo and text can sit there.',
+  reel:'Vertical 9:16 frame. The bottle stands upright and centered, filling about 45% of the frame height, slightly above the middle. Keep the top 14% and the bottom 30% of the frame dark and uncluttered so a logo, product name and price can sit there.',
+  wide:'Horizontal 16:9 frame. The bottle stands upright just right of center, filling about 70% of the frame height. Keep the left third and the bottom 20% darker and uncluttered for text.',
+  sq:'Square 1:1 frame. The bottle stands upright and centered, filling about 60% of the frame height, its base about 25% up from the bottom edge. Keep the bottom 22% dark and uncluttered for text.'
+};
+const ACLEAN={
+  p45:'Vertical 4:5 frame. The bottle stands upright and centered, filling about 80% of the frame height, with even white space around it.',
+  reel:'Vertical 9:16 frame. The bottle stands upright and centered, filling about 70% of the frame height, with even white space around it.',
+  wide:'Horizontal 16:9 frame. The bottle stands upright and centered, filling about 85% of the frame height.',
+  sq:'Square 1:1 frame. The bottle stands upright and centered, filling about 82% of the frame height.'
+};
+const AMODELS={
+  nb2:{puter:'google/gemini-3.1-flash-image',google:'gemini-3.1-flash-image'},
+  nbpro:{puter:'google/gemini-3-pro-image',google:'gemini-3-pro-image'},
+  gpt:{puter:'openai/gpt-image-2.5-sunburst'},
+  grok:{puter:'x-ai/grok-imagine-image-2.0'}
+};
+const ARATIO={p45:[4,5],reel:[9,16],wide:[16,9],sq:[1,1]};
+const PUTER_SRC='https://js.puter.com/v2/';
+const aTest=/[?&]aitest=1/.test(location.search); /* Puter test mode: sample images, no credits */
+const aSt={ref:null,refURL:'',scene:'inferno',fmt:'p45',model:'nb2',size:'2K',
+  engine:'puter',kind:'vertex',n:2,busy:false,res:[],sel:-1};
+
+function aMsg(s){$('#astatus').textContent=s||''}
+function aChips(sel,key,fn){$(sel).addEventListener('click',e=>{
+  const b=e.target.closest('[data-'+key+']');if(!b||b.disabled)return;
+  [...$(sel).children].forEach(x=>x.classList.toggle('on',x===b));fn(b.dataset[key]);aSync()})}
+function aPrompt(){
+  const sc=SCENES.find(s=>s.id===aSt.scene),name=$('#aname').value.trim(),
+    extra=$('#aextra').value.trim().replace(/[.\s]+$/,'');
+  const subj=aSt.ref
+    ?'Create a photorealistic advertising photo of the exact bottle in the attached image'+(name?' ('+name+')':'')+'. Keep the bottle identical to the reference: same shape and proportions, glass, cap, liquid color, and label artwork with every word, logo and color exactly as shown. Do not redesign, translate, add or remove anything on the bottle or its label.'
+    :'Create a photorealistic advertising photo of a bottle of '+(name||'premium liquor')+'. Reproduce the real, current bottle and label design as accurately as you can.';
+  return [subj,'Scene: '+sc.scene,'Composition: '+(sc.clean?ACLEAN:ACOMP)[aSt.fmt],
+    sc.clean?'Clean, true-to-life color and crisp studio detail.'
+      :'Shot like a high-end liquor commercial: full-frame camera, 85mm lens, crisp focus on the label, realistic reflections and refraction in the glass, cinematic color grading, rich contrast.',
+    extra?'Also: '+extra+'.':'',
+    'No added text, captions, prices, extra logos, watermarks, hands or people.'].filter(Boolean).join('\n\n');
+}
+function aSync(){
+  const g=aSt.engine==='google';
+  $('#aPuterBox').hidden=g;$('#aGoogleBox').hidden=!g;
+  if(g&&!AMODELS[aSt.model].google)aSt.model='nb2';
+  [...$('#amodels').children].forEach(b=>{const ok=!g||!!AMODELS[b.dataset.m].google;
+    b.disabled=!ok;b.style.opacity=ok?'':'0.4';b.classList.toggle('on',b.dataset.m===aSt.model)});
+  $('#agen').textContent=(aSt.n>1?'Generate '+aSt.n+' images':'Generate image')+(g?' with Google':' with Puter');
+  $('#aprompt').value=aPrompt();
+}
+
+/* ----- product reference ----- */
+function aPrepRef(img){ /* flattened on white, capped at 1280px, small enough to send inline */
+  const s=Math.min(1,1280/Math.max(img.naturalWidth,img.naturalHeight));
+  const c=document.createElement('canvas');
+  c.width=Math.max(1,Math.round(img.naturalWidth*s));c.height=Math.max(1,Math.round(img.naturalHeight*s));
+  const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
+  x.drawImage(img,0,0,c.width,c.height);
+  return c.toDataURL('image/jpeg',0.9);
+}
+function aSetRef(img){
+  aSt.ref=img;aSt.refURL=aPrepRef(img);
+  $('#athumbImg').src=aSt.refURL;$('#athumb').hidden=false;$('#apick').textContent='Replace bottle photo';aSync();
+}
+function aLoadFile(f){
+  if(!f||!f.type.startsWith('image/'))return;
+  const img=new Image();img.onload=()=>aSetRef(img);img.src=URL.createObjectURL(f);
+}
+
+/* ----- Google (Vertex AI express mode or AI Studio) ----- */
+function gErr(status,m){
+  if(/API_KEY_INVALID|API key not valid/i.test(m))return 'Google rejected the key. Copy it again in full, and check the key type above.';
+  if(status===429)return 'Google’s free capacity is busy or your quota is used up. Wait a minute and try again, or switch models.';
+  if(/billing/i.test(m))return 'This model needs billing on that Google account. Try Nano Banana 2, or a Vertex AI express key.';
+  if(status===401||status===403)return 'Google refused the key ('+m+'). Express mode keys need “Vertex AI” selected; AI Studio keys need “AI Studio key”.';
+  return 'Google error: '+m;
+}
+async function aGoogle(key,model,prompt,noSize){
+  const parts=[];
+  if(aSt.ref)parts.push({inlineData:{mimeType:'image/jpeg',data:aSt.refURL.split(',')[1]}});
+  parts.push({text:prompt});
+  const r=ARATIO[aSt.fmt],ic={aspectRatio:r[0]+':'+r[1]};
+  if(!noSize)ic.imageSize=aSt.size;
+  const url=aSt.kind==='studio'
+    ?'https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent'
+    :'https://aiplatform.googleapis.com/v1/publishers/google/models/'+model+':generateContent';
+  const body=JSON.stringify({contents:[{role:'user',parts}],
+    generationConfig:{responseModalities:['TEXT','IMAGE'],imageConfig:ic}});
+  let res,j=null;
+  for(let i=0;;i++){
+    try{res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body})}
+    catch(e){throw new Error('Could not reach Google. Check your connection and try again.')}
+    j=await res.json().catch(()=>null);
+    if((res.status===429||res.status===503)&&i<2){aMsg('Google is busy, retrying in a few seconds…');await sleep(7000*(i+1));continue}
+    break;
+  }
+  if(!res.ok){
+    const m=(j&&j.error&&j.error.message)||('HTTP '+res.status);
+    if(res.status===400&&!noSize&&/image_?size/i.test(m))return aGoogle(key,model,prompt,true);
+    if(res.status===404&&!/-preview$/.test(model))return aGoogle(key,model+'-preview',prompt,noSize);
+    throw new Error(gErr(res.status,m));
+  }
+  let img=null,txt='';
+  for(const cd of (j&&j.candidates)||[])for(const p of (cd.content&&cd.content.parts)||[]){
+    if(p.thought)continue; /* Gemini 3 can send draft "thought" images first */
+    const d=p.inlineData||p.inline_data;
+    if(d&&d.data)img=d;else if(p.text)txt+=p.text+' ';
+  }
+  if(!img){
+    const why=(j&&j.promptFeedback&&j.promptFeedback.blockReason)||(j&&j.candidates&&j.candidates[0]&&j.candidates[0].finishReason)||'';
+    throw new Error(/SAFETY|PROHIBITED|BLOCK/i.test(why)
+      ?'Google blocked this one. Try different wording in Extra direction.'
+      :'Google sent no image'+(txt?': “'+txt.trim().slice(0,160)+'”':'. Try again.'));
+  }
+  return b64Blob(img.data,img.mimeType||img.mime_type||'image/png');
+}
+
+/* ----- Puter ----- */
+function puterErr(e){
+  const code=String((e&&(e.code||(e.error&&e.error.code)))||''),
+    m=String((e&&(e.message||(e.error&&e.error.message)))||e||'');
+  if(/insufficient_funds/i.test(code+m))return 'Your free Puter allowance for this month is used up. Use a Google key, or the free Gemini app below.';
+  if(/auth|sign.?in|unauthori/i.test(code+m))return 'Puter needs you to sign in first. Tap “Sign in to Puter” and try again.';
+  return 'Puter error: '+(m||code||'unknown');
+}
+async function aPuterLoad(){
+  await loadScript(PUTER_SRC);
+  if(!window.puter||!puter.ai)throw new Error('Puter did not load. Check your connection.');
+  return window.puter;
+}
+async function aPuterStatus(){
+  try{const P=window.puter;if(P&&P.auth&&P.auth.isSignedIn()){const u=await P.auth.getUser();
+    $('#aPuterIn').textContent='Signed in to Puter'+(u&&u.username?' as '+u.username:'')}}catch(e){}
+}
+async function aPuter(model,prompt){
+  const P=await aPuterLoad();
+  const r=ARATIO[aSt.fmt],opt={model,ratio:{w:r[0],h:r[1]}};
+  if(/gemini/.test(model))opt.quality=aSt.size; /* Nano Banana 2 defaults to 512px without this */
+  else if(/gpt-image/.test(model))opt.quality='high';
+  if(aSt.ref)opt.input_images=[aSt.refURL];
+  if(aTest)opt.test_mode=true;
+  let im;
+  try{im=await P.ai.txt2img(prompt,opt)}catch(e){throw new Error(puterErr(e))}
+  const src=im&&(im.src||String(im));
+  if(!src)throw new Error('Puter sent no image. Try again.');
+  try{const res=await fetch(src);if(!res.ok)throw new Error();return await res.blob()}
+  catch(e){window.open(src,'_blank','noopener');
+    throw new Error('The image opened in a new tab. Save it, then bring it back with “Add a finished image”.')}
+}
+
+/* ----- results ----- */
+function nearestFmt(w,h){let best='p45',bd=9;
+  for(const k in ARATIO){const d=Math.abs(Math.log((w/h)/(ARATIO[k][0]/ARATIO[k][1])));if(d<bd){bd=d;best=k}}
+  return best}
+function whiteBg(img){ /* imported packshot on white? then it suits the classic window look */
+  try{const c=document.createElement('canvas');c.width=c.height=24;const x=c.getContext('2d');
+    x.drawImage(img,0,0,24,24);const d=x.getImageData(0,0,24,24).data;let s=0,n=0;
+    for(let i=0;i<24;i++)for(const [px,py] of [[i,0],[i,23],[0,i],[23,i]]){const o=(py*24+px)*4;s+=d[o]+d[o+1]+d[o+2];n+=3}
+    return s/n>232}catch(e){return false}
+}
+async function aAdd(blob,label,clean){
+  const url=URL.createObjectURL(blob),img=new Image();
+  await new Promise((res,rej)=>{img.onload=res;img.onerror=()=>rej(new Error('That image could not be opened.'));img.src=url});
+  aSt.res.push({blob,url,img,label,fmt:nearestFmt(img.naturalWidth,img.naturalHeight),
+    clean:clean==null?whiteBg(img):clean});
+  aSt.sel=aSt.res.length-1;aRender();
+}
+function aRender(){
+  const r=aSt.res[aSt.sel],v=$('#aview');let im=$('#aimg');
+  $('#aempty').hidden=!!r;
+  if(r){if(!im){im=document.createElement('img');im.id='aimg';im.alt='Generated ad image';v.appendChild(im)}im.src=r.url}
+  else if(im)im.remove();
+  $('#agal').innerHTML=aSt.res.map((x,i)=>'<button type="button" data-i="'+i+'"'+(i===aSt.sel?' class="on"':'')+
+    ' aria-label="Image '+(i+1)+'"><img src="'+x.url+'" alt=""></button>').join('');
+  $('#aactions').hidden=!r;
+}
+async function aGenerate(){
+  if(aSt.busy)return;
+  const g=aSt.engine==='google',m=AMODELS[aSt.model],key=$('#akey').value.trim();
+  if(!aSt.ref&&!$('#aname').value.trim()){aMsg('Upload the bottle photo or type the product name first.');return}
+  if(g&&!key){aMsg('Paste your Google key first (see “Get the free Google key”).');return}
+  if(g)LS.set('dantes.gkey',$('#aremember').checked?key:'');
+  const prompt=aPrompt(),sc=SCENES.find(s=>s.id===aSt.scene);
+  aSt.busy=true;$('#agen').disabled=true;$('#aview').classList.add('busy');
+  let made=0;
+  try{
+    for(let i=0;i<aSt.n;i++){
+      aMsg('Making image '+(i+1)+' of '+aSt.n+'… this usually takes 10–40 seconds.');
+      const blob=g?await aGoogle(key,m.google,prompt):await aPuter(m.puter,prompt);
+      await aAdd(blob,sc.name,!!sc.clean);made++;
+    }
+    aMsg(made>1?'Done. Tap a thumbnail to compare, then send your favorite to an ad.'
+      :'Done. Send it to an ad, or generate again for another take.');
+  }catch(err){aMsg((made?made+' made, then: ':'')+err.message)}
+  finally{aSt.busy=false;$('#agen').disabled=false;$('#aview').classList.remove('busy')}
+}
+
+/* ----- AI Studio bindings ----- */
+aChips('#ascenes','s',v=>{aSt.scene=v});
+aChips('#afmts','f',v=>{aSt.fmt=v});
+aChips('#amodels','m',v=>{aSt.model=v});
+aChips('#asizes','s',v=>{aSt.size=v});
+aChips('#acount','n',v=>{aSt.n=+v});
+aChips('#aengines','e',v=>{aSt.engine=v;LS.set('dantes.aengine',v);
+  if(v==='puter')aPuterLoad().then(aPuterStatus).catch(()=>{})});
+aChips('#akinds','k',v=>{aSt.kind=v;LS.set('dantes.gkind',v)});
+['#aname','#aextra'].forEach(id=>$(id).addEventListener('input',aSync));
+$('#apick').addEventListener('click',()=>$('#afile').click());
+$('#afile').addEventListener('change',e=>{aLoadFile(e.target.files[0]);e.target.value=''});
+$('#aclear').addEventListener('click',()=>{aSt.ref=null;aSt.refURL='';$('#athumb').hidden=true;
+  $('#apick').textContent='Upload bottle photo';aSync()});
+$('#aremember').addEventListener('change',e=>{if(!e.target.checked)LS.set('dantes.gkey','')});
+$('#aPuterIn').addEventListener('click',async()=>{
+  try{const P=await aPuterLoad();if(!P.auth.isSignedIn())await P.auth.signIn();aPuterStatus()}
+  catch(e){aMsg('Puter sign-in did not finish. '+((e&&e.message)||''))}
+});
+$('#agen').addEventListener('click',aGenerate);
+$('#agal').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;aSt.sel=+b.dataset.i;aRender()});
+$('#aToSocial').addEventListener('click',()=>{const r=aSt.res[aSt.sel];if(!r)return;
+  setFmt(r.fmt);setSocialImage(r.img);showTab('social');window.scrollTo(0,0)});
+$('#aToWindow').addEventListener('click',()=>{const r=aSt.res[aSt.sel];if(!r)return;
+  setWindowImage(r.img);setMStyle(r.clean?'classic':'cine');showTab('monitor');window.scrollTo(0,0)});
+$('#asave').addEventListener('click',()=>{const r=aSt.res[aSt.sel];if(!r)return;
+  const base=($('#aname').value||r.label).toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||'ai';
+  dl(r.blob,'dantes_ai_'+base+'_'+(aSt.sel+1)+(r.blob.type==='image/jpeg'?'.jpg':'.png'))});
+$('#agemini').addEventListener('click',async()=>{
+  const p=aPrompt();$('#aprompt').value=p;let ok=false;
+  try{await navigator.clipboard.writeText(p);ok=true}catch(e){}
+  window.open('https://gemini.google.com/app','_blank','noopener');
+  aMsg(ok?'Prompt copied. In Gemini: attach the bottle photo, paste and send.'
+    :'Copy the prompt from the box below, then paste it into Gemini with the bottle photo.');
+});
+$('#aimport').addEventListener('click',()=>$('#aimp').click());
+$('#aimp').addEventListener('change',async e=>{const f=e.target.files[0];e.target.value='';
+  if(!f||!f.type.startsWith('image/'))return;
+  try{await aAdd(f,'Imported',null);aMsg('Image added. Send it to an ad below.')}catch(err){aMsg(err.message)}});
+function aInit(){
+  $('#ascenes').innerHTML=SCENES.map(s=>'<button class="scene'+(s.id===aSt.scene?' on':'')+'" data-s="'+s.id+
+    '" type="button"><b>'+s.name+'</b><span>'+s.sub+'</span></button>').join('');
+  const key=LS.get('dantes.gkey'),eng=LS.get('dantes.aengine'),kind=LS.get('dantes.gkind');
+  if(key)$('#akey').value=key;
+  if(eng==='google'||eng==='puter'){aSt.engine=eng;
+    [...$('#aengines').children].forEach(b=>b.classList.toggle('on',b.dataset.e===eng))}
+  if(kind==='studio'||kind==='vertex'){aSt.kind=kind;
+    [...$('#akinds').children].forEach(b=>b.classList.toggle('on',b.dataset.k===kind))}
+  aSync();
+  /* preload Puter so its sign-in popup opens straight from the tap */
+  if(aSt.engine==='puter')setTimeout(()=>aPuterLoad().then(aPuterStatus).catch(()=>{}),1200);
+}
+
 /* ---------- tabs ---------- */
-let activeTab='social';
-document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
-  activeTab=b.dataset.tab;
-  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b));
-  $('#tab-social').hidden=activeTab!=='social';
-  $('#tab-monitor').hidden=activeTab!=='monitor';
-  if(activeTab==='monitor')mDraw();
-}));
+let activeTab='ai';
+function showTab(t){
+  activeTab=t;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.dataset.tab===t));
+  $('#tab-ai').hidden=t!=='ai';
+  $('#tab-social').hidden=t!=='social';
+  $('#tab-monitor').hidden=t!=='monitor';
+  if(t==='monitor')mDraw();
+}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
 
 /* ---------- init ---------- */
 initEmbers(stage.width,stage.height);
 draw();
 mDraw();
+aInit();
 if(document.fonts){
   ['100px Anton','700 100px Oswald','600 100px Oswald','400 100px Oswald','700 100px "Zilla Slab"','800 100px "Baloo 2"']
     .forEach(f=>{try{document.fonts.load(f).then(()=>{draw();mDraw()}).catch(()=>{})}catch(e){}});
