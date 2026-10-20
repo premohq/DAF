@@ -24,7 +24,17 @@ Turns a plain bottle photo into a cinematic ad shot with Google's Nano Banana im
 ### 2 · Social Media Ads
 Builds Instagram-ready posts and Reels on a live canvas.
 
-- **Upload a photo** — drag & drop or tap to pick. Drag to reposition, pinch or use the slider to zoom, one button to re-center the crop.
+- **Pick a layout:**
+  | Layout | What it is |
+  |---|---|
+  | One product | A product photo with its name and price (the classic Forge ad) |
+  | Two products · split | Two photos side by side or stacked, with a gold line between them. One headline and price card, which makes a good "from" price |
+  | Deals list | A weekly price list: up to 8 deals (name, detail, price, optional NEW / SALE / DEAL tag, prices like `2 for 41.99`) over a blurred store photo or the Inferno background. In the video the rows slide in one by one |
+  | Closing slide | The last slide of a carousel or Story: the logo, where to find the store, and a 21+ line |
+- **Upload a photo** — drag & drop or tap to pick. Drag to reposition, pinch or use the slider to zoom, one button to re-center the crop. In a split, drag either half to move its photo.
+- **Whole product** — instead of filling the frame, the entire photo sits inside the safe area (below the logo, above the name and price) over a blurred, darkened copy of itself, so no bottle top gets cut off.
+- **Blur a spot** — turn on the blur tool and drag a box over anything that shouldn't be in the ad, like other products' price tags. It gets blurred and muted. Undo and clear are one tap.
+- **Enhance photo** — a light contrast, color and sharpening pass for phone photos.
 - **Pick a format:**
   | Format | Size | Use it for |
   |---|---|---|
@@ -33,12 +43,14 @@ Builds Instagram-ready posts and Reels on a live canvas.
   | 9:16 Reel | 1080×1920 | Reels & Stories |
   | 16:9 Wide | 1920×1080 | X / Facebook link posts |
 - **Set the text** — badge (top right, Ember red or Gold), product name lines, subline, and the store address footer.
-- **Price card** — toggle it on and punch in dollars and cents. Dark near-black card, thin gold keyline. Classy. No tacky chips.
+- **Price card** — toggle it on and punch in dollars and cents. Dark near-black card, thin gold keyline. Classy. No tacky chips. An optional caption sits above it in small gold capitals: 2 FOR, SALE, FROM, 1 LITER, or anything you type.
 - **Export:**
   - **PNG** — full-resolution still, named automatically from the product.
+  - **All four sizes · ZIP** — the 4:5, 1:1, 9:16 and 16:9 PNGs in one download, plus a caption.txt with the caption, short version and alt text.
   - **Video** — 4, 6, or 8 second animated cut with the ember/flame treatment, rendered frame by frame into a smooth 30 fps MP4 (falls back to real-time recording on browsers without WebCodecs).
   - **GIF** — encoded in-browser via gif.js. No audio, bigger files. Video is the move for Reels; add audio in the Instagram app before posting.
   - **Preview animation** — watch the loop before you commit.
+- **Caption & hashtags** — writes the post for you from the ad's own text and price: a caption with the store line, "21+ only. Please drink responsibly." and hashtags, a short version for X, Stories and Threads, and alt text. "Another version" cycles through three takes per ad type (new arrival, deal, or pick). Copy buttons for each, an optional AI polish through Puter, and the caption keeps up with the ad until you edit it by hand.
 
 ### 3 · Window Display Ads
 Replicates the exact format of the in-store window monitor ads.
@@ -56,7 +68,7 @@ Replicates the exact format of the in-store window monitor ads.
 
 You don't pick the look. The look picks you.
 
-- **Logo:** the real Dante's Liquors logo, rebuilt as vector art from the original: the plate with its corner screws, DANTE'S with the red apostrophe, LIQUORS, and the fire-bird glass. It is drawn as shapes, so it stays sharp at any size, from the tab icon to 4K window screens. Dark ads get the white version, white ads get the black one.
+- **Logo:** the real Dante's Liquors logo, rebuilt as vector art from the original: the plate with its corner screws, DANTE'S with the red apostrophe, LIQUORS, and the fire glass. The glass is fitted to the original's pixels, with both white slashes kept inside the flame and the right-hand flame sitting straight on its neck. It is drawn as shapes, so it stays sharp at any size, from the tab icon to 4K window screens. Dark ads get the white version, white ads get the black one.
 - **Logo files:** [`brand/`](brand/) has the logo as SVG (any size, for print and signage) and 4000px transparent PNG, black and white versions, plus the glass on its own.
 
 - **Palette:** Ink `#0B0908` · Bone `#F6F1E7` · Ember `#C8102E` · Gold `#E3B264`
@@ -72,11 +84,12 @@ Everything is one self-contained `index.html`:
 
 - All rendering happens on an HTML5 `<canvas>` — the preview you see is the same pipeline the export uses, drawn at full output resolution.
 - Photo positioning uses pointer events (drag to pan, pinch to zoom on touch) with clamped centering so the crop can never fall off the image.
+- The ZIP of all four sizes is built in the page (stored, no compression library needed). Blurred spots and Enhance work on a copy of the photo; the original is never changed.
 - Video export renders every frame on its own clock and encodes with WebCodecs (H.264, or VP9 where H.264 is missing) into an MP4 via mp4-muxer, loaded from jsDelivr on demand. Browsers without WebCodecs fall back to `canvas.captureStream()` + `MediaRecorder`.
 - Window loops are seamless by construction: everything that moves repeats exactly once per loop.
 - GIF export loads gif.js from a CDN on demand and encodes with web workers.
 - AI Studio calls the AI straight from the browser: Puter.js (loaded from js.puter.com) or Google's API (Vertex AI express mode or AI Studio) with your key. Keys are kept in this browser only if you leave "Remember on this device" on. Add `?aitest=1` to the URL to try the Puter flow with sample images that use no credits.
-- Zero backend. Photos stay in your browser — except in AI Studio, which sends the bottle photo and the prompt to the AI service you picked (Puter or Google). Everything else that happens in the Forge stays in the Forge.
+- Zero backend. Photos stay in your browser — except in AI Studio, which sends the bottle photo and the prompt to the AI service you picked (Puter or Google). The caption writer works offline; only "Polish the caption with AI" sends the caption text (never a photo) to Puter. Everything else that happens in the Forge stays in the Forge.
 
 ---
 
