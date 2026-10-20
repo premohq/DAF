@@ -118,6 +118,7 @@ input[type=text],input[type=password],textarea{
 input[type=text]:focus,input[type=password]:focus,textarea:focus{outline:none;border-color:var(--ember);box-shadow:0 0 0 2px rgba(200,16,46,.18)}
 input::placeholder,textarea::placeholder{color:#999}
 textarea{min-height:130px;margin-top:4px;resize:vertical}
+textarea.short{min-height:64px}
 .mini{width:76px}
 .mini input{text-align:center;font:bold 14px var(--ui)}
 
@@ -192,10 +193,19 @@ input[type=range]::-moz-range-thumb{
 .btn.ghost:disabled{opacity:1;color:#A1A192;border-color:#C9C7BA;background:#F5F4EA}
 .btn+.btn{margin-top:6px}
 .btn.small{display:inline-block;width:auto;padding:3px 10px}
+.btn.ghost[aria-pressed="true"]{background:linear-gradient(180deg,#CDCAC3 0%,#E3E3DB 10%,#E5E5DE 90%,#F2F2F1 100%);box-shadow:inset 0 1px 3px rgba(0,0,0,.35);font-weight:bold}
+
+/* deals list editor */
+.drow{padding:8px 0 2px;border-top:1px dotted var(--boxline)}
+.drow:first-child{margin-top:10px;border-top:0}
+.drow .row+.row{margin-top:5px}
+.drow .mini2{width:92px}
+.drow .btn.small{align-self:stretch;padding:0 8px;font-weight:bold}
+canvas#stage.spot{cursor:crosshair}
 
 /* ---------- notes, status, progress ---------- */
 .note{margin:6px 0 0;font:11px/1.5 var(--ui);color:#666}
-#status,#mstatus,#astatus{min-height:16px;margin-top:8px;font:12px/1.45 var(--ui);color:#000}
+#status,#mstatus,#astatus,#capstatus{min-height:16px;margin-top:8px;font:12px/1.45 var(--ui);color:#000}
 .xpbar,#astatus.busy::after{height:14px;margin-top:5px;padding:1px;border:1px solid #686868;border-radius:3px;background:#fff;overflow:hidden}
 .xpbar i{
   display:block;height:100%;
@@ -453,7 +463,18 @@ details.how .btn{margin-top:8px}
   <section class="panel">
 
     <div class="card">
-      <h3>1 · Photo</h3>
+      <h3 data-t="Layout">1 · Layout</h3>
+      <div class="chips" id="layouts">
+        <button class="chip on" data-l="single" type="button">One product</button>
+        <button class="chip" data-l="split" type="button">Two products · split</button>
+        <button class="chip" data-l="list" type="button">Deals list</button>
+        <button class="chip" data-l="closer" type="button">Closing slide</button>
+      </div>
+      <p class="note" id="layoutnote">One product photo with its name and price.</p>
+    </div>
+
+    <div class="card">
+      <h3 data-t="Photo">2 · Photo</h3>
       <input type="file" id="file" accept="image/*" hidden>
       <button class="btn ghost" id="pick" type="button">Upload photo</button>
       <div class="row" style="margin-top:12px">
@@ -462,12 +483,43 @@ details.how .btn{margin-top:8px}
         <div class="field"><label class="lbl" for="dark">Overlay intensity</label>
           <input type="range" id="dark" min="0.55" max="1.35" step="0.01" value="1"></div>
       </div>
-      <p class="note">Drag the preview to position your photo. Pinch or scroll to zoom. If no photo is loaded, the Inferno background is used.</p>
-      <button class="btn ghost" id="recenter" type="button" style="margin-top:4px">Re-center crop</button>
+      <div class="row" data-for="single"><div class="field"><label class="lbl">Framing</label>
+        <div class="chips" id="fits">
+          <button class="chip on" data-v="fill" type="button">Fill the frame</button>
+          <button class="chip" data-v="whole" type="button">Whole product</button>
+        </div></div></div>
+      <label class="switch" style="margin-top:10px"><input type="checkbox" id="enh"> Enhance photo (sharpen + color)</label>
+      <p class="note" id="photonote">Drag the preview to position your photo. Pinch or scroll to zoom. If no photo is loaded, the Inferno background is used.</p>
+      <div class="btnrow" style="margin-top:4px">
+        <button class="btn ghost" id="recenter" type="button">Re-center crop</button>
+        <button class="btn ghost" id="blurOn" type="button" aria-pressed="false" data-for="single split">Blur a spot</button>
+      </div>
+      <div id="blurBox" hidden>
+        <p class="note">Drag a box on the preview over anything you want hidden, like other products&rsquo; price tags. It gets blurred and muted. Turn the tool off to drag the photo again.</p>
+        <div class="btnrow" style="margin-top:6px">
+          <button class="btn ghost" id="blurUndo" type="button">Undo last blur</button>
+          <button class="btn ghost" id="blurClear" type="button">Clear all blurs</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-for="split">
+      <h3 data-t="Second photo">3 · Second photo</h3>
+      <input type="file" id="file2" accept="image/*" hidden>
+      <button class="btn ghost" id="pick2" type="button">Upload second photo</button>
+      <div class="row" style="margin-top:12px"><div class="field"><label class="lbl" for="zoom2">Zoom</label>
+        <input type="range" id="zoom2" min="1" max="4" step="0.01" value="1"></div></div>
+      <div class="row"><div class="field"><label class="lbl">Split</label>
+        <div class="chips" id="splits">
+          <button class="chip on" data-v="h" type="button">Side by side</button>
+          <button class="chip" data-v="v" type="button">Stacked</button>
+        </div></div></div>
+      <p class="note">The first photo goes on the left (or top), the second on the right (or bottom), with a gold line between them. Drag either half to position it.</p>
+      <button class="btn ghost" id="recenter2" type="button" style="margin-top:4px">Re-center second photo</button>
     </div>
 
     <div class="card">
-      <h3>2 · Format</h3>
+      <h3 data-t="Format">3 · Format</h3>
       <div class="chips" id="fmts">
         <button class="chip on" data-f="p45" type="button">4:5 Post</button>
         <button class="chip" data-f="sq" type="button">1:1 Square</button>
@@ -477,8 +529,8 @@ details.how .btn{margin-top:8px}
       <p class="note">4:5 is recommended for feed posts. 9:16 for Reels and Stories. 16:9 for X and Facebook link posts.</p>
     </div>
 
-    <div class="card">
-      <h3>3 · Text</h3>
+    <div class="card" data-for="single split list">
+      <h3 data-t="Text">4 · Text</h3>
       <div class="row">
         <div class="field"><label class="lbl" for="badge">Badge (top right)</label>
           <input type="text" id="badge" value="NEW ARRIVAL" maxlength="22"></div>
@@ -489,29 +541,66 @@ details.how .btn{margin-top:8px}
           </div>
         </div>
       </div>
-      <div class="row"><div class="field"><label class="lbl" for="n1">Headline</label>
+      <div class="row" data-for="single split"><div class="field"><label class="lbl" for="n1">Headline</label>
         <input type="text" id="n1" value="PATRÓN" maxlength="18"></div></div>
-      <div class="row"><div class="field"><label class="lbl" for="n2">Line two</label>
+      <div class="row" data-for="single split"><div class="field"><label class="lbl" for="n2">Line two</label>
         <input type="text" id="n2" value="ESTATE RELEASE" maxlength="26"></div></div>
-      <div class="row"><div class="field"><label class="lbl" for="sub">Detail line</label>
+      <div class="row" data-for="single split"><div class="field"><label class="lbl" for="sub">Detail line</label>
         <input type="text" id="sub" value="Edición Limitada · Tequila · 750 mL" maxlength="60"></div></div>
       <div class="row"><div class="field"><label class="lbl" for="addr">Address line</label>
         <input type="text" id="addr" value="2305 FL-7, HOLLYWOOD · INSIDE SEDANO'S PLAZA" maxlength="60"></div></div>
     </div>
 
-    <div class="card">
-      <h3>4 · Price</h3>
+    <div class="card" data-for="single split">
+      <h3 data-t="Price">5 · Price</h3>
       <label class="switch"><input type="checkbox" id="priceOn" checked> Show price card</label>
-      <div class="row" id="priceRow" style="margin-top:12px">
-        <div class="mini"><label class="lbl" for="dol">Dollars</label><input type="text" id="dol" value="25" inputmode="numeric" maxlength="4"></div>
-        <div class="mini"><label class="lbl" for="cts">Cents</label><input type="text" id="cts" value="99" inputmode="numeric" maxlength="2"></div>
+      <div id="priceBox">
+        <div class="row" style="margin-top:12px">
+          <div class="mini"><label class="lbl" for="dol">Dollars</label><input type="text" id="dol" value="25" inputmode="numeric" maxlength="4"></div>
+          <div class="mini"><label class="lbl" for="cts">Cents</label><input type="text" id="cts" value="99" inputmode="numeric" maxlength="2"></div>
+          <div class="field"><label class="lbl" for="ptag">Caption above it</label>
+            <input type="text" id="ptag" value="" maxlength="14" placeholder="optional"></div>
+        </div>
+        <div class="chips" id="ptags" style="margin-top:8px">
+          <button class="chip on" data-v="" type="button">None</button>
+          <button class="chip" data-v="SALE" type="button">Sale</button>
+          <button class="chip" data-v="FROM" type="button">From</button>
+          <button class="chip" data-v="2 FOR" type="button">2 for</button>
+          <button class="chip" data-v="1 LITER" type="button">1 Liter</button>
+          <button class="chip" data-v="1.75 L" type="button">1.75 L</button>
+        </div>
       </div>
-      <p class="note">Dark card with gold keyline, per the approved brand style. Turn off for image-only ads.</p>
+      <p class="note">Dark card with gold keyline, per the approved brand style. The caption sits above the card in small gold capitals. Turn the card off for image-only ads.</p>
+    </div>
+
+    <div class="card" data-for="list">
+      <h3 data-t="Deals">5 · Deals</h3>
+      <div class="row"><div class="field"><label class="lbl" for="lkicker">Small line on top</label>
+        <input type="text" id="lkicker" value="NEW ARRIVALS + WEEKLY DEALS" maxlength="40"></div></div>
+      <div class="row"><div class="field"><label class="lbl" for="ltitle">Title</label>
+        <input type="text" id="ltitle" value="THIS WEEK AT DANTE'S" maxlength="28"></div></div>
+      <div id="lrows"></div>
+      <button class="btn ghost" id="laddrow" type="button" style="margin-top:8px">Add a deal</button>
+      <div class="row" style="margin-top:10px"><div class="field"><label class="lbl" for="lfoot">Fine print</label>
+        <input type="text" id="lfoot" value="21+ · PLEASE DRINK RESPONSIBLY · WHILE SUPPLIES LAST" maxlength="70"></div></div>
+      <p class="note">Up to 8 deals. Type prices like 14.99, or 2 for 41.99. The tag is optional: NEW shows in ember red, anything else in gold. A store photo behind the list is blurred and darkened so the prices stay readable.</p>
+    </div>
+
+    <div class="card" data-for="closer">
+      <h3 data-t="Closing slide">4 · Closing slide</h3>
+      <div class="row"><div class="field"><label class="lbl" for="cl1">Big line</label>
+        <input type="text" id="cl1" value="COME SEE US" maxlength="24"></div></div>
+      <div class="row"><div class="field"><label class="lbl" for="cl2">Second line</label>
+        <input type="text" id="cl2" value="INSIDE SEDANO'S PLAZA" maxlength="36"></div></div>
+      <div class="row"><div class="field"><label class="lbl" for="cl3">Third line</label>
+        <input type="text" id="cl3" value="2305 FL-7 · HOLLYWOOD, FL" maxlength="40"></div></div>
+      <p class="note">The last slide of a carousel or a Story: the Dante&rsquo;s Liquors logo and where to find the store, with a 21+ line at the bottom.</p>
     </div>
 
     <div class="card">
-      <h3>5 · Export</h3>
+      <h3 data-t="Export">6 · Export</h3>
       <button class="btn" id="png" type="button">Export image · PNG</button>
+      <button class="btn ghost" id="pngAll" type="button">Export all four sizes · ZIP</button>
       <div class="row" style="margin-top:14px">
         <div class="field"><label class="lbl">Animation length</label>
           <div class="chips" id="durs">
@@ -525,7 +614,30 @@ details.how .btn{margin-top:8px}
       <button class="btn" id="vid" type="button">Export video</button>
       <button class="btn ghost" id="gif" type="button">Export GIF</button>
       <div id="status" role="status"></div>
-      <p class="note">Video renders frame by frame into a smooth MP4 (older browsers record in real time instead, as MP4 or WebM). GIF exports have no audio and produce larger files; video is recommended for Reels. Audio can be added in the Instagram app before posting.</p>
+      <p class="note">The ZIP holds the 4:5, 1:1, 9:16 and 16:9 PNGs plus a caption.txt. Video renders frame by frame into a smooth MP4 (older browsers record in real time instead, as MP4 or WebM). GIF exports have no audio and produce larger files; video is recommended for Reels. Audio can be added in the Instagram app before posting.</p>
+    </div>
+
+    <div class="card">
+      <h3 data-t="Caption &amp; hashtags">7 · Caption &amp; hashtags</h3>
+      <div class="btnrow">
+        <button class="btn" id="capGo" type="button">Write caption</button>
+        <button class="btn ghost" id="capNext" type="button">Another version</button>
+      </div>
+      <label class="lbl" for="capText" style="margin-top:12px">Caption and hashtags</label>
+      <textarea id="capText" spellcheck="true"></textarea>
+      <div class="btnrow" style="margin-top:6px">
+        <button class="btn ghost" id="capCopy" type="button">Copy caption</button>
+        <button class="btn ghost" id="capTagsCopy" type="button">Copy hashtags only</button>
+      </div>
+      <label class="lbl" for="capShort" style="margin-top:12px">Short version (X, Stories, Threads)</label>
+      <textarea id="capShort" class="short" spellcheck="true"></textarea>
+      <button class="btn ghost" id="capShortCopy" type="button" style="margin-top:6px">Copy short version</button>
+      <label class="lbl" for="capAlt" style="margin-top:12px">Alt text (for accessibility)</label>
+      <textarea id="capAlt" class="short" spellcheck="true"></textarea>
+      <button class="btn ghost" id="capAltCopy" type="button" style="margin-top:6px">Copy alt text</button>
+      <button class="btn ghost" id="capAI" type="button" style="margin-top:12px">Polish the caption with AI · Puter</button>
+      <div id="capstatus" role="status"></div>
+      <p class="note">Written from the ad&rsquo;s own text and price, so you can edit it before copying. Every caption ends with &ldquo;21+ only. Please drink responsibly.&rdquo; If you boost a post as a paid ad, set the audience to 21+.</p>
     </div>
 
   </section>
@@ -538,7 +650,7 @@ details.how .btn{margin-top:8px}
         <span>or click to browse, then drag to position</span>
       </div>
     </div>
-    <div class="stagehint">Live preview · exports at full resolution</div>
+    <div class="stagehint" id="stagehint">Live preview · exports at full resolution</div>
   </section>
 
 </main>
@@ -677,11 +789,22 @@ const $=s=>document.querySelector(s);
 const COL={INK:'#0B0908',BONE:'#F6F1E7',EMBER:'#C8102E',EMBER_BR:'#E8334B',EMBER_DP:'#7D0D1C',GOLD:'#E3B264',GOLD_BR:'#F0C373'};
 const FMT={p45:[1080,1350],sq:[1080,1080],reel:[1080,1920],wide:[1920,1080]};
 
-const st={fmt:'p45',img:null,iw:0,ih:0,cx:.5,cy:.5,zoom:1,darken:1,
+/* layout: single | split (two photos) | list (weekly deals) | closer (closing slide).
+   st holds the first photo; st.b the second photo of a split. src is the photo as loaded,
+   img the working copy that is drawn (enhanced and with blurred spots when those are on). */
+const st={fmt:'p45',layout:'single',fit:'fill',img:null,src:null,k:1,iw:0,ih:0,cx:.5,cy:.5,zoom:1,blurs:[],darken:1,enhance:false,
+  b:{img:null,src:null,k:1,iw:0,ih:0,cx:.5,cy:.5,zoom:1,blurs:[]},splitDir:'h',
   badge:'NEW ARRIVAL',badgeGold:false,
   n1:'PATRÓN',n2:'ESTATE RELEASE',sub:'Edición Limitada · Tequila · 750 mL',
   addr:"2305 FL-7, HOLLYWOOD · INSIDE SEDANO'S PLAZA",
-  price:true,dol:'25',cts:'99',dur:4};
+  price:true,dol:'25',cts:'99',tag:'',dur:4,
+  list:{kicker:'NEW ARRIVALS + WEEKLY DEALS',title:"THIS WEEK AT DANTE'S",foot:'21+ · PLEASE DRINK RESPONSIBLY · WHILE SUPPLIES LAST',
+    rows:[{name:'La Puerta Negra Reposado',detail:'Tequila · 1 Liter',price:'14.99',tag:'NEW'},
+      {name:'Teremana Blanco',detail:'Small batch tequila · 1 Liter',price:'29.99',tag:''},
+      {name:'Casamigos 2-Pack',detail:'Tequila · 2 × 375 mL',price:'39.99',tag:'SALE'},
+      {name:'Patrón Reposado',detail:'Tequila · 375 mL',price:'2 for 41.99',tag:'DEAL'},
+      {name:'Barton Vodka',detail:'1.75 L handle',price:'10.49',tag:'SALE'}]},
+  close:{l1:'COME SEE US',l2:"INSIDE SEDANO'S PLAZA",l3:'2305 FL-7 · HOLLYWOOD, FL'}};
 
 const stage=$('#stage'), ctx=stage.getContext('2d');
 let embers=[],animId=null,busy=false;
@@ -802,8 +925,30 @@ function clampCover(s,R,z){
   s.cx=Math.max(fw/2,Math.min(1-fw/2,s.cx));
   s.cy=Math.max(fh/2,Math.min(1-fh/2,s.cy));
 }
-function cropBox(kb){const [W,H]=FMT[st.fmt];return coverBox(st,W/H,st.zoom*(kb||1))}
-function clampCenter(){const [W,H]=FMT[st.fmt];clampCover(st,W/H,st.zoom)}
+/* safe zone for "whole product" framing, as fractions of the frame:
+   below the logo and badge, above the name, price and address (the ad set's bands) */
+const BAND={p45:[.037,.081,.963,.741],sq:[.037,.097,.963,.69],reel:[.028,.065,.972,.818],wide:[.365,.088,.781,.954]};
+const wholeOn=()=>st.layout==='single'&&st.fit==='whole';
+/* the part of a W x H frame that photo state s fills */
+function frameRect(s,W,H){
+  if(st.layout==='split'){const i=s===st.b?1:0;return st.splitDir==='v'?[0,i*H/2,W,H/2]:[i*W/2,0,W/2,H]}
+  if(wholeOn()){const B=BAND[st.fmt];return [B[0]*W,B[1]*H,(B[2]-B[0])*W,(B[3]-B[1])*H]}
+  return [0,0,W,H];
+}
+/* where photo s lands: a cover crop of its frame, or (whole product) the whole photo
+   fitted inside the safe zone with its point (cx, cy) at the zone's center */
+function photoGeo(s,W,H,kb){
+  const [fx,fy,fw,fh]=frameRect(s,W,H),z=s.zoom*(kb||1);
+  if(wholeOn()&&s===st){const sc=Math.min(fw/s.iw,fh/s.ih)*z;
+    return {fx,fy,fw,fh,whole:true,sc,dx:fx+fw/2-s.cx*s.iw*sc,dy:fy+fh/2-s.cy*s.ih*sc}}
+  return {fx,fy,fw,fh,whole:false,b:coverBox(s,fw/fh,z)};
+}
+function clampPhoto(s){
+  if(!s.img)return;
+  if(wholeOn()&&s===st){s.cx=Math.max(0,Math.min(1,s.cx));s.cy=Math.max(0,Math.min(1,s.cy));return}
+  const [W,H]=FMT[st.fmt],r=frameRect(s,W,H);clampCover(s,r[2]/r[3],s.zoom);
+}
+function clampCenter(){clampPhoto(st);clampPhoto(st.b)}
 function infernoBG(c,W,H){
   c.fillStyle='#0d0908';c.fillRect(0,0,W,H);
   let g=c.createRadialGradient(W/2,H*1.05,W*0.05,W/2,H*1.05,H*0.85);
@@ -813,10 +958,106 @@ function infernoBG(c,W,H){
   s.addColorStop(0,'rgba(0,0,0,0.5)');s.addColorStop(0.5,'rgba(0,0,0,0)');s.addColorStop(1,'rgba(0,0,0,0.5)');
   c.fillStyle=s;c.fillRect(0,0,W,H);
 }
+/* a small blurred copy of a photo, stretched into soft backdrops (cached per image) */
+function tinyBlur(s){
+  if(s.tiny&&s.tiny.img===s.img)return s.tiny.cv;
+  const k=96/Math.max(s.iw,s.ih),w=Math.max(2,Math.round(s.iw*k)),h=Math.max(2,Math.round(s.ih*k));
+  const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+  const x=cv.getContext('2d');if(CANVAS_FILTER)x.filter='blur(1.5px)';
+  x.drawImage(s.img,-3,-3,w+6,h+6);
+  s.tiny={img:s.img,cv};return cv;
+}
+function backdrop(c,s,W,H,kb,dim){
+  const t=tinyBlur(s),b=coverBox({iw:t.width,ih:t.height,cx:s.cx,cy:s.cy},W/H,kb||1);
+  c.save();c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
+  c.drawImage(t,b.x,b.y,b.cw,b.ch,0,0,W,H);
+  c.fillStyle='rgba(9,6,5,'+dim+')';c.fillRect(0,0,W,H);c.restore();
+}
+/* the photo at display size with feathered edges, so it melts into its backdrop (cached) */
+function softPhoto(s,w,h){
+  w=Math.max(1,Math.round(w));h=Math.max(1,Math.round(h));
+  if(s.soft&&s.soft.img===s.img&&s.soft.w===w&&s.soft.h===h)return s.soft.cv;
+  const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+  const x=cv.getContext('2d');x.imageSmoothingQuality='high';x.drawImage(s.img,0,0,w,h);
+  const f=Math.min(w,h)*0.07;x.globalCompositeOperation='destination-in';
+  for(const across of [true,false]){
+    const L=across?w:h,e=Math.min(0.49,f/L),g=across?x.createLinearGradient(0,0,w,0):x.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(e,'#000');g.addColorStop(1-e,'#000');g.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle=g;x.fillRect(0,0,w,h);
+  }
+  s.soft={img:s.img,w,h,cv};return cv;
+}
 function drawPhoto(c,W,H,kb){
+  if(st.layout==='split'){
+    for(const s of [st,st.b]){const g=photoGeo(s,W,H,kb);
+      c.save();c.beginPath();c.rect(g.fx,g.fy,g.fw,g.fh);c.clip();
+      if(s.img)c.drawImage(s.img,g.b.x,g.b.y,g.b.cw,g.b.ch,g.fx,g.fy,g.fw,g.fh);else infernoBG(c,W,H);
+      c.restore()}
+    const S=Math.min(W,H)/1080;c.fillStyle=COL.GOLD;
+    if(st.splitDir==='v')c.fillRect(0,H/2-2*S,W,4*S);else c.fillRect(W/2-2*S,0,4*S,H);
+    return}
   if(!st.img){infernoBG(c,W,H);return}
-  const b=cropBox(kb);
-  c.drawImage(st.img,b.x,b.y,b.cw,b.ch,0,0,W,H);
+  const g=photoGeo(st,W,H,kb);
+  if(g.whole){ /* blurred, darkened extension of the scene, the whole photo on top */
+    backdrop(c,st,W,H,kb,0.5);
+    const w=st.iw*g.sc,h=st.ih*g.sc,k=kb||1;
+    c.drawImage(softPhoto(st,w/k,h/k),g.dx,g.dy,w,h);return}
+  c.drawImage(st.img,g.b.x,g.b.y,g.b.cw,g.b.ch,0,0,W,H);
+}
+
+/* ---------- photo clean-up on a working copy: enhance, and blurred spots ---------- */
+const CANVAS_FILTER='filter' in CanvasRenderingContext2D.prototype;
+function processPhoto(s){
+  s.soft=s.tiny=null;
+  if(!s.src){s.img=null;s.iw=s.ih=0;s.k=1;return}
+  const w0=s.src.naturalWidth||s.src.width,h0=s.src.naturalHeight||s.src.height;
+  if(!st.enhance&&!s.blurs.length){s.img=s.src;s.iw=w0;s.ih=h0;s.k=1;return}
+  const k=Math.min(1,3000/Math.max(w0,h0)),w=Math.round(w0*k),h=Math.round(h0*k);
+  const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+  const x=cv.getContext('2d');x.drawImage(s.src,0,0,w,h);
+  if(st.enhance)enhance(x,w,h);
+  for(const r of s.blurs)blurSpot(x,r.x*k,r.y*k,r.w*k,r.h*k);
+  s.img=cv;s.iw=w;s.ih=h;s.k=k;
+}
+/* the ad set's photo prep: contrast 1.05, color 1.08, then an unsharp mask on brightness */
+function enhance(x,w,h){
+  const id=x.getImageData(0,0,w,h),d=id.data,n=w*h,L=new Float32Array(n);
+  for(let i=0,p=0;i<n;i++,p+=4){
+    const r=(d[p]-128)*1.05+128,g=(d[p+1]-128)*1.05+128,b=(d[p+2]-128)*1.05+128,l=0.299*r+0.587*g+0.114*b;
+    d[p]=l+(r-l)*1.08;d[p+1]=l+(g-l)*1.08;d[p+2]=l+(b-l)*1.08;
+    L[i]=0.299*d[p]+0.587*d[p+1]+0.114*d[p+2];
+  }
+  const B=box3(box3(L,w,h),w,h);
+  for(let i=0,p=0;i<n;i++,p+=4){const e=L[i]-B[i];if(e>2||e<-2){const v=e*0.65;d[p]+=v;d[p+1]+=v;d[p+2]+=v}}
+  x.putImageData(id,0,0);
+}
+function box3(a,w,h){ /* 3x3 box blur, rows then columns */
+  const t=new Float32Array(w*h),o=new Float32Array(w*h);
+  for(let y=0;y<h;y++){const r=y*w;
+    for(let x=0;x<w;x++)t[r+x]=(a[r+(x?x-1:0)]+a[r+x]+a[r+(x<w-1?x+1:x)])/3}
+  for(let y=0;y<h;y++){const r=y*w,u=(y?y-1:0)*w,v=(y<h-1?y+1:y)*w;
+    for(let x=0;x<w;x++)o[r+x]=(t[u+x]+t[r+x]+t[v+x])/3}
+  return o;
+}
+/* blur and mute one rectangle (working-copy px) with soft rounded edges, like the
+   ad set's retouch of other products' price tags */
+function blurSpot(x,rx,ry,rw,rh){
+  const W=x.canvas.width,H=x.canvas.height,R=Math.max(8,Math.round(Math.max(W,H)/170)),f=Math.max(4,Math.round(Math.min(rw,rh)*0.12));
+  const x0=Math.max(0,Math.floor(rx-f)),y0=Math.max(0,Math.floor(ry-f)),x1=Math.min(W,Math.ceil(rx+rw+f)),y1=Math.min(H,Math.ceil(ry+rh+f));
+  const w=x1-x0,h=y1-y0;if(w<2||h<2)return;
+  const t=document.createElement('canvas');t.width=w;t.height=h;const tx=t.getContext('2d');
+  if(CANVAS_FILTER){tx.filter='blur('+R+'px)';tx.drawImage(x.canvas,-x0,-y0);tx.filter='none'}
+  else{const q=document.createElement('canvas');q.width=Math.max(1,Math.round(w/R));q.height=Math.max(1,Math.round(h/R));
+    q.getContext('2d').drawImage(x.canvas,x0,y0,w,h,0,0,q.width,q.height);
+    tx.imageSmoothingQuality='high';tx.drawImage(q,0,0,w,h)}
+  tx.globalCompositeOperation='saturation';tx.fillStyle='rgba(128,128,128,.7)';tx.fillRect(0,0,w,h);
+  tx.globalCompositeOperation='multiply';tx.fillStyle='rgb(204,204,204)';tx.fillRect(0,0,w,h);
+  /* feathered mask: only the shadow of a shape drawn off-canvas lands here */
+  const m=document.createElement('canvas');m.width=w;m.height=h;const mx=m.getContext('2d'),off=w+h+50;
+  mx.shadowColor='#000';mx.shadowBlur=f;mx.shadowOffsetX=-off;mx.fillStyle='#000';
+  rounded(mx,rx-x0+off,ry-y0,rw,rh,Math.min(rw,rh)*0.2);mx.fill();
+  tx.globalCompositeOperation='destination-in';tx.drawImage(m,0,0);
+  x.drawImage(t,x0,y0);
 }
 
 /* ---------- grade / scrims / atmosphere ---------- */
@@ -842,17 +1083,18 @@ function scrims(c,W,H){
   t.addColorStop(0,'rgba(0,0,0,'+(0.55*d).toFixed(3)+')');t.addColorStop(1,'rgba(0,0,0,0)');
   c.fillStyle=t;c.fillRect(0,0,W,H*0.15);
 }
+/* ember positions are fractions of the frame, so half-size GIF frames get the same field */
 function initEmbers(W,H){
   embers=[];for(let i=0;i<88;i++)embers.push({
-    x:Math.random()*W,y:Math.random()*H,sp:30+Math.random()*85,
+    x:Math.random(),y:Math.random(),sp:30+Math.random()*85,
     sz:1.4+Math.random()*3.2,ph:Math.random()*6.28,dr:(Math.random()-0.5)});
 }
 function drawEmbers(c,W,H,t){
   c.save();c.globalCompositeOperation='lighter';
   const S=Math.min(W,H)/1080;
   for(const e of embers){
-    const y=((e.y-t*e.sp*S)%H+H)%H;
-    const x=e.x+Math.sin(t*1.2+e.ph)*26*e.dr*S;
+    const y=((e.y*H-t*e.sp*S)%H+H)%H;
+    const x=e.x*W+Math.sin(t*1.2+e.ph)*26*e.dr*S;
     const tw=0.55+0.45*Math.sin(t*3+e.ph);
     const r=e.sz*(0.8+0.4*tw)*S*2.1;
     const a=0.5*tw*(0.3+0.7*(y/H));
@@ -962,6 +1204,14 @@ function priceCard(c,rightX,midY,S,alpha,scale){
   c.font=font(M.p,'anton');c.fillStyle=COL.BONE;c.fillText(st.dol,xx,dBase);xx+=M.dW+M.gap;
   c.font=font(M.p*0.45,'osw',700);c.fillStyle=COL.GOLD;
   c.fillText(st.cts,xx,dBase-M.dCap+M.sCap+M.dCap*0.06);
+  const tag=(st.tag||'').trim().toUpperCase();
+  if(tag){ /* small gold caption over the card ("2 FOR", "SALE", "FROM", "1 LITER"), short rules either side */
+    c.font=font(M.p*0.186,'osw',700);
+    const tr=M.p*0.043,w=trkW(c,tag,tr),ch=cap(c,'A'),base=y0-M.p*0.114,mid=x0+M.w/2,g=M.p*0.1;
+    c.fillStyle=COL.GOLD;trk(c,mid-w/2,base,tag,tr);
+    const ly=base-ch/2-M.p*0.007,lw=Math.min(M.p*0.33,(M.w-w)/2-g),th=Math.max(1,M.p*0.014);
+    if(lw>M.p*0.057){c.fillRect(mid-w/2-g-lw,ly,lw,th);c.fillRect(mid+w/2+g,ly,lw,th)}
+  }
   c.restore();
 }
 
@@ -1001,7 +1251,10 @@ function textBlock(c,W,H,S,rv){
   }
 }
 function render(c,W,H,o){
-  o=o||{};const anim=!!o.anim,t=o.t||0,dur=o.dur||st.dur;
+  o=o||{};
+  if(st.layout==='list')return renderList(c,W,H,o);
+  if(st.layout==='closer')return renderCloser(c,W,H,o);
+  const anim=!!o.anim,t=o.t||0,dur=o.dur||st.dur;
   const S=Math.min(W,H)/1080;
   const pulse=anim?0.5+0.5*Math.sin(t*1.6):0.5;
   c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,W,H);
@@ -1016,75 +1269,242 @@ function render(c,W,H,o){
   header(c,W,H,S,rv.head,rv.badge);
   textBlock(c,W,H,S,rv);
 }
-function draw(){render(ctx,stage.width,stage.height,{anim:false})}
+/* ---------- deals list: up to 8 deals over the store photo (or Inferno), rows slide in ---------- */
+/* "14.99" -> $14.99, "2 for 41.99" -> 2 FOR $41.99 */
+function parsePrice(p){
+  const m=/^\s*(.*?)\s*\$?\s*(\d{1,4})(?:[.,](\d{1,2}))?\s*$/.exec(p||'');
+  return m?{pre:m[1].replace(/\$$/,'').trim().toUpperCase(),dol:m[2],cts:((m[3]||'0')+'0').slice(0,2)}:null;
+}
+function listPill(c,x,base,text,fill,txt,S,px){
+  c.font=font(px*S,'osw',700);const ch=cap(c,'A'),tr=2.5*S,padX=11*S,padY=7*S;
+  const w=trkW(c,text,tr)+padX*2,h=ch+padY*2,y=base-ch-padY;
+  rounded(c,x,y,w,h,h/2);c.fillStyle=fill;c.fill();
+  c.fillStyle=txt;trk(c,x+padX,base,text,tr);return w;
+}
+/* same type system as the price card: gold $ and cents, bone Anton dollars; returns its left edge */
+function listPrice(c,rightX,base,r,S,k){
+  const p=64*S*k;
+  c.font=font(p,'anton');const dW=c.measureText(r.dol).width,dCap=cap(c,'0');
+  c.font=font(p*0.45,'osw',700);const sW=c.measureText('$').width,sCap=cap(c,'$'),ctW=c.measureText(r.cts).width;
+  const gap=p*0.05;let x=rightX-(sW+dW+ctW+gap*2),left=x;
+  const top=base-dCap;
+  c.fillStyle=COL.GOLD;c.fillText('$',x,top+sCap+dCap*0.10);
+  if(r.pre){c.save();c.font=font(24*S*k,'osw',700);const tw=trkW(c,r.pre,3*S);left=x-tw-14*S*k;
+    c.fillStyle=COL.GOLD;trk(c,left,base-dCap*0.5+cap(c,'A')/2,r.pre,3*S);c.restore()}
+  x+=sW+gap;c.font=font(p,'anton');c.fillStyle=COL.BONE;c.fillText(r.dol,x,base);x+=dW+gap;
+  c.font=font(p*0.45,'osw',700);c.fillStyle=COL.GOLD;c.fillText(r.cts,x,top+sCap+dCap*0.04);
+  return left;
+}
+function renderList(c,W,H,o){
+  const anim=!!o.anim,t=o.t||0,dur=o.dur||st.dur,L=st.list;
+  const S=Math.min(W,H)/1080,tall=H/W>1.5;
+  c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,W,H);
+  if(st.img)backdrop(c,st,W,H,(anim?1+0.05*sstep(t/dur):1)*st.zoom,0.74);else infernoBG(c,W,H);
+  grade(c,W,H,anim?0.5+0.5*Math.sin(t*1.6):0.5);
+  if(anim)drawEmbers(c,W,H,t);
+  scrims(c,W,H);
+  header(c,W,H,S,anim?ez(t,0,0.6):1,anim?ez(t,0.35,0.95):1);
+  const mx=64*S;c.textAlign='left';c.textBaseline='alphabetic';
+  /* kicker + title */
+  const rvT=anim?ez(t,0.45,1.05):1,kick=(L.kicker||'').trim().toUpperCase(),title=(L.title||'').trim().toUpperCase();
+  let y=(tall?250:178)*S;
+  c.save();c.globalAlpha=rvT;c.translate(0,(1-rvT)*30*S);
+  c.font=font((tall?32:27)*S,'osw',600);c.fillStyle=COL.GOLD;
+  if(kick){c.fillRect(mx,y-cap(c,'A')/2-9*S,14*S,17*S);trk(c,mx+28*S,y,kick,6*S)}
+  if(title){const tp=fitPx(c,title,'anton',400,(tall?118:98)*S,W-2*mx,56*S);
+    c.font=font(tp,'anton');c.fillStyle=COL.BONE;y+=18*S+cap(c,'A');c.fillText(title,mx,y)}
+  c.restore();
+  /* rows */
+  const rows=L.rows.filter(r=>(r.name||'').trim()).slice(0,8),n=rows.length;
+  const yStart=y+(tall?70:44)*S,yEnd=H-(tall?230:170)*S;
+  if(n){
+    const rowH=(yEnd-yStart)/n,k=Math.min(1.3,rowH/(106*S));
+    c.save();c.globalAlpha=rvT*0.9;c.fillStyle='rgba(227,178,100,0.55)';c.fillRect(mx,yStart-2*S,W-2*mx,2*S);c.restore();
+    rows.forEach((r,i)=>{
+      const rv=anim?ez(t,0.9+i*0.17,1.45+i*0.17):1;if(rv<=0)return;
+      const top=yStart+i*rowH,P=parsePrice(r.price);
+      c.save();c.globalAlpha=rv;c.translate((1-rv)*60*S,0);
+      const left=P?listPrice(c,W-mx,top+rowH*0.72,P,S,k):W-mx;
+      /* name (shrunk to clear the price and its tag), then the tag pill */
+      const nm=r.name.trim().toUpperCase(),tag=(r.tag||'').trim().toUpperCase();
+      let pillW=0;if(tag){c.font=font(17*S*k,'osw',700);pillW=trkW(c,tag,2.5*S)+22*S+16*S}
+      const room=left-mx-pillW-28*S;let np=38*S*k;
+      c.font=font(np,'osw',700);while(trkW(c,nm,1.5*S)>room&&np>18*S){np*=0.95;c.font=font(np,'osw',700)}
+      c.fillStyle=COL.BONE;const nb=top+rowH*0.47,nw=trkW(c,nm,1.5*S);trk(c,mx,nb,nm,1.5*S);
+      if(tag){const gold=tag!=='NEW';listPill(c,mx+nw+16*S,nb-2*S*k,tag,gold?COL.GOLD:COL.EMBER,gold?'#1d1206':COL.BONE,S,17*k)}
+      const det=(r.detail||'').trim().toUpperCase();
+      if(det){let dp=24*S*k;c.font=font(dp,'osw',500);
+        while(trkW(c,det,2*S)>left-mx-24*S&&dp>13*S){dp*=0.95;c.font=font(dp,'osw',500)}
+        c.fillStyle='#B9AC9F';trk(c,mx,top+rowH*0.80,det,2*S)}
+      c.fillStyle='rgba(227,178,100,0.20)';c.fillRect(mx,top+rowH-1*S,W-2*mx,1.5*S);
+      c.restore();
+    });
+  }
+  /* fine print + address */
+  const rvF=anim?ez(t,0.9+n*0.17+0.3,1.5+n*0.17+0.3):1;
+  if(rvF>0){c.save();c.globalAlpha=rvF;
+    const foot=(L.foot||'').trim().toUpperCase(),addr=(st.addr||'').trim().toUpperCase();
+    if(foot){let fp=19*S;c.font=font(fp,'osw',500);while(trkW(c,foot,2.5*S)>W-2*mx&&fp>11*S){fp*=0.95;c.font=font(fp,'osw',500)}
+      c.fillStyle='#8F8378';trk(c,mx,H-(tall?150:118)*S,foot,2.5*S)}
+    if(addr){c.fillStyle=COL.EMBER;c.fillRect(mx,H-84*S+7*S,14*S,17*S);
+      c.font=font(24*S,'osw',600);c.fillStyle='#C8BCB2';trk(c,mx+26*S,H-84*S+cap(c),addr,3*S)}
+    c.restore()}
+}
+
+/* ---------- closing slide: the logo, a gold rule, where to find the store, 21+ line ---------- */
+function renderCloser(c,W,H,o){
+  const anim=!!o.anim,t=anim?(o.t||0):3.2,dur=o.dur||st.dur,C=st.close;
+  const S=Math.min(W,H)/1080,cx=W/2,mx=64*S;
+  c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,W,H);
+  if(st.img)backdrop(c,st,W,H,(anim?1+0.05*sstep(t/dur):1)*st.zoom,0.72);else infernoBG(c,W,H);
+  grade(c,W,H,anim?0.5+0.5*Math.sin(t*1.6):0.5);
+  drawEmbers(c,W,H,t);
+  const rv=k=>anim?ez(t,k,k+0.6):1;
+  const lw=Math.min(W-2*mx,860*S),lh=lw*LOGO.vb[3]/LOGO.vb[2];
+  const lines=[[C.l1,'anton',400,92,3,COL.BONE,78],[C.l2,'osw',700,40,5,COL.BONE,56],[C.l3,'osw',500,32,4,'#C8BCB2',0]]
+    .map(l=>[(l[0]||'').trim().toUpperCase(),...l.slice(1)]).filter(l=>l[0]);
+  const blockH=lh+116*S+lines.reduce((a,l)=>a+l[6]*S,0)+(lines.length?69*S:0);
+  const top=Math.max(40*S,(H-blockH)/2-20*S);
+  let a=rv(0);c.save();c.globalAlpha=a;drawLogo(c,cx-lw/2,top+(1-a)*30*S,lw,'light');c.restore();
+  let y=top+lh+56*S;
+  a=rv(0.6);c.save();c.globalAlpha=a;c.fillStyle=COL.GOLD;const rw=220*S*a;c.fillRect(cx-rw/2,y,rw,3*S);c.restore();
+  y+=60*S;
+  a=rv(0.95);c.save();c.globalAlpha=a;c.translate(0,(1-a)*24*S);c.textBaseline='alphabetic';
+  lines.forEach(([s,fam,wt,px,tr,col,gap],i)=>{
+    let p=px*S;c.font=font(p,fam,wt);while(trkW(c,s,tr*S)>W-2*mx&&p>px*S*0.45){p*=0.95;c.font=font(p,fam,wt)}
+    if(!i)y+=cap(c,'A');c.fillStyle=col;trk(c,cx-trkW(c,s,tr*S)/2,y,s,tr*S);y+=gap*S});
+  c.restore();
+  a=rv(1.5);c.save();c.globalAlpha=a;c.font=font(20*S,'osw',500);c.fillStyle='#8F8378';
+  const ft='21+ · PLEASE DRINK RESPONSIBLY',fw=trkW(c,ft,3*S);trk(c,cx-fw/2,H-70*S,ft,3*S);c.restore();
+}
+function draw(){render(ctx,stage.width,stage.height,{anim:false});if(spot)drawSpot()}
 function stopAnim(){if(animId){cancelAnimationFrame(animId);animId=null}}
 
-/* ---------- interactions ---------- */
-const pts=new Map();let pinch0=null;
+/* ---------- interactions: drag / pinch the photo under the pointer, or mark a spot to blur ---------- */
+const pts=new Map();let pinch0=null,act=st,spot=null,blurMode=false,blurLog=[];
+const photoLayout=()=>st.layout==='single'||st.layout==='split';
+function stageXY(e){const r=stage.getBoundingClientRect(),k=stage.width/r.width;return [(e.clientX-r.left)*k,(e.clientY-r.top)*k]}
+function photoAt(x,y){
+  if(st.layout!=='split')return st;
+  return (st.splitDir==='v'?y>=stage.height/2:x>=stage.width/2)?st.b:st;
+}
+function setZoom(s,z){s.zoom=Math.max(1,Math.min(4,z));$(s===st.b?'#zoom2':'#zoom').value=s.zoom;clampPhoto(s);draw()}
 stage.addEventListener('pointerdown',e=>{
-  stage.setPointerCapture(e.pointerId);
+  stopAnim();stage.setPointerCapture(e.pointerId);
   pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
-  if(pts.size===2){const a=[...pts.values()];
-    pinch0={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),z:st.zoom}}
+  const [x,y]=stageXY(e);
+  if(pts.size===1){act=photoAt(x,y);
+    if(blurMode&&photoLayout()&&act.img){spot={s:act,x0:x,y0:y,x1:x,y1:y};return}}
+  if(pts.size===2){spot=null;const a=[...pts.values()];pinch0={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),z:act.zoom}}
 });
 stage.addEventListener('pointermove',e=>{
   if(!pts.has(e.pointerId))return;
   const prev=pts.get(e.pointerId);
   pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(spot){[spot.x1,spot.y1]=stageXY(e);draw();return}
   if(pts.size===2&&pinch0){const a=[...pts.values()];
-    const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);
-    st.zoom=Math.max(1,Math.min(4,pinch0.z*d/pinch0.d));
-    $('#zoom').value=st.zoom;clampCenter();draw();return}
-  if(!st.img)return;
-  const r=stage.getBoundingClientRect(),sc=stage.width/r.width;
-  const b=cropBox(1),[W,H]=FMT[st.fmt];
-  st.cx-=((e.clientX-prev.x)*sc)*(b.cw/W)/st.iw;
-  st.cy-=((e.clientY-prev.y)*sc)*(b.ch/H)/st.ih;
-  clampCenter();draw();
+    setZoom(act,pinch0.z*Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)/pinch0.d);return}
+  if(!act.img)return;
+  const r=stage.getBoundingClientRect(),k=stage.width/r.width,dx=(e.clientX-prev.x)*k,dy=(e.clientY-prev.y)*k;
+  const g=photoGeo(act,stage.width,stage.height,1);
+  if(g.whole){act.cx-=dx/(act.iw*g.sc);act.cy-=dy/(act.ih*g.sc)}
+  else{act.cx-=dx*(g.b.cw/g.fw)/act.iw;act.cy-=dy*(g.b.ch/g.fh)/act.ih}
+  clampPhoto(act);draw();
 });
-function endPt(e){pts.delete(e.pointerId);if(pts.size<2)pinch0=null}
+function endPt(e){
+  pts.delete(e.pointerId);if(pts.size<2)pinch0=null;
+  if(spot&&!pts.size){const sp=spot;spot=null;addSpot(sp)}
+}
 stage.addEventListener('pointerup',endPt);
-stage.addEventListener('pointercancel',endPt);
-stage.addEventListener('wheel',e=>{e.preventDefault();
-  st.zoom=Math.max(1,Math.min(4,st.zoom*(1-e.deltaY*0.0012)));
-  $('#zoom').value=st.zoom;clampCenter();draw();
-},{passive:false});
+stage.addEventListener('pointercancel',e=>{spot=null;endPt(e);draw()});
+stage.addEventListener('wheel',e=>{e.preventDefault();const [x,y]=stageXY(e),s=photoAt(x,y);
+  setZoom(s,s.zoom*(1-e.deltaY*0.0012))},{passive:false});
+
+/* ---------- blurred spots (other products' price tags and the like) ---------- */
+function drawSpot(){
+  const S=stage.width/1080,x=Math.min(spot.x0,spot.x1),y=Math.min(spot.y0,spot.y1),w=Math.abs(spot.x1-spot.x0),h=Math.abs(spot.y1-spot.y0);
+  ctx.save();ctx.fillStyle='rgba(255,213,61,.18)';ctx.fillRect(x,y,w,h);
+  ctx.setLineDash([12*S,8*S]);ctx.lineWidth=3*S;ctx.strokeStyle='#FFD53D';ctx.strokeRect(x,y,w,h);ctx.restore();
+}
+function addSpot(sp){
+  const x0=Math.min(sp.x0,sp.x1),y0=Math.min(sp.y0,sp.y1),x1=Math.max(sp.x0,sp.x1),y1=Math.max(sp.y0,sp.y1);
+  if(x1-x0<12||y1-y0<12){draw();return}
+  const s=sp.s,g=photoGeo(s,stage.width,stage.height,1);
+  const img=(x,y)=>g.whole?[(x-g.dx)/g.sc,(y-g.dy)/g.sc]:[g.b.x+(x-g.fx)/g.fw*g.b.cw,g.b.y+(y-g.fy)/g.fh*g.b.ch];
+  const [ax,ay]=img(x0,y0),[bx,by]=img(x1,y1);
+  s.blurs.push({x:ax/s.k,y:ay/s.k,w:(bx-ax)/s.k,h:(by-ay)/s.k});blurLog.push(s);
+  processPhoto(s);draw();blurUI();
+}
+function blurUI(){
+  const b=$('#blurOn');b.setAttribute('aria-pressed',String(blurMode));
+  b.textContent=blurMode?'Blur tool on · tap when done':'Blur a spot';
+  $('#blurBox').hidden=!blurMode;
+  $('#blurUndo').disabled=$('#blurClear').disabled=!blurLog.length;
+  stage.classList.toggle('spot',blurMode);
+  $('#stagehint').textContent=blurMode?'Blur tool on: drag a box over the spot to hide':'Live preview · exports at full resolution';
+}
+function setBlurMode(on){blurMode=on;spot=null;blurUI();draw()}
+$('#blurOn').addEventListener('click',()=>setBlurMode(!blurMode));
+$('#blurUndo').addEventListener('click',()=>{const s=blurLog.pop();if(!s)return;s.blurs.pop();processPhoto(s);blurUI();draw()});
+$('#blurClear').addEventListener('click',()=>{blurLog=[];for(const s of [st,st.b]){s.blurs=[];processPhoto(s)}blurUI();draw()});
 
 /* ---------- uploads ---------- */
-function setSocialImage(img){
-  st.img=img;st.iw=img.naturalWidth;st.ih=img.naturalHeight;
-  st.cx=st.cy=0.5;st.zoom=1;$('#zoom').value=1;
-  $('#drop').classList.add('hide');draw();
+function setPhoto(s,img){
+  s.src=img;s.blurs=[];blurLog=blurLog.filter(x=>x!==s);
+  s.cx=s.cy=0.5;s.zoom=1;$(s===st.b?'#zoom2':'#zoom').value=1;
+  processPhoto(s);clampPhoto(s);
+  if(s===st)$('#drop').classList.add('hide');
+  blurUI();draw();
 }
-function loadFile(f){
+function setSocialImage(img){setPhoto(st,img)}
+function loadFile(f,s){
   if(!f||!f.type.startsWith('image/'))return;
-  const img=new Image();img.onload=()=>setSocialImage(img);img.src=URL.createObjectURL(f);
+  const img=new Image();img.onload=()=>setPhoto(s||st,img);img.src=URL.createObjectURL(f);
 }
-$('#file').addEventListener('change',e=>loadFile(e.target.files[0]));
+$('#file').addEventListener('change',e=>{loadFile(e.target.files[0],st);e.target.value=''});
+$('#file2').addEventListener('change',e=>{loadFile(e.target.files[0],st.b);e.target.value=''});
 $('#pick').addEventListener('click',()=>$('#file').click());
+$('#pick2').addEventListener('click',()=>$('#file2').click());
 $('#drop').addEventListener('click',()=>$('#file').click());
 ['dragover','drop'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault()));
 document.addEventListener('drop',e=>{
-  const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];
-  if(!f)return;
-  if(activeTab==='monitor')mLoadFile(f);else if(activeTab==='ai')aLoadFile(f);else loadFile(f);
+  const fs=[...((e.dataTransfer&&e.dataTransfer.files)||[])].filter(f=>f.type.startsWith('image/'));
+  if(!fs.length)return;
+  if(activeTab==='monitor')mLoadFile(fs[0]);
+  else if(activeTab==='ai')aLoadFile(fs[0]);
+  else if(st.layout==='split'&&fs.length>1){loadFile(fs[0],st);loadFile(fs[1],st.b)}
+  else{const r=stage.getBoundingClientRect(),over=e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;
+    loadFile(fs[0],over?photoAt(...stageXY(e)):st)}
 });
 
 /* ---------- bindings ---------- */
-function bind(id,key,upper){const el=$(id);el.addEventListener('input',()=>{
-  st[key]=upper?el.value:el.value;draw()})}
+function bind(id,key){const el=$(id);el.addEventListener('input',()=>{st[key]=el.value;draw()})}
 bind('#badge','badge');bind('#n1','n1');bind('#n2','n2');bind('#sub','sub');bind('#addr','addr');
 $('#dol').addEventListener('input',e=>{st.dol=e.target.value.replace(/\D/g,'')||'0';draw()});
 $('#cts').addEventListener('input',e=>{st.cts=e.target.value.replace(/\D/g,'').slice(0,2)||'00';draw()});
-$('#zoom').addEventListener('input',e=>{st.zoom=+e.target.value;clampCenter();draw()});
+function tagChips(){const v=(st.tag||'').trim().toUpperCase();[...$('#ptags').children].forEach(b=>b.classList.toggle('on',b.dataset.v===v))}
+$('#ptag').addEventListener('input',e=>{st.tag=e.target.value;tagChips();draw()});
+$('#ptags').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;
+  st.tag=b.dataset.v;$('#ptag').value=st.tag;tagChips();draw()});
+$('#zoom').addEventListener('input',e=>setZoom(st,+e.target.value));
+$('#zoom2').addEventListener('input',e=>setZoom(st.b,+e.target.value));
 $('#dark').addEventListener('input',e=>{st.darken=+e.target.value;draw()});
-$('#recenter').addEventListener('click',()=>{st.cx=st.cy=0.5;st.zoom=1;$('#zoom').value=1;draw()});
-$('#priceOn').addEventListener('change',e=>{st.price=e.target.checked;
-  $('#priceRow').style.display=st.price?'flex':'none';draw()});
+$('#recenter').addEventListener('click',()=>{st.cx=st.cy=0.5;setZoom(st,1)});
+$('#recenter2').addEventListener('click',()=>{st.b.cx=st.b.cy=0.5;setZoom(st.b,1)});
+$('#priceOn').addEventListener('change',e=>{st.price=e.target.checked;$('#priceBox').hidden=!st.price;draw()});
 $('#bEmber').addEventListener('click',()=>{st.badgeGold=false;
   $('#bEmber').classList.add('on');$('#bGold').classList.remove('on');draw()});
 $('#bGold').addEventListener('click',()=>{st.badgeGold=true;
   $('#bGold').classList.add('on');$('#bEmber').classList.remove('on');draw()});
+function chipPick(sel,key,fn){$(sel).addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;
+  [...$(sel).children].forEach(x=>x.classList.toggle('on',x===b));fn(b.dataset[key])})}
+chipPick('#fits','v',v=>{st.fit=v;clampCenter();draw()});
+chipPick('#splits','v',v=>{st.splitDir=v;clampCenter();draw()});
+$('#enh').addEventListener('change',async e=>{
+  st.enhance=e.target.checked;
+  const any=st.src||st.b.src;if(any&&st.enhance){msg('Enhancing photo…');await sleep(30)}
+  processPhoto(st);processPhoto(st.b);draw();if(any&&st.enhance)msg('Photo enhanced.');
+});
 function setFmt(f){
   [...$('#fmts').children].forEach(x=>x.classList.toggle('on',x.dataset.f===f));
   st.fmt=f;const[W,H]=FMT[f];stage.width=W;stage.height=H;
@@ -1097,16 +1517,112 @@ $('#durs').addEventListener('click',e=>{
   st.dur=+b.dataset.d;
 });
 
+/* ---------- layouts ---------- */
+const LAYOUT_NOTE={
+  single:'One product photo with its name and price.',
+  split:'Two products, side by side or stacked, with a gold line between them. They share the headline and price card, so the card works well as a "from" price.',
+  list:'A weekly price list: up to 8 deals over your store photo or the Inferno background. In the video the rows slide in one by one.',
+  closer:'The last slide of a carousel or a Story: the logo, where to find the store, and a 21+ line.'};
+const PHOTO_NOTE={
+  single:'Drag the preview to position your photo; pinch or scroll to zoom. Whole product keeps the entire photo inside the safe area, over a blurred copy of itself, so no bottle top gets cut off. No photo? The Inferno background is used.',
+  split:'This is the first photo (left or top). Drag either half of the preview to position its photo; pinch or scroll over a half to zoom it.',
+  list:'Optional: a store or shelf photo behind the list. It is blurred and darkened so the prices stay readable.',
+  closer:'Optional: a store photo behind the logo. It is blurred and darkened.'};
+function setLayout(l){
+  const was=st.layout;st.layout=l;stopAnim();
+  [...$('#layouts').children].forEach(b=>b.classList.toggle('on',b.dataset.l===l));
+  document.querySelectorAll('#tab-social [data-for]').forEach(el=>{el.hidden=!el.dataset.for.split(' ').includes(l)});
+  $('#layoutnote').textContent=LAYOUT_NOTE[l];$('#photonote').textContent=PHOTO_NOTE[l];
+  $('#pick').textContent=l==='split'?'Upload first photo':l==='single'?'Upload photo':'Upload background photo (optional)';
+  $('#drop').classList.toggle('hide',!!st.src||!photoLayout());
+  if(!photoLayout()&&blurMode)setBlurMode(false);
+  /* a deals list reads better with "THIS WEEK" than the one-product default */
+  if(l==='list'&&st.badge==='NEW ARRIVAL'){st.badge='THIS WEEK';$('#badge').value=st.badge}
+  else if(was==='list'&&l!=='list'&&st.badge==='THIS WEEK'){st.badge='NEW ARRIVAL';$('#badge').value=st.badge}
+  let n=0;document.querySelectorAll('#tab-social .card').forEach(cd=>{
+    if(!cd.hidden){const h=cd.querySelector('h3');h.textContent=(++n)+' · '+h.dataset.t}});
+  clampCenter();draw();
+}
+$('#layouts').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)setLayout(b.dataset.l)});
+
+/* ---------- deals list editor ---------- */
+function lRender(){
+  const esc=v=>String(v||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  $('#lrows').innerHTML=st.list.rows.map((r,i)=>'<div class="drow" data-i="'+i+'">'+
+    '<div class="row"><div class="field"><input type="text" data-k="name" maxlength="34" placeholder="Product" aria-label="Deal '+(i+1)+' product" value="'+esc(r.name)+'"></div>'+
+    '<div class="mini2"><input type="text" data-k="price" maxlength="16" placeholder="14.99" aria-label="Deal '+(i+1)+' price" value="'+esc(r.price)+'"></div></div>'+
+    '<div class="row"><div class="field"><input type="text" data-k="detail" maxlength="40" placeholder="Detail, e.g. Tequila · 1 Liter" aria-label="Deal '+(i+1)+' detail" value="'+esc(r.detail)+'"></div>'+
+    '<div class="mini2"><input type="text" data-k="tag" maxlength="8" placeholder="Tag" aria-label="Deal '+(i+1)+' tag" value="'+esc(r.tag)+'"></div>'+
+    '<button class="btn ghost small" type="button" data-del aria-label="Remove deal '+(i+1)+'">&times;</button></div></div>').join('');
+  $('#laddrow').disabled=st.list.rows.length>=8;
+}
+$('#lrows').addEventListener('input',e=>{const d=e.target.closest('.drow');if(!d||!e.target.dataset.k)return;
+  st.list.rows[+d.dataset.i][e.target.dataset.k]=e.target.value;draw()});
+$('#lrows').addEventListener('click',e=>{const b=e.target.closest('[data-del]');if(!b)return;
+  st.list.rows.splice(+b.closest('.drow').dataset.i,1);lRender();draw()});
+$('#laddrow').addEventListener('click',()=>{if(st.list.rows.length>=8)return;
+  st.list.rows.push({name:'',detail:'',price:'',tag:''});lRender();draw();
+  const f=$('#lrows').querySelector('.drow:last-child input');if(f)f.focus()});
+['kicker','title','foot'].forEach(k=>$('#l'+k).addEventListener('input',e=>{st.list[k]=e.target.value;draw()}));
+['l1','l2','l3'].forEach(k=>$('#c'+k).addEventListener('input',e=>{st.close[k]=e.target.value;draw()}));
+
 /* ---------- exports ---------- */
 function msg(s){setStatus($('#status'),s)}
 function setBusy(b){busy=b;document.querySelectorAll('.btn').forEach(el=>el.disabled=b)}
 function dl(blob,name){const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href),5000)}
-function slug(){return ((st.n1||'dantes').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''))||'dantes'}
+function slug(){
+  const base=st.layout==='list'?(st.list.title||'deals'):st.layout==='closer'?'closing_slide':(st.n1||'dantes');
+  return (base.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''))||'dantes';
+}
 
 $('#png').addEventListener('click',()=>{if(busy)return;
   draw();stage.toBlob(b=>{if(b){dl(b,'dantes_'+slug()+'_'+st.fmt+'.png');msg('PNG exported.')}},'image/png')});
+/* ---------- all four sizes in one ZIP (stored: PNGs are already compressed) ---------- */
+const CRC=(()=>{const t=new Uint32Array(256);
+  for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(u){let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=CRC[(c^u[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function zipBlob(files){
+  const d=new Date(),tm=(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1),
+    dt=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate(),out=[],dir=[];
+  let off=0;
+  for(const f of files){
+    const nm=new TextEncoder().encode(f.name),crc=crc32(f.data),n=f.data.length;
+    const lh=new DataView(new ArrayBuffer(30)),ch=new DataView(new ArrayBuffer(46));
+    lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x800,true);
+    lh.setUint16(10,tm,true);lh.setUint16(12,dt,true);lh.setUint32(14,crc,true);lh.setUint32(18,n,true);lh.setUint32(22,n,true);
+    lh.setUint16(26,nm.length,true);
+    ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x800,true);
+    ch.setUint16(12,tm,true);ch.setUint16(14,dt,true);ch.setUint32(16,crc,true);ch.setUint32(20,n,true);ch.setUint32(24,n,true);
+    ch.setUint16(28,nm.length,true);ch.setUint32(42,off,true);
+    out.push(lh,nm,f.data);dir.push(ch,nm);off+=30+nm.length+n;
+  }
+  const size=dir.reduce((a,p)=>a+p.byteLength,0),end=new DataView(new ArrayBuffer(22));
+  end.setUint32(0,0x06054b50,true);end.setUint16(8,files.length,true);end.setUint16(10,files.length,true);
+  end.setUint32(12,size,true);end.setUint32(16,off,true);
+  return new Blob([...out,...dir,end],{type:'application/zip'});
+}
+const SIZE_NAMES={p45:'feed_4x5',sq:'square_1x1',reel:'story_9x16',wide:'wide_16x9'};
+$('#pngAll').addEventListener('click',async()=>{
+  if(busy)return;stopAnim();setBusy(true);
+  const keep={fmt:st.fmt,a:[st.cx,st.cy,st.zoom],b:[st.b.cx,st.b.cy,st.b.zoom]},files=[];
+  const reset=()=>{[st.cx,st.cy,st.zoom]=keep.a;[st.b.cx,st.b.cy,st.b.zoom]=keep.b};
+  try{
+    for(const f of ['p45','sq','reel','wide']){
+      msg('Rendering '+SIZE_NAMES[f].replace('_',' ')+'…');
+      reset();setFmt(f);await sleep(0);
+      const b=await new Promise(r=>stage.toBlob(r,'image/png'));
+      if(!b)throw new Error('the browser could not make a PNG');
+      files.push({name:'dantes_'+slug()+'_'+SIZE_NAMES[f]+'.png',data:new Uint8Array(await b.arrayBuffer())});
+    }
+    files.push({name:'caption.txt',data:new TextEncoder().encode(captionFile())});
+    dl(zipBlob(files),'dantes_'+slug()+'_all_sizes.zip');
+    msg('ZIP exported: the 4:5, 1:1, 9:16 and 16:9 PNGs plus caption.txt.');
+  }catch(err){msg('Export failed: '+err.message)}
+  finally{reset();setFmt(keep.fmt);setBusy(false)}
+});
+
 
 $('#prev').addEventListener('click',()=>{if(busy)return;stopAnim();
   const t0=performance.now(),dur=st.dur;
@@ -1168,6 +1684,165 @@ $('#gif').addEventListener('click',async()=>{
       setBusy(false);draw()});
     gif.render();
   }catch(err){msg('GIF encoder failed to load ('+err.message+'). Video export remains available.');setBusy(false)}
+});
+
+/* ================= Caption writer ================= */
+/* Captions, hashtags, a short version and alt text in the voice of the ad set's
+   social-media-descriptions.txt, written from the ad's own fields. */
+function capMsg(s){setStatus($('#capstatus'),s)}
+/* shouty ad text to readable case: PATRÓN REPOSADO · 375 ML -> Patrón Reposado · 375 mL */
+function tidy(s){
+  return (s||'').trim().toLowerCase()
+    .replace(/(^|[\s(\/·+&"-])(\p{L})/gu,(m,a,b)=>a+b.toUpperCase())
+    .replace(/(\d)\s*ml\b/gi,'$1 mL').replace(/(\d)\s*l\b/gi,'$1 L')
+    .replace(/ (Of|And|The|For|With|In|On|At|To|Or|A)(?= )/g,m=>m.toLowerCase())
+    .replace(/\b(Fl|Us|Sr|Ne|Nw|Se|Sw|Vs|Vsop|Xo|Xxo|Ipa|Ii|Iii)\b/g,m=>m.toUpperCase());
+}
+const lead=s=>s.replace(/^(Inside|In|At|On|Near|Across From|Next To) /,m=>m.toLowerCase()); /* "Inside X" mid-sentence */
+const plain=s=>(s||'').trim().replace(/\s*·\s*/g,', ');                                        /* "a · b" in a sentence */
+const sent=s=>s?s.replace(/[\s.]+$/,'')+'. ':'';
+const cap1=s=>s.charAt(0).toUpperCase()+s.slice(1);
+function money(dol,cts){return '$'+(dol||'0')+'.'+((cts||'0')+'0').slice(0,2)}
+function storeLine(){
+  const a=(st.addr||'').trim();
+  if(!a||/2305\s*FL-?\s*7/i.test(a))return "📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)";
+  return "📍 Dante's Liquors: "+tidy(a.replace(/\s*·\s*/g,', '));
+}
+/* the facts of a one- or two-product ad */
+function capFacts(){
+  const parts=(st.n2||'').split('·').map(tidy).filter(Boolean);
+  const nm=[tidy(st.n1),parts[0]].filter(Boolean).join(' ').trim()||"Dante's pick";
+  const price=st.price?money(st.dol,st.cts):'',tag=(st.tag||'').trim(),tl=tag.toLowerCase();
+  const priceTxt=!price?'':/^(from|only|just|now|\d+ for)$/.test(tl)?tl+' '+price:price;
+  const ks=((st.badge||'')+' '+tag).toUpperCase();
+  const kind=/SALE|DEAL|OFF|SAVE|SPECIAL|\d+ FOR|CLEARANCE|STOCK.?UP/.test(ks)?'deal':/NEW|JUST|LANDED|ARRIV|IN STOCK|BACK/.test(ks)?'new':'pick';
+  const all=[st.n1,st.n2,st.sub,tag].join(' ').toLowerCase();
+  const use=(CAP_USE.find(([re])=>new RegExp(re).test(all))||[0,'the weekend'])[1];
+  return {nm,price,priceTxt,kind,detail:plain(st.sub),badge:tidy(st.badge),tag,use,
+    alert:/^(sale|deal)$/i.test(tag)?tidy(tag):'Deal'};
+}
+const CAP_USE=[['tequila|mezcal|margarita|paloma','the margarita pitcher'],['vodka','the cooler'],
+  ['whisk|bourbon|scotch|\\brye\\b','a slow pour on the rocks'],['\\brum\\b|\\bron\\b','something tropical'],
+  ['wine|vino|cabernet|merlot|pinot|chardonnay|moscato|ros[ée]','dinner tonight'],['champagne|prosecco|\\bbrut\\b|cava','the next toast'],
+  ['beer|cerveza|lager|\\bipa\\b','game day'],['cognac|hennessy|brandy','the weekend']];
+const CAP={
+  new:[
+    f=>`New on the shelf: ${f.nm} 🔥\n\n${sent(f.detail)}${f.priceTxt?`Just ${f.priceTxt}. `:''}Grab one for ${f.use}.`,
+    f=>`Just landed at Dante's: ${f.nm}. ✨\n\n${sent(f.detail)}${f.priceTxt?`Yours for ${f.priceTxt}. `:''}Come grab one before the weekend.`,
+    f=>`${f.nm} is here. 🥃\n\n${sent(f.detail)}${f.priceTxt?`${cap1(f.priceTxt)}, on the shelf now.`:'On the shelf now.'}`],
+  deal:[
+    f=>`${f.alert} alert 🚨 ${f.nm}${f.priceTxt?`, ${f.priceTxt}`:''} this week at Dante's.\n\n${sent(f.detail)}Stock up while it lasts.`,
+    f=>`Stock-up price: ${f.nm}${f.priceTxt?` for ${f.priceTxt}`:''}. 🔥\n\n${sent(f.detail)}While supplies last.`,
+    f=>`This week only: ${f.nm}${f.priceTxt?`, ${f.priceTxt}`:''}. 💸\n\n${sent(f.detail)}Perfect for ${f.use}.`],
+  pick:[
+    f=>`${f.nm} 🔥\n\n${sent(f.detail)}${f.priceTxt?`Only ${f.priceTxt} at Dante's.`:"Find it at Dante's."}`,
+    f=>`This week's pick: ${f.nm}. 🥃\n\n${sent(f.detail)}${f.priceTxt?cap1(f.priceTxt)+'.':''}`,
+    f=>`Treat yourself: ${f.nm}${f.priceTxt?` for ${f.priceTxt}`:''}. ✨\n\n${sent(f.detail)}Made for ${f.use}.`]
+};
+const dealRows=()=>st.list.rows.filter(r=>(r.name||'').trim()).slice(0,8)
+  .map(r=>{const P=parsePrice(r.price);return {name:tidy(r.name),detail:plain(r.detail),tag:tidy(r.tag),
+    price:P?(P.pre?P.pre.toLowerCase()+' ':'')+money(P.dol,P.cts):''}});
+function capBody(i){
+  if(st.layout==='list'){
+    const rows=dealRows(),head=[`${tidy(st.list.title)||"This week at Dante's"} 🔥`,"This week's deals at Dante's 🔥",'Deals worth the trip 💸'][i%3];
+    return head+'\n\n'+rows.map(r=>'• '+r.name+(r.detail?' ('+r.detail+')':'')+(r.price?': '+r.price:'')+(r.tag?' · '+r.tag:'')).join('\n')+
+      '\n\nPrices good while supplies last.';
+  }
+  if(st.layout==='closer'){const C=st.close,where=lead(tidy(C.l2))||"inside Sedano's Plaza",addr=plain(tidy(C.l3))||'2305 FL-7, Hollywood, FL';
+    return [`${cap1((C.l1||'Come see us').trim().toLowerCase())}. 🥃\n\nDante's Liquors: tequila, vodka, whiskey, wine and cold beer, ${where}.`,
+      `Your neighborhood liquor store. 🔥\n\nFind us ${where}, ${addr}.`][i%2];
+  }
+  const f=capFacts(),T=CAP[f.kind];return T[i%T.length](f);
+}
+function capTags(){
+  const L=st.layout,H=['#DantesLiquors'];
+  const all=(L==='list'?st.list.rows.map(r=>r.name+' '+r.detail).join(' '):L==='closer'?'':[st.n1,st.n2,st.sub].join(' ')).toLowerCase();
+  if(L==='single'||L==='split'){
+    const br=(st.n1||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9 ]/g,' ').trim().split(/\s+/)
+      .filter(Boolean).slice(0,3).map(w=>w[0].toUpperCase()+w.slice(1).toLowerCase()).join('');
+    if(br&&br.length<=22&&!/^dantes?/i.test(br))H.push('#'+br)}
+  for(const [re,t] of [['tequila',['#Tequila']],['reposado',['#TequilaReposado']],['blanco',['#TequilaBlanco']],['a[ñn]ejo',['#Anejo']],
+    ['mezcal',['#Mezcal']],['vodka',['#Vodka']],['whisk',['#Whiskey']],['bourbon',['#Bourbon']],['scotch',['#Scotch']],
+    ['\\brum\\b|\\bron\\b',['#Rum']],['\\bgin\\b',['#Gin']],['cognac|hennessy',['#Cognac']],['champagne|prosecco|\\bbrut\\b',['#Champagne']],
+    ['wine|vino|cabernet|merlot|pinot|chardonnay|moscato',['#Wine']],['beer|cerveza|lager|\\bipa\\b',['#Beer']]])
+    if(new RegExp(re).test(all))H.push(...t);
+  const k=L==='list'?'deal':L==='closer'?'':capFacts().kind;
+  if(k==='deal')H.push('#LiquorDeals');else if(k==='new')H.push('#NewArrival');
+  H.push('#HollywoodFL','#HollywoodFlorida','#BrowardCounty','#SouthFlorida','#954','#LiquorStore');
+  return [...new Set(H)].slice(0,15).join(' ');
+}
+function capShort(){
+  const where="Dante's Liquors, 2305 FL-7 Hollywood (inside Sedano's Plaza)",L=st.layout;let s;
+  if(L==='list'){const r=dealRows();
+    s="This week at Dante's: "+r.slice(0,3).map(x=>x.name+(x.price?' '+x.price:'')).join(' · ')+(r.length>3?' and more':'')+' 🔥 '+where+'. 21+ · Drink responsibly.'}
+  else if(L==='closer')s='Come see us 🥃 '+where+'. 21+ · Drink responsibly.';
+  else{const f=capFacts();
+    s=(f.kind==='new'?'NEW: ':f.kind==='deal'?f.alert.toUpperCase()+': ':'')+f.nm+(f.priceTxt?', '+f.priceTxt:'')+' 🔥 '+where+'. 21+ · Drink responsibly.'}
+  s+=' '+capTags().split(' ').slice(1,3).join(' ');
+  return s.length>280?s.slice(0,279)+'…':s;
+}
+function capAlt(){
+  const L=st.layout;
+  if(L==='list')return "Price list of this week's deals at Dante's Liquors: "+dealRows().map(r=>r.name+(r.price?' '+r.price:'')).join(', ')+'.';
+  if(L==='closer')return "The Dante's Liquors logo over a glowing red background, with the words “"+cap1((st.close.l1||'').trim().toLowerCase())+'”, '+lead(tidy(st.close.l2))+', '+plain(tidy(st.close.l3))+'.';
+  const f=capFacts(),what=L==='split'&&st.src&&st.b.src?(st.splitDir==='v'?'Two product photos, one above the other,':'Two product photos side by side'):st.src?'Photo':'Ad graphic';
+  return what+' of '+f.nm+(f.detail?' ('+f.detail+')':'')+(f.price?', with a '+(f.priceTxt||f.price)+' price card':'')+
+    (st.badge.trim()?' and a “'+f.badge+'” badge':'')+", from Dante's Liquors.";
+}
+let capIdx=0,capAuto=null;
+const capSig=()=>JSON.stringify([st.layout,st.n1,st.n2,st.sub,st.badge,st.tag,st.price,st.dol,st.cts,st.addr,st.list,st.close,!!st.src]);
+const capEdited=()=>!!capAuto&&($('#capText').value!==capAuto.t||$('#capShort').value!==capAuto.s||$('#capAlt').value!==capAuto.a);
+function capWrite(i){
+  $('#capText').value=capBody(i)+'\n\n'+storeLine()+'\n21+ only. Please drink responsibly.\n\n'+capTags();
+  $('#capShort').value=capShort();$('#capAlt').value=capAlt();capMsg('');
+  capAuto={sig:capSig(),t:$('#capText').value,s:$('#capShort').value,a:$('#capAlt').value};
+}
+/* a written caption follows the ad as it changes, until the user edits it by hand */
+function capRefresh(){
+  if(!capAuto||capAuto.sig===capSig())return;
+  if(!capEdited())capWrite(capIdx);
+  else capMsg('The ad changed after you edited this caption. Your edits are kept; press Write caption for a fresh one.');
+}
+['input','click','change'].forEach(ev=>$('#tab-social .panel').addEventListener(ev,e=>{
+  if(!e.target.closest('#capText,#capShort,#capAlt'))setTimeout(capRefresh,0)}));
+function captionFile(){ /* goes into the ZIP: the boxes as edited, or a fresh set that matches the ad */
+  if(!$('#capText').value.trim()||(!capEdited()&&(!capAuto||capAuto.sig!==capSig())))capWrite(capIdx);
+  return 'CAPTION\n'+$('#capText').value.trim()+'\n\nSHORT VERSION (X / Stories / Threads)\n'+$('#capShort').value.trim()+
+    '\n\nALT TEXT\n'+$('#capAlt').value.trim()+'\n\nIf you boost this post as a paid ad, set the audience to 21+.\n';
+}
+async function copyText(t,ok){
+  try{await navigator.clipboard.writeText(t);capMsg(ok)}
+  catch(e){capMsg('Copying is blocked here. Select the text in the box and copy it by hand.')}
+}
+$('#capGo').addEventListener('click',()=>{capIdx=0;capWrite(0)});
+$('#capNext').addEventListener('click',()=>capWrite(++capIdx));
+$('#capCopy').addEventListener('click',()=>{if(!$('#capText').value.trim())capWrite(capIdx);copyText($('#capText').value,'Caption copied.')});
+$('#capTagsCopy').addEventListener('click',()=>copyText(capTags(),'Hashtags copied.'));
+$('#capShortCopy').addEventListener('click',()=>{if(!$('#capShort').value.trim())capWrite(capIdx);copyText($('#capShort').value,'Short version copied.')});
+$('#capAltCopy').addEventListener('click',()=>{if(!$('#capAlt').value.trim())capWrite(capIdx);copyText($('#capAlt').value,'Alt text copied.')});
+/* optional AI polish through Puter, the same free sign-in AI Studio uses */
+function chatText(r){
+  if(typeof r==='string')return r;
+  const m=r&&r.message;
+  if(m){if(typeof m.content==='string')return m.content;if(Array.isArray(m.content))return m.content.map(p=>p.text||'').join('')}
+  return r&&typeof r.text==='string'?r.text:String(r||'');
+}
+$('#capAI').addEventListener('click',async()=>{
+  if(!$('#capText').value.trim())capWrite(capIdx);
+  const tags=capTags(),body=$('#capText').value.replace(tags,'').trim(),b=$('#capAI');
+  b.disabled=true;capMsg('Asking the AI for a polished caption…');
+  try{
+    const P=await aPuterLoad();
+    if(P.auth&&!P.auth.isSignedIn())await P.auth.signIn();
+    const prompt="Polish this Instagram caption for Dante's Liquors, a neighborhood liquor store in Hollywood, Florida. "+
+      'Keep every product name, size, price and the address exactly as written. Warm and local, under 90 words, at most 3 emojis. '+
+      'Keep the last line exactly: "21+ only. Please drink responsibly." No hashtags. Reply with the caption only.\n\n'+body;
+    const r=aTest?await P.ai.chat(prompt,true):await P.ai.chat(prompt);
+    const txt=chatText(r).trim().replace(/^["“]+|["”]+$/g,'');
+    if(!txt)throw new Error('empty');
+    $('#capText').value=txt+'\n\n'+tags;capMsg('Done. Double-check the prices before you post.');
+  }catch(e){capMsg(e&&e.message==='empty'?'The AI sent an empty reply. Try again.':puterErr(e))}
+  finally{b.disabled=false}
 });
 
 /* ================= Window display (monitor) engine ================= */
@@ -1770,7 +2445,7 @@ $('#aPuterIn').addEventListener('click',async()=>{
 $('#agen').addEventListener('click',aGenerate);
 $('#agal').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;aSt.sel=+b.dataset.i;aRender()});
 $('#aToSocial').addEventListener('click',()=>{const r=aSt.res[aSt.sel];if(!r)return;
-  setFmt(r.fmt);setSocialImage(r.img);showTab('social');window.scrollTo(0,0)});
+  if(!photoLayout())setLayout('single');setFmt(r.fmt);setSocialImage(r.img);showTab('social');window.scrollTo(0,0)});
 $('#aToWindow').addEventListener('click',()=>{const r=aSt.res[aSt.sel];if(!r)return;
   setWindowImage(r.img);setMStyle(r.clean?'classic':'cine');showTab('monitor');window.scrollTo(0,0)});
 $('#asave').addEventListener('click',()=>{const r=aSt.res[aSt.sel];if(!r)return;
@@ -1828,6 +2503,7 @@ $('#hdrlogo').innerHTML=logoSVG('light');
 {const fav=document.createElement('link');fav.rel='icon';fav.type='image/svg+xml';
   fav.href='data:image/svg+xml,'+encodeURIComponent(logoSVG('dark',true));document.head.appendChild(fav)}
 initEmbers(stage.width,stage.height);
+lRender();blurUI();setLayout('single');
 draw();
 mDraw();
 aInit();
