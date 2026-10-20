@@ -56,6 +56,9 @@ Replicates the exact format of the in-store window monitor ads.
 
 You don't pick the look. The look picks you.
 
+- **Logo:** the real Dante's Liquors logo, rebuilt as vector art from the original: the plate with its corner screws, DANTE'S with the red apostrophe, LIQUORS, and the fire-bird glass. It is drawn as shapes, so it stays sharp at any size, from the tab icon to 4K window screens. Dark ads get the white version, white ads get the black one.
+- **Logo files:** [`brand/`](brand/) has the logo as SVG (any size, for print and signage) and 4000px transparent PNG, black and white versions, plus the glass on its own.
+
 - **Palette:** Ink `#0B0908` · Bone `#F6F1E7` · Ember `#C8102E` · Gold `#E3B264`
 - **Type:** Anton (headlines), Oswald (body/UI), Zilla Slab (brand mark) — pulled from Google Fonts
 - **Treatment:** Inferno full-bleed — radial ember glow rising from the bottom, floating ember particles, film-grade scrims, and flame accents. No inset boxes, no dead margins. The bottle IS the poster.
