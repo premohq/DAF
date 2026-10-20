@@ -59,6 +59,7 @@ You don't pick the look. The look picks you.
 - **Palette:** Ink `#0B0908` · Bone `#F6F1E7` · Ember `#C8102E` · Gold `#E3B264`
 - **Type:** Anton (headlines), Oswald (body/UI), Zilla Slab (brand mark) — pulled from Google Fonts
 - **Treatment:** Inferno full-bleed — radial ember glow rising from the bottom, floating ember particles, film-grade scrims, and flame accents. No inset boxes, no dead margins. The bottle IS the poster.
+- **The Forge itself** is dressed as a mid-2000s website: centered page on a dark pinstripe, glossy fire banner and tabs, boxed sidebar modules with [–] toggles, and classic XP-style form controls. The ads keep the brand system above.
 
 ---
 
