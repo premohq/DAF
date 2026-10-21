@@ -4,12 +4,12 @@
 
 ## What It Does
 
-The Forge has three tabs:
+The Forge has four tabs:
 
 ### 1 · AI Studio (new)
 Turns a plain bottle photo into a cinematic ad shot with Google's Nano Banana image models, right inside the Forge.
 
-- **Upload the bottle** — the AI copies the bottle and label from your photo. No photo? Type the product name and it draws the bottle from memory (check the label). The product name fills in by itself from the photo (see [Bottle detection](#bottle-detection)).
+- **Upload the bottle** — the AI copies the bottle and label from your photo. No photo? Type the product name and it draws the bottle from memory (check the label). The product name fills in by itself from the photo, or start typing it and pick it from the list (see [The bottle list and label reader](#the-bottle-list-and-label-reader)).
 - **Pick a scene** — Inferno, Gold Luxe, Ice Cold, Neon Night, Bar Top, Spotlight, Agave Sunset, or Studio White (a clean packshot for the classic window ads). Add extra direction if you want ("fresh limes beside it").
 - **Pick the shape and model** — 4:5, 9:16 (Reels and the window screens), 16:9 or 1:1. With a Google key or Puter: Nano Banana 2 (fast) or Nano Banana Pro (most detailed); GPT Image 2.5 and Grok Imagine 2 through Puter; 1K, 2K or 4K. With Gemini, Gemini picks its own model and size.
 - **Pick the engine:**
@@ -23,7 +23,7 @@ Turns a plain bottle photo into a cinematic ad shot with Google's Nano Banana im
 - **No add-on, or on a phone?** "Copy prompt & open Gemini" copies the same prompt and opens the Gemini app. Attach the bottle, paste and send. Then right-click the picture, **Copy image**, come back and press **Ctrl+V** (or **Paste image**): it lands in AI Studio with no saving and re-uploading. **Add a finished image** still takes a file.
 
 ### The DAF Helper add-on
-A small browser add-on in [`addon/`](addon/) that lets the Forge use Gemini without you touching Gemini. When you press Generate, it opens Gemini in a pinned tab in the background, attaches your bottle photo, types the prompt, waits for the picture, and hands the full-size image back to AI Studio. It also reads bottle labels for [Bottle detection](#bottle-detection).
+A small browser add-on in [`addon/`](addon/) that lets the Forge use Gemini without you touching Gemini. When you press Generate, it opens Gemini in a pinned tab in the background, attaches your bottle photo, types the prompt, waits for the picture, and hands the full-size image back to AI Studio. It also reads bottle labels and writes captions, and the Batch tab uses it for every bottle.
 
 **Install it once (about 2 minutes, on a computer with Chrome, Edge, Brave or Opera):**
 1. In AI Studio, step 4 · Engine, press **Download the add-on** and unzip it somewhere you'll keep it.
@@ -38,12 +38,17 @@ A small browser add-on in [`addon/`](addon/) that lets the Forge use Gemini with
 - It drives Gemini's website the way you would by hand, not through an official Google API, so a redesign of Gemini's page can break it. When that happens the Forge shows Gemini's message or what step failed; download the add-on again once it's updated, and the hand route above always works.
 - Phones can't run add-ons.
 
-### Bottle detection
-Upload a product photo in any tab and the Forge reads the label: brand, expression, type, bottle size, and a shelf price tag if one is clearly in the shot. It fills in AI Studio's product name, the Social ad's headline, line two, detail line and price, and the Window ad's size line, product name and price.
+### The bottle list and label reader
+**Type a few letters, pick the bottle.** AI Studio's product name, the Social headline and the Window product name suggest bottles as you type: "casa", "titos 1.75", "henny", "jw black", "don julio 1942", even typos like "hennesy". Picking one fills in the name, type and size, and size buttons switch between the sizes it comes in. The list is [`bottles.js`](bottles.js): about 880 popular liquors, wines, champagnes and beers in some 340 brands, one brand per line, easy to add to. Bottles you use are remembered on your device and come first next time.
 
-- It never overwrites what you typed. Only empty boxes, the page's sample text, or its own earlier fill get replaced. If you had typed something, it says what it found and offers **Use these instead**. Every fill has an **Undo**.
-- It uses whichever AI is set up, fastest first: a Google key (Gemini Flash, which is in Google's free tier for AI Studio keys), the DAF Helper add-on, or Puter if you're already signed in. With none of them, it shows a tip instead.
-- Turn it off with the **Fill in the name from the photo** checkbox in any photo box. The setting is shared by all three tabs.
+**Or let it read the label.** Upload a product photo in any tab and the Forge reads it: brand, expression, type, size, and a shelf price tag if one is clearly in the shot.
+
+- The on-device reader always works, with no add-on, no key and no account, on phones too. It recognizes the text in the photo inside your browser and matches it against the bottle list, so even a garbled "PATRG N… ReposAvo" becomes Patrón Reposado. The first time it loads about 6 MB, then it's quick. When it can tell the brand but not which one, it asks: **Which one? Blanco · Reposado · Añejo**.
+- When Gemini is set up (a Google key, the DAF Helper add-on, or Puter if you're signed in), Gemini reads it too and the better answer wins. A Google key is the fastest (Gemini Flash is in Google's free tier). Gemini's answer is checked against the list, so the spelling and type come out clean.
+- It uses what you already told it: a name you typed, or the photo's file name ("casamigos-reposado.jpg").
+- Sizes come from the label or a shelf tag. If neither shows one, it takes the bottle's usual size and says "(guessed)", with size buttons to fix it.
+- It never overwrites what you typed. Only empty boxes, the page's sample text, or its own earlier fill get replaced. If you had typed something, it says what it found and offers **Use these instead**. Every fill has an **Undo**. If nothing could be read, it says why and offers **Try again**.
+- Turn it off with the **Fill in the name from the photo** checkbox in any photo box. The setting is shared by all tabs.
 
 ### 2 · Social Media Ads
 Builds Instagram-ready posts and Reels on a live canvas.
@@ -74,7 +79,7 @@ Builds Instagram-ready posts and Reels on a live canvas.
   - **Video** — 4, 6, or 8 second animated cut with the ember/flame treatment, rendered frame by frame into a smooth 30 fps MP4 (falls back to real-time recording on browsers without WebCodecs).
   - **GIF** — encoded in-browser via gif.js. No audio, bigger files. Video is the move for Reels; add audio in the Instagram app before posting.
   - **Preview animation** — watch the loop before you commit.
-- **Caption & hashtags** — writes the post for you from the ad's own text and price: a caption with the store line, "21+ only. Please drink responsibly." and hashtags, a short version for X, Stories and Threads, and alt text. "Another version" cycles through three takes per ad type (new arrival, deal, or pick). Copy buttons for each, an optional AI polish through Puter, and the caption keeps up with the ad until you edit it by hand.
+- **Caption & hashtags** — **Write it with Gemini** sends the finished ad and its facts to Gemini (through the add-on or a Google key) and fills in the caption, short version, alt text and hashtags. Without Gemini, the built-in writer still writes the post for you from the ad's own text and price: a caption with the store line, "21+ only. Please drink responsibly." and hashtags, a short version for X, Stories and Threads, and alt text. "Another version" cycles through three takes per ad type (new arrival, deal, or pick). Copy buttons for each, an optional AI polish through Puter, and the caption keeps up with the ad until you edit it by hand.
 
 ### 3 · Window Display Ads
 Replicates the exact format of the in-store window monitor ads.
@@ -86,6 +91,17 @@ Replicates the exact format of the in-store window monitor ads.
 - **Fonts:** 21 to pick from, each shown in its own typeface: Baloo (the house style and the default), Anton, Bebas Neue, Oswald, Archivo Black, Alfa Slab, Zilla Slab, Ultra, Abril Fatface, Playfair, Rye, Lilita One, Titan One, Fredoka, Luckiest Guy, Bangers, Bungee, Righteous, Lobster, Pacifico and Permanent Marker. Each is sized to match Baloo, so switching fonts keeps the layout. The price follows the font too, unless you untick **Price uses this font too** (handy for script fonts). The choice is remembered on this device.
 - Exports full monitor resolution PNG, drop-in compatible with the existing display files.
 - **Loop video:** 6, 10, or 15 second seamless MP4 loops for the screens, 1080p or 4K, in the same orientation as the PNG. Embers drift, light sweeps across, the scene breathes and the price pulses, while the name and price stay readable. Change the price and re-export; no new AI image needed.
+
+### 4 · Batch (new)
+Many bottles, all their ads, one click.
+
+1. **Add the bottles.** Pick as many photos as you like, ZIPs of photos, or a whole folder, or drop or paste them on the page. One photo per bottle.
+2. **Check the list.** Each label is read and the name, size and price fill in on the right (type over anything, with the same dropdown as the other tabs). Each bottle can keep its own scene or use the one picked from its photo.
+3. **Pick what to make:** Social posts in 4:5, 1:1, 9:16 and 16:9, and Window ads in portrait and landscape. Background: a **new AI scene** for every bottle, which Gemini picks from the photo (Agave Sunset for a tequila, Ice Cold for a vodka, Bar Top for a bourbon and so on) and makes from your photo, or **my photo as is**.
+4. **Make all ads.** For each bottle it makes the picture, draws every ad you picked (with the fonts, colors and address from the Social and Window tabs), and writes a caption with Gemini or the built-in writer. **Stop** stops after the current step.
+5. **Save** as one ZIP, straight into a folder on your computer (Chrome and Edge), or as separate files. Each bottle gets its own folder (`01_patron-reposado/feed_4x5.png`, `story_9x16.png`, `window_portrait_2160x3840.png`, the AI picture and the prompt that made it, and `caption.txt` with the caption, hashtags, short version and alt text), plus `captions.txt` and `bottles.csv` with every bottle in one place.
+
+AI scenes come from the engine picked in AI Studio. Free Gemini accounts get a limited number of pictures a day, so for big batches start with your best sellers.
 
 ---
 
@@ -105,7 +121,7 @@ You don't pick the look. The look picks you.
 
 ## How It Works Under the Hood
 
-Everything is one self-contained `index.html`, plus the optional add-on in `addon/`:
+Everything is one self-contained `index.html`, plus the bottle list in `bottles.js` and the optional add-on in `addon/`:
 
 - All rendering happens on an HTML5 `<canvas>` — the preview you see is the same pipeline the export uses, drawn at full output resolution.
 - Photo positioning uses pointer events (drag to pan, pinch to zoom on touch) with clamped centering so the crop can never fall off the image.
@@ -113,9 +129,11 @@ Everything is one self-contained `index.html`, plus the optional add-on in `addo
 - Video export renders every frame on its own clock and encodes with WebCodecs (H.264, or VP9 where H.264 is missing) into an MP4 via mp4-muxer, loaded from jsDelivr on demand. Browsers without WebCodecs fall back to `canvas.captureStream()` + `MediaRecorder`.
 - Window loops are seamless by construction: everything that moves repeats exactly once per loop.
 - GIF export loads gif.js from a CDN on demand and encodes with web workers.
+- The on-device label reader is Tesseract.js (from jsDelivr, loaded the first time a photo is read). It reads the middle of the photo, where the label usually is, then the whole frame if it needs to, and fuzzy-matches the words against the bottle list: a word only one brand uses is enough, short words must be exact, and split words get joined.
+- Batch reads ZIPs in the browser (DecompressionStream), renders through the same Social and Window engines with each bottle swapped in, and builds its ZIP without copying the pictures. "Into a folder" uses the File System Access API.
 - AI Studio calls the AI straight from the browser: the DAF Helper add-on (your own Gemini tab), Puter.js (loaded from js.puter.com) or Google's API (Vertex AI express mode or AI Studio) with your key.
 - The add-on is a Manifest V3 extension: a bridge script on the Forge's pages passes jobs to its background worker, which reloads its pinned Gemini tab to a new chat, injects the script that attaches the photo, types and sends, and returns the picture at full size (it asks Google's image server for the original). The page builds the add-on's ZIP itself from the files in `addon/`. Keys are kept in this browser only if you leave "Remember on this device" on. Add `?aitest=1` to the URL to try the Puter flow with sample images that use no credits.
-- Zero backend. Photos stay in your browser — except in AI Studio, which sends the bottle photo and the prompt to the AI service you picked (Gemini, Puter or Google), and bottle detection, which sends a small copy of the product photo to that same AI to read the label (turn it off with its checkbox). The caption writer works offline; only "Polish the caption with AI" sends the caption text (never a photo) to Puter. Everything else that happens in the Forge stays in the Forge.
+- Zero backend. Photos stay in your browser — except in AI Studio, which sends the bottle photo and the prompt to the AI service you picked (Gemini, Puter or Google), and the label reader, which sends a copy of the product photo to that same AI when one is set up (the on-device reader keeps it in your browser; turn reading off with its checkbox). Batch sends each bottle photo to the AI that makes its scene, and the bottle names and prices to Gemini for captions. The built-in caption writer works offline; "Write it with Gemini" sends the finished ad image and its facts to Gemini, and "Polish the caption with AI" sends the caption text (never a photo) to Puter. Everything else that happens in the Forge stays in the Forge.
 
 ---
 
@@ -125,6 +143,7 @@ Everything is one self-contained `index.html`, plus the optional add-on in `addo
 - PNG export works everywhere.
 - AI Studio needs an internet connection. Allow pop-ups for the site so the Puter sign-in window can open.
 - The DAF Helper add-on works in Chrome, Edge, Brave and Opera on a computer. If you open the Forge as a file instead of from the website, also turn on **Allow access to file URLs** for the add-on in `chrome://extensions`.
+- Batch's "Into a folder" needs Chrome or Edge on a computer; the ZIP and separate-file options work everywhere.
 - If a browser can't record video, the Forge tells you instead of pretending. Fuhgeddaboudit and switch to Chrome.
 
 ---*

@@ -177,10 +177,13 @@ async function answer(op, before, skip, port) {
       port.postMessage({kind: 'progress', step: 'wait', secs, text: op === 'image'
         ? (pics.length ? 'Gemini is finishing the image…' : 'Gemini is making the image… ' + secs + 's')
         : 'Gemini is reading the label… ' + secs + 's'});
-      if (!busy && root) {
-        if (op === 'image' && pics.length && calm >= 2) return {pics, text};
-        if (op === 'image' && !pics.length && r && text && calm >= 8 && !drawing(r)) return {pics, text};
-        if (op === 'ask' && text && calm >= 2) return {pics: [], text};
+      /* done when Gemini stops, or when the answer has sat still for a while even though
+         something on the page still looks like a stop button */
+      if (root) {
+        const json = /[{[][\s\S]*[}\]]/.test(text);
+        if (op === 'image' && pics.length && (calm >= 2 && !busy || calm >= 8)) return {pics, text};
+        if (op === 'image' && !pics.length && r && text && !drawing(r) && (calm >= 8 && !busy || calm >= 30)) return {pics, text};
+        if (op === 'ask' && text && (calm >= 2 && !busy || json && calm >= 5)) return {pics: [], text};
       }
       if (!woke && Date.now() - changed > 45000) { woke = true; port.postMessage({kind: 'wake'}) }
       if (Date.now() - t0 > 330000) throw fail('timeout', 'Gemini took more than 5 minutes. Press “Open the Gemini tab” to see what happened.');

@@ -204,6 +204,41 @@ b.ok{color:#167D16}
 .det.busy{border-color:var(--boxline);background:#F7F6F1;color:#555}
 .det button{appearance:none;padding:0;border:0;background:none;font:inherit;color:var(--link);text-decoration:underline;cursor:pointer}
 
+/* bottle list dropdown under the name boxes */
+.bac{position:relative}
+.bacl{position:absolute;left:0;right:0;top:100%;z-index:30;margin-top:2px;max-height:320px;overflow:auto;background:#fff;
+  border:1px solid var(--field);box-shadow:0 6px 16px rgba(0,0,0,.28)}
+.baco{padding:5px 8px;cursor:pointer;border-top:1px solid #EEE;font:12px/1.35 var(--ui);color:#333}
+.baco:first-child{border-top:0}
+.baco.on,.baco:hover{background:#FFF4CC}
+.baco b{display:block;color:#000}
+.szs{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:4px}
+.szs span{font:11px var(--ui);color:#666}
+.szs button{appearance:none;padding:1px 6px;border:1px solid var(--boxline);border-radius:2px;background:#fff;font:11px var(--ui);color:#000;cursor:pointer;text-decoration:none}
+.szs button.on{border-color:var(--ember);color:var(--ember);font-weight:bold}
+.szs button:hover{border-color:#E5A01A}
+.det.err{border-color:#E7B4B4;background:#FFF3F3}
+select{width:100%;height:26px;padding:2px 4px;border:1px solid var(--field);border-radius:0;background:#fff;color:#000;font:12px var(--ui)}
+select:focus{outline:none;border-color:var(--ember);box-shadow:0 0 0 2px rgba(200,16,46,.18)}
+
+/* batch */
+.checks{display:flex;flex-wrap:wrap;gap:6px 16px}
+.bhead{display:flex;align-items:baseline;gap:8px;font:12px var(--ui);color:#555}
+.bhead b{font:bold 16px var(--head);color:var(--wine)}
+.blist{display:flex;flex-direction:column;gap:8px}
+.brow{display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:10px;align-items:start;padding:8px;border:1px solid var(--boxline);background:#fff}
+.brow.busy{border-color:#E5A01A;background:#FFFCF2}
+.bthumb{width:84px;height:112px;object-fit:contain;background:#F6F4EF;border:1px solid var(--boxline)}
+.brow .row{margin-top:6px}
+.brow .mini2{width:92px}
+.brow .bdel{padding:0 8px;font-weight:bold}
+.bstat{margin-top:6px;font:11px/1.45 var(--ui);color:#555}
+.bstat.err{color:#9A0F22}
+.bouts{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.bouts:empty{display:none}
+.bouts img{height:72px;border:1px solid var(--boxline);background:#0d0908}
+@media(max-width:560px){.brow{grid-template-columns:64px minmax(0,1fr) auto}.bthumb{width:64px;height:86px}}
+
 /* window font picker: each option is shown in its own typeface */
 .fontgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
 .fbtn{
@@ -224,7 +259,7 @@ canvas#stage.spot{cursor:crosshair}
 
 /* ---------- notes, status, progress ---------- */
 .note{margin:6px 0 0;font:11px/1.5 var(--ui);color:#666}
-#status,#mstatus,#astatus,#capstatus{min-height:16px;margin-top:8px;font:12px/1.45 var(--ui);color:#000}
+#status,#mstatus,#astatus,#capstatus,#bstatus{min-height:16px;margin-top:8px;font:12px/1.45 var(--ui);color:#000}
 .xpbar,#astatus.busy::after{height:14px;margin-top:5px;padding:1px;border:1px solid #686868;border-radius:3px;background:#fff;overflow:hidden}
 .xpbar i{
   display:block;height:100%;
@@ -349,13 +384,14 @@ details.how .btn{margin-top:8px}
   <span class="div"></span>
   <span class="forge">AD FORGE</span>
   <span class="tag">Ad Creation Suite · Hollywood, FL</span>
-  <button class="burst" id="burst" type="button" aria-label="New: open AI Studio">New!<small>AI Studio</small></button>
+  <button class="burst" id="burst" type="button" aria-label="New: open Batch">New!<small>Batch ads</small></button>
 </header>
 
 <nav class="tabs" aria-label="Ad type">
   <button class="tab on" data-tab="ai" type="button">AI Studio<span class="new">New</span></button>
   <button class="tab" data-tab="social" type="button">Social Media Ads</button>
   <button class="tab" data-tab="monitor" type="button">Window Display Ads</button>
+  <button class="tab" data-tab="batch" type="button">Batch<span class="new">New</span></button>
 </nav>
 
 <main class="wrap" id="tab-ai">
@@ -372,7 +408,7 @@ details.how .btn{margin-top:8px}
         <button class="btn ghost small" id="aclear" type="button">Remove</button>
       </div>
       <div class="row" style="margin-top:12px"><div class="field"><label class="lbl" for="aname">Product name</label>
-        <input type="text" id="aname" value="" placeholder="e.g. Casamigos Blanco Tequila 750 mL" maxlength="60"></div></div>
+        <input type="text" id="aname" value="" placeholder="Start typing, e.g. casamigos" maxlength="60"></div></div>
       <div class="det" id="adet" hidden></div>
       <label class="switch" style="margin-top:8px"><input type="checkbox" class="dauto" checked> Fill in the name from the photo</label>
       <p class="note">A clear photo of the real bottle gives the most accurate label. With only a name, the AI draws the bottle from memory and the label may be wrong.</p>
@@ -419,6 +455,7 @@ details.how .btn{margin-top:8px}
           <p class="note"><b class="ok">Add-on connected.</b> Generate sends your photo and the prompt to Gemini in a pinned tab and brings the picture back here. It runs on your own Gemini account, so it's free within Gemini's daily image limit.</p>
           <label class="switch" style="margin-top:8px"><input type="checkbox" id="ashowgem"> Show Gemini while it works</label>
           <button class="btn ghost" id="aopengem" type="button" style="margin-top:8px">Open the Gemini tab</button>
+          <p class="note" id="aHelpOld" hidden><b>A newer add-on is out.</b> <button class="btn small" id="aaddon2" type="button">Download it</button>, unzip it over the old daf-helper folder, then press the reload arrow on DAF Helper in chrome://extensions.</p>
         </div>
         <div id="aHelpOff">
           <p class="note">Gemini makes the picture in the background, right from this page. It needs the free <b>DAF Helper</b> add-on, a one-time setup of about 2 minutes on a computer with Chrome, Edge or Brave:</p>
@@ -530,8 +567,7 @@ details.how .btn{margin-top:8px}
           <button class="chip" data-v="whole" type="button">Whole product</button>
         </div></div></div>
       <label class="switch" style="margin-top:10px"><input type="checkbox" id="enh"> Enhance photo (sharpen + color)</label>
-      <div data-for="single"><div class="det" id="sdet" hidden></div>
-        <label class="switch" style="margin-top:8px"><input type="checkbox" class="dauto" checked> Fill in the name and size from the photo</label></div>
+      <label class="switch" style="margin-top:8px" data-for="single"><input type="checkbox" class="dauto" checked> Fill in the name and size from the photo</label>
       <p class="note" id="photonote">Drag the preview to position your photo. Pinch or scroll to zoom. If no photo is loaded, the Inferno background is used.</p>
       <div class="btnrow" style="margin-top:4px">
         <button class="btn ghost" id="recenter" type="button">Re-center crop</button>
@@ -584,8 +620,9 @@ details.how .btn{margin-top:8px}
           </div>
         </div>
       </div>
-      <div class="row" data-for="single split"><div class="field"><label class="lbl" for="n1">Headline</label>
+      <div class="row" data-for="single split"><div class="field"><label class="lbl" for="n1">Headline · type a bottle to pick it from the list</label>
         <input type="text" id="n1" value="PATRÓN" maxlength="18"></div></div>
+      <div data-for="single"><div class="det" id="sdet" hidden></div></div>
       <div class="row" data-for="single split"><div class="field"><label class="lbl" for="n2">Line two</label>
         <input type="text" id="n2" value="ESTATE RELEASE" maxlength="26"></div></div>
       <div class="row" data-for="single split"><div class="field"><label class="lbl" for="sub">Detail line</label>
@@ -719,7 +756,6 @@ details.how .btn{margin-top:8px}
         <div class="field"><label class="lbl" for="mzoom">Zoom</label>
           <input type="range" id="mzoom" min="0.5" max="3" step="0.01" value="1"></div>
       </div>
-      <div class="det" id="mdet" hidden></div>
       <label class="switch" style="margin-top:8px"><input type="checkbox" class="dauto" checked> Fill in the name and size from the photo</label>
       <p class="note" id="mphotonote">Product photos on a white background work best. Drag the preview to position; pinch or scroll to zoom.</p>
       <button class="btn ghost" id="mrecenter" type="button" style="margin-top:4px">Re-center photo</button>
@@ -738,8 +774,9 @@ details.how .btn{margin-top:8px}
       <h3>4 · Text</h3>
       <div class="row"><div class="field"><label class="lbl" for="ml1">Size / offer line</label>
         <input type="text" id="ml1" value="750 mL" maxlength="30"></div></div>
-      <div class="row"><div class="field"><label class="lbl" for="ml2">Product name</label>
+      <div class="row"><div class="field"><label class="lbl" for="ml2">Product name · type a bottle to pick it from the list</label>
         <input type="text" id="ml2" value="Casamigos Blanco" maxlength="34"></div></div>
+      <div class="det" id="mdet" hidden></div>
       <div class="row"><div class="field"><label class="lbl">Name color</label>
         <div class="chips" id="mncols">
           <button class="chip on" data-c="orange" type="button">Orange</button>
@@ -816,6 +853,88 @@ details.how .btn{margin-top:8px}
 
 </main>
 
+<main class="wrap" id="tab-batch" hidden>
+
+  <section class="panel">
+
+    <div class="card">
+      <h3>1 · Bottles</h3>
+      <input type="file" id="bfiles" accept="image/*,.zip,application/zip" multiple hidden>
+      <input type="file" id="bfolder" webkitdirectory multiple hidden>
+      <button class="btn ghost" id="bpick" type="button">Add photos or ZIPs</button>
+      <button class="btn ghost" id="bpickdir" type="button">Add a whole folder</button>
+      <p class="note">Pick as many photos as you like, ZIPs of photos, or a folder. You can also drop them on this page, or paste them. One photo per bottle; each one gets its own set of ads.</p>
+      <label class="switch" style="margin-top:8px"><input type="checkbox" id="bread" checked> Read each label (name, size, shelf price)</label>
+    </div>
+
+    <div class="card">
+      <h3>2 · Ads to make</h3>
+      <label class="lbl">Social posts</label>
+      <div class="checks">
+        <label class="switch"><input type="checkbox" class="bout" data-o="p45"> Feed 4:5</label>
+        <label class="switch"><input type="checkbox" class="bout" data-o="sq"> Square 1:1</label>
+        <label class="switch"><input type="checkbox" class="bout" data-o="reel"> Story / Reel 9:16</label>
+        <label class="switch"><input type="checkbox" class="bout" data-o="wide"> Wide 16:9</label>
+      </div>
+      <label class="lbl" style="margin-top:10px">Window monitors</label>
+      <div class="checks">
+        <label class="switch"><input type="checkbox" class="bout" data-o="wport"> Portrait 2160×3840</label>
+        <label class="switch"><input type="checkbox" class="bout" data-o="wland"> Landscape 3840×2160</label>
+      </div>
+      <label class="lbl" style="margin-top:10px">Background</label>
+      <div class="chips" id="bart">
+        <button class="chip on" data-v="ai" type="button">New AI scene</button>
+        <button class="chip" data-v="photo" type="button">My photo as is</button>
+      </div>
+      <div class="row" id="bscenerow" style="margin-top:8px"><div class="field"><label class="lbl" for="bscene">Scene</label>
+        <select id="bscene"></select></div></div>
+      <p class="note" id="bartnote"></p>
+    </div>
+
+    <div class="card">
+      <h3>3 · Text</h3>
+      <div class="row"><div class="field"><label class="lbl" for="bbadge">Badge on the Social posts</label>
+        <input type="text" id="bbadge" value="NEW ARRIVAL" maxlength="22"></div></div>
+      <label class="switch" style="margin-top:8px"><input type="checkbox" id="bprice" checked> Show the price (bottles that have one)</label>
+      <p class="note">Names, sizes and prices come from the list on the right. Fonts, colors and the address come from the Social and Window tabs.</p>
+    </div>
+
+    <div class="card">
+      <h3>4 · Captions</h3>
+      <label class="switch"><input type="checkbox" id="bcap" checked> Write a caption for each bottle</label>
+      <div class="row" id="bcapbyrow" style="margin-top:8px"><div class="field"><label class="lbl">Written by</label>
+        <div class="chips" id="bcapby">
+          <button class="chip on" data-v="ai" type="button">Gemini</button>
+          <button class="chip" data-v="built" type="button">Built-in writer</button>
+        </div></div></div>
+      <p class="note">Each bottle's folder gets caption.txt (caption, hashtags, short version, alt text) and the AI prompt it used. captions.txt and bottles.csv list every bottle. Gemini needs the add-on or a Google key; otherwise the built-in writer does it.</p>
+    </div>
+
+    <div class="card">
+      <h3>5 · Make &amp; save</h3>
+      <button class="btn" id="bgo" type="button">Make all ads</button>
+      <div id="bstatus" role="status"></div>
+      <label class="lbl" style="margin-top:12px">Save as</label>
+      <div class="chips" id="bsave">
+        <button class="chip on" data-v="zip" type="button">One ZIP</button>
+        <button class="chip" data-v="folder" type="button">Into a folder</button>
+        <button class="chip" data-v="files" type="button">Separate files</button>
+      </div>
+      <button class="btn" id="bdl" type="button" style="margin-top:10px" disabled>Download</button>
+      <button class="btn ghost" id="bclear" type="button" disabled>Clear the list</button>
+    </div>
+
+  </section>
+
+  <section class="stagecol">
+    <div class="bhead"><b>Bottles</b><span id="bcount"></span></div>
+    <div class="stagebox" id="bempty"><div class="aempty"><b>Many bottles, one click</b>Add photos of the bottles you want to advertise. Each label is read and filled in here. Check the names, sizes and prices, then press Make all ads.</div></div>
+    <div class="blist" id="blist"></div>
+    <datalist id="bsizes"><option value="50 mL"><option value="200 mL"><option value="375 mL"><option value="750 mL"><option value="1 L"><option value="1.75 L"><option value="6-pack"><option value="12-pack"></datalist>
+  </section>
+
+</main>
+
 <footer class="foot">
   <div class="badges" aria-hidden="true">
     <span class="badge"><b>Ad</b><span>Forge</span></span>
@@ -830,6 +949,7 @@ details.how .btn{margin-top:8px}
 
 </div>
 
+<script src="bottles.js"></script>
 <script>
 "use strict";
 /* ================= Dante's Ad Forge engine ================= */
@@ -1498,7 +1618,7 @@ function setSocialImage(img){setPhoto(st,img)}
 function loadFile(f,s){
   if(!f||!f.type.startsWith('image/'))return;
   const img=new Image();img.onload=()=>{setPhoto(s||st,img);
-    if((s||st)===st&&st.layout==='single')dRun('social',dShot(img))};img.src=URL.createObjectURL(f);
+    if((s||st)===st&&st.layout==='single')dRun('social',img,f.name)};img.src=URL.createObjectURL(f);
 }
 $('#file').addEventListener('change',e=>{loadFile(e.target.files[0],st);e.target.value=''});
 $('#file2').addEventListener('change',e=>{loadFile(e.target.files[0],st.b);e.target.value=''});
@@ -1507,7 +1627,9 @@ $('#pick2').addEventListener('click',()=>$('#file2').click());
 $('#drop').addEventListener('click',()=>$('#file').click());
 ['dragover','drop'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault()));
 document.addEventListener('drop',e=>{
-  const fs=[...((e.dataTransfer&&e.dataTransfer.files)||[])].filter(f=>f.type.startsWith('image/'));
+  const all=[...((e.dataTransfer&&e.dataTransfer.files)||[])];
+  if(activeTab==='batch'){if(all.length)bAdd(all);return}
+  const fs=all.filter(f=>f.type.startsWith('image/'));
   if(!fs.length)return;
   if(activeTab==='monitor')mLoadFile(fs[0]);
   else if(activeTab==='ai')aLoadFile(fs[0]);
@@ -1518,8 +1640,9 @@ document.addEventListener('drop',e=>{
 
 document.addEventListener('paste',e=>{
   if(e.target.closest&&e.target.closest('input,textarea,[contenteditable="true"]'))return;
-  const f=[...((e.clipboardData&&e.clipboardData.files)||[])].find(x=>x.type.startsWith('image/'));
+  const fl=[...((e.clipboardData&&e.clipboardData.files)||[])].filter(x=>x.type.startsWith('image/')),f=fl[0];
   if(!f)return;e.preventDefault();
+  if(activeTab==='batch'){bAdd(fl);return}
   if(activeTab==='ai')aAdd(f,'Pasted',null).then(()=>aMsg('Pasted image added. Send it to an ad below.'),err=>aMsg(err.message));
   else if(activeTab==='monitor')mLoadFile(f);
   else loadFile(f,st);
@@ -1848,13 +1971,14 @@ function capWrite(i){
 /* a written caption follows the ad as it changes, until the user edits it by hand */
 function capRefresh(){
   if(!capAuto||capAuto.sig===capSig())return;
-  if(!capEdited())capWrite(capIdx);
-  else capMsg('The ad changed after you edited this caption. Your edits are kept; press Write caption for a fresh one.');
+  if(!capEdited()&&!capAuto.ai)capWrite(capIdx);
+  else capMsg(capEdited()?'The ad changed after you edited this caption. Your edits are kept; press Write caption for a fresh one.'
+    :'The ad changed since Gemini wrote this caption. Press “Write it with Gemini” for a fresh one.');
 }
 ['input','click','change'].forEach(ev=>$('#tab-social .panel').addEventListener(ev,e=>{
   if(!e.target.closest('#capText,#capShort,#capAlt'))setTimeout(capRefresh,0)}));
 function captionFile(){ /* goes into the ZIP: the boxes as edited, or a fresh set that matches the ad */
-  if(!$('#capText').value.trim()||(!capEdited()&&(!capAuto||capAuto.sig!==capSig())))capWrite(capIdx);
+  if(!$('#capText').value.trim()||(!capEdited()&&!(capAuto&&capAuto.ai)&&(!capAuto||capAuto.sig!==capSig())))capWrite(capIdx);
   return 'CAPTION\n'+$('#capText').value.trim()+'\n\nSHORT VERSION (X / Stories / Threads)\n'+$('#capShort').value.trim()+
     '\n\nALT TEXT\n'+$('#capAlt').value.trim()+'\n\nIf you boost this post as a paid ad, set the audience to 21+.\n';
 }
@@ -1876,6 +2000,15 @@ function chatText(r){
   return r&&typeof r.text==='string'?r.text:String(r||'');
 }
 $('#capAI').addEventListener('click',async()=>{
+  if(capGem()){const b=$('#capAI');b.disabled=true;capMsg('Gemini is writing the caption…');
+    try{const r=await capGemini();
+      $('#capText').value=r.caption+(r.hashtags?'\n\n'+r.hashtags:'');
+      if(r.short)$('#capShort').value=r.short;if(r.alt)$('#capAlt').value=r.alt;
+      capAuto={sig:capSig(),t:$('#capText').value,s:$('#capShort').value,a:$('#capAlt').value,ai:true};
+      capMsg('Written by Gemini. Double-check the prices before you post.');
+    }catch(e){capMsg('Gemini couldn’t write it: '+e.message)}
+    finally{b.disabled=false}
+    return}
   if(!$('#capText').value.trim())capWrite(capIdx);
   const tags=capTags(),body=$('#capText').value.replace(tags,'').trim(),b=$('#capAI');
   b.disabled=true;capMsg('Asking the AI for a polished caption…');
@@ -2190,7 +2323,7 @@ function setWindowImage(img){
 }
 function mLoadFile(f){
   if(!f||!f.type.startsWith('image/'))return;
-  const img=new Image();img.onload=()=>{setWindowImage(img);dRun('monitor',dShot(img))};img.src=URL.createObjectURL(f);
+  const img=new Image();img.onload=()=>{setWindowImage(img);dRun('monitor',img,f.name)};img.src=URL.createObjectURL(f);
 }
 $('#mfile').addEventListener('change',e=>mLoadFile(e.target.files[0]));
 $('#mpick').addEventListener('click',()=>$('#mfile').click());
@@ -2320,7 +2453,9 @@ $('#mpng').addEventListener('click',async()=>{
    The add-on (addon/ in this repo) runs jobs in the user's own Gemini tab in the
    background: {op:'image'} returns the picture, {op:'ask'} returns Gemini's text.
    It talks to this page through window messages, so the page works without it. */
-const HELP={ver:'',jobs:new Map(),n:0};
+const HELP={ver:'',jobs:new Map(),n:0},HELP_MIN='1.1.0';
+const verLess=(a,b)=>{const x=String(a).split('.').map(Number),y=String(b).split('.').map(Number);
+  for(let i=0;i<3;i++){if((x[i]||0)!==(y[i]||0))return (x[i]||0)<(y[i]||0)}return false};
 window.addEventListener('message',e=>{
   const m=e.data;if(e.source!==window||!m||m.dafHelper!=='from-ext')return;
   if(m.kind==='hello'){if(!HELP.ver){HELP.ver=m.version||'1';helperReady()}return}
@@ -2407,18 +2542,20 @@ function aMsg(s){setStatus($('#astatus'),s)}
 function aChips(sel,key,fn){$(sel).addEventListener('click',e=>{
   const b=e.target.closest('[data-'+key+']');if(!b||b.disabled)return;
   [...$(sel).children].forEach(x=>x.classList.toggle('on',x===b));fn(b.dataset[key]);aSync()})}
-function aPrompt(){
-  const sc=SCENES.find(s=>s.id===aSt.scene),name=$('#aname').value.trim(),
-    extra=$('#aextra').value.trim().replace(/[.\s]+$/,'');
-  const subj=aSt.ref
+/* the picture prompt for one bottle: {name, scene, extra, fmt, ref} */
+function promptFor(o){
+  const sc=SCENES.find(s=>s.id===o.scene)||SCENES[0],name=(o.name||'').trim(),
+    extra=(o.extra||'').trim().replace(/[.\s]+$/,'');
+  const subj=o.ref
     ?'Create a photorealistic advertising photo of the exact bottle in the attached image'+(name?' ('+name+')':'')+'. Keep the bottle identical to the reference: same shape and proportions, glass, cap, liquid color, and label artwork with every word, logo and color exactly as shown. Do not redesign, translate, add or remove anything on the bottle or its label.'
     :'Create a photorealistic advertising photo of a bottle of '+(name||'premium liquor')+'. Reproduce the real, current bottle and label design as accurately as you can.';
-  return [subj,'Scene: '+sc.scene,'Composition: '+(sc.clean?ACLEAN:ACOMP)[aSt.fmt],
+  return [subj,'Scene: '+sc.scene,'Composition: '+(sc.clean?ACLEAN:ACOMP)[o.fmt||'p45'],
     sc.clean?'Clean, true-to-life color and crisp studio detail.'
       :'Shot like a high-end liquor commercial: full-frame camera, 85mm lens, crisp focus on the label, realistic reflections and refraction in the glass, cinematic color grading, rich contrast.',
     extra?'Also: '+extra+'.':'',
     'No added text, captions, prices, extra logos, watermarks, hands or people.'].filter(Boolean).join('\n\n');
 }
+function aPrompt(){return promptFor({name:$('#aname').value,scene:aSt.scene,extra:$('#aextra').value,fmt:aSt.fmt,ref:!!aSt.ref})}
 function aSync(){
   const e=aSt.engine,g=e==='google',gem=e==='gemini';
   $('#aGeminiBox').hidden=!gem;$('#aPuterBox').hidden=e!=='puter';$('#aGoogleBox').hidden=!g;
@@ -2433,7 +2570,8 @@ function aSync(){
   $('#aprompt').value=aPrompt();
 }
 function helperReady(){
-  $('#aHelpOn').hidden=false;$('#aHelpOff').hidden=true;
+  $('#aHelpOn').hidden=false;$('#aHelpOff').hidden=true;capLabel();bOptsUI();
+  if(verLess(HELP.ver,HELP_MIN)){$('#aHelpOld').hidden=false}
   document.querySelectorAll('.det[data-tip]').forEach(el=>{el.hidden=true;el.removeAttribute('data-tip')});
 }
 
@@ -2449,11 +2587,12 @@ function aPrepRef(img){ /* flattened on white, capped at 1280px, small enough to
 function aSetRef(img){
   aSt.ref=img;aSt.refURL=aPrepRef(img);aSt.det=null;
   $('#athumbImg').src=aSt.refURL;$('#athumb').hidden=false;$('#apick').textContent='Replace bottle photo';aSync();
-  const d=dRun('ai',aSt.refURL);
+  const d=dRun('ai',img,aSt.refName);
   if($('#aauto').checked)d.then(()=>{if(aSt.ref===img&&!aSt.busy)aGenerate()});
 }
 function aLoadFile(f){
   if(!f||!f.type.startsWith('image/'))return;
+  aSt.refName=f.name||'';
   const img=new Image();img.onload=()=>aSetRef(img);img.src=URL.createObjectURL(f);
 }
 
@@ -2465,11 +2604,12 @@ function gErr(status,m){
   if(status===401||status===403)return 'Google refused the key ('+m+'). Express mode keys need “Vertex AI” selected; AI Studio keys need “AI Studio key”.';
   return 'Google error: '+m;
 }
-async function aGoogle(key,model,prompt,noSize){
+async function aGoogle(key,model,prompt,noSize,o){
+  o=o||{ref:aSt.ref?aSt.refURL:'',fmt:aSt.fmt};
   const parts=[];
-  if(aSt.ref)parts.push({inlineData:{mimeType:'image/jpeg',data:aSt.refURL.split(',')[1]}});
+  if(o.ref)parts.push({inlineData:{mimeType:'image/jpeg',data:o.ref.split(',')[1]}});
   parts.push({text:prompt});
-  const r=ARATIO[aSt.fmt],ic={aspectRatio:r[0]+':'+r[1]};
+  const r=ARATIO[o.fmt],ic={aspectRatio:r[0]+':'+r[1]};
   if(!noSize)ic.imageSize=aSt.size;
   const url=aSt.kind==='studio'
     ?'https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent'
@@ -2486,8 +2626,8 @@ async function aGoogle(key,model,prompt,noSize){
   }
   if(!res.ok){
     const m=(j&&j.error&&j.error.message)||('HTTP '+res.status);
-    if(res.status===400&&!noSize&&/image_?size/i.test(m))return aGoogle(key,model,prompt,true);
-    if(res.status===404&&!/-preview$/.test(model))return aGoogle(key,model+'-preview',prompt,noSize);
+    if(res.status===400&&!noSize&&/image_?size/i.test(m))return aGoogle(key,model,prompt,true,o);
+    if(res.status===404&&!/-preview$/.test(model))return aGoogle(key,model+'-preview',prompt,noSize,o);
     throw new Error(gErr(res.status,m));
   }
   let img=null,txt='';
@@ -2522,12 +2662,13 @@ async function aPuterStatus(){
   try{const P=window.puter;if(P&&P.auth&&P.auth.isSignedIn()){const u=await P.auth.getUser();
     $('#aPuterIn').textContent='Signed in to Puter'+(u&&u.username?' as '+u.username:'')}}catch(e){}
 }
-async function aPuter(model,prompt){
+async function aPuter(model,prompt,o){
+  o=o||{ref:aSt.ref?aSt.refURL:'',fmt:aSt.fmt};
   const P=await aPuterLoad();
-  const r=ARATIO[aSt.fmt],opt={model,ratio:{w:r[0],h:r[1]}};
+  const r=ARATIO[o.fmt],opt={model,ratio:{w:r[0],h:r[1]}};
   if(/gemini/.test(model))opt.quality=aSt.size; /* Nano Banana 2 defaults to 512px without this */
   else if(/gpt-image/.test(model))opt.quality='high';
-  if(aSt.ref)opt.input_images=[aSt.refURL];
+  if(o.ref)opt.input_images=[o.ref];
   if(aTest)opt.test_mode=true;
   let im;
   try{im=await P.ai.txt2img(prompt,opt)}catch(e){throw new Error(puterErr(e))}
@@ -2582,7 +2723,7 @@ async function aGenerate(){
   if(gem&&!HELP.ver){aMsg('Add the DAF Helper add-on first (step 4), then reload this page. No computer handy? Use the Gemini app by hand below.');return}
   if(g)LS.set('dantes.gkey',$('#aremember').checked?key:'');
   const prompt=aPrompt(),sc=SCENES.find(s=>s.id===aSt.scene),
-    det=aSt.det&&$('#aname').value===DET.ai.auto['#aname']?aSt.det:null;
+    det=aSt.det&&$('#aname').value===DET.ai.auto['#aname']?aSt.det:dGuess($('#aname').value);
   aSt.busy=true;aSt.stop=false;$('#astatus').classList.add('busy');
   if(gem)$('#agen').textContent='Stop';else $('#agen').disabled=true;
   let made=0;
@@ -2604,7 +2745,7 @@ aChips('#afmts','f',v=>{aSt.fmt=v});
 aChips('#amodels','m',v=>{aSt.model=v});
 aChips('#asizes','s',v=>{aSt.size=v});
 aChips('#acount','n',v=>{aSt.n=+v});
-aChips('#aengines','e',v=>{aSt.engine=v;LS.set('dantes.engine',v);
+aChips('#aengines','e',v=>{aSt.engine=v;LS.set('dantes.engine',v);bOptsUI();
   if(v==='puter')aPuterLoad().then(aPuterStatus).catch(()=>{})});
 aChips('#akinds','k',v=>{aSt.kind=v;LS.set('dantes.gkind',v)});
 ['#aname','#aextra'].forEach(id=>$(id).addEventListener('input',aSync));
@@ -2625,6 +2766,8 @@ $('#aToSocial').addEventListener('click',()=>{const r=aSt.res[aSt.sel];if(!r)ret
 $('#aToWindow').addEventListener('click',()=>{const r=aSt.res[aSt.sel];if(!r)return;
   setWindowImage(r.img);setMStyle(r.clean?'classic':'cine');showTab('monitor');window.scrollTo(0,0);dFrom('monitor',r)});
 $('#aaddon').addEventListener('click',addonZip);
+$('#aaddon2').addEventListener('click',addonZip);
+$('#akey').addEventListener('input',()=>{gModels=null;capLabel()});
 $('#aopengem').addEventListener('click',helperShow);
 $('#ashowgem').addEventListener('change',e=>LS.set('dantes.showgem',e.target.checked?'1':''));
 $('#aauto').addEventListener('change',e=>LS.set('dantes.aauto',e.target.checked?'1':''));
@@ -2665,126 +2808,866 @@ function aInit(){
   if(aSt.engine==='puter')setTimeout(()=>aPuterLoad().then(aPuterStatus).catch(()=>{}),1200);
 }
 
-/* ================= Bottle detection =================
-   When a product photo comes in (AI Studio, Social, Window), Gemini reads the label and the
-   name, size and any visible price tag fill in. Through a Google key (fast, free tier), the
-   DAF Helper add-on, or Puter if already signed in. Fields the user typed are never overwritten
-   unasked: only empty fields, the page's sample text or our own earlier fill get replaced. */
-const DPROMPT='Identify the main product (bottle, can or box) in this photo for a liquor store ad. Read the label carefully and only report what you can see. '+
-  'Reply with JSON only, no markdown, with exactly these keys: {"found":true,"brand":"","product":"","category":"","size":"","price":"","confidence":0}. '+
-  'brand: the brand as printed, e.g. "Casamigos". product: the expression or variety without the brand, e.g. "Blanco", "Reposado", "Single Barrel", "12 Year"; empty for the flagship bottle. '+
-  'category: the drink in plain English, e.g. "Tequila", "Bourbon", "Vodka", "Cognac", "Rum", "Red Wine", "Champagne", "Beer". '+
-  'size: the volume if printed or obvious, e.g. "750 mL", "1 L", "1.75 L", "375 mL", else "". '+
-  'price: only if a price tag or sticker for this product is clearly visible, e.g. "39.99", else "". confidence: 0 to 1. If there is no product, set found to false.';
+/* ================= Bottle list =================
+   bottles.js holds the bottle list (brand, expressions, category, sizes). The name boxes suggest
+   from it as you type, and the label reader checks what it read against it. Bottles you use are
+   remembered on this device and come first next time. */
+const BSIZES={5:'50 mL',1:'100 mL',2:'200 mL',8:'187 mL',3:'375 mL',7:'750 mL',L:'1 L',M:'1.5 L',H:'1.75 L',X:'3 L',
+  4:'4-pack',P:'6-pack',T:'12-pack',U:'24-pack'};
+const bnorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/&/g,' and ')
+  .replace(/['’`.]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+const hEsc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+/* words that say little about which brand it is */
+const BSTOP=new Set(['the','la','el','de','del','los','las','ron','tequila','aguardiente','and','of','san','santa']);
+/* everyday label words that can't tell one brand from another on their own */
+const BGENERIC=new Set(('royal black white silver golden special reserve original premium classic label select estate single barrel double '+
+  'extra smooth light dark spiced cream honey apple peach cherry vanilla orange lemon coconut mango pineapple strawberry grape berry spirit '+
+  'spirits whiskey whisky vodka tequila brandy cognac liqueur imported product bottle proof aged years company distillery').split(' '));
+const BALIAS={henny:'hennessy',jd:'jack daniels',jw:'johnnie walker',jager:'jagermeister',goose:'grey goose',
+  crown:'crown royal',cuervo:'jose cuervo',dusse:'dusse',moet:'moet',henn:'hennessy',buchanan:'buchanans'};
+function bName(b,e){return !e?b:bnorm(e).startsWith(bnorm(b))?e:b+' '+e}
+function bItem(b,e,c,s){
+  const n=bName(b,e);
+  return {b,e,c,s,n,k:bnorm(n+' '+c),bt:bnorm(b).split(' ').filter(Boolean),et:bnorm(e).split(' ').filter(Boolean)};
+}
+let BL=null,BIDF=null,BDF={};
+function bList(){
+  if(BL)return BL;
+  BL=[];
+  for(const line of String(window.DAF_BOTTLES||'').split('\n')){
+    const l=line.trim();if(!l||l[0]==='#')continue;
+    const [b,ex,cat,sz]=l.split('|').map(x=>(x||'').trim());if(!b||!ex)continue;
+    const sizes=[...(sz||'7')].map(c=>BSIZES[c]).filter(Boolean);
+    ex.split(';').forEach((e,o)=>{
+      let c=cat;const eq=e.indexOf('=');if(eq>0){c=e.slice(eq+1).trim();e=e.slice(0,eq)}
+      e=e.trim();BL.push(Object.assign(bItem(b,e==='-'?'':e,c,sizes),{o}));
+    });
+  }
+  /* rarer brand words count for more when matching a label */
+  const df=BDF={},brands=new Set(BL.map(it=>bnorm(it.b)));
+  brands.forEach(b=>new Set(b.split(' ')).forEach(t=>df[t]=(df[t]||0)+1));
+  BIDF=t=>Math.log(1+brands.size/(df[t]||1));
+  return BL;
+}
+/* the store's own bottles: picked, read or exported here before */
+function bMine(){try{const a=JSON.parse(LS.get('dantes.bottles')||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
+function bRemember(d){
+  const b=(d.brand||'').trim(),e=(d.product||'').trim();if(!b&&!e)return;
+  /* "La Puerta Negra" alone isn't a bottle when the list has its Blanco and Reposado */
+  if(!e&&bList().some(x=>x.e&&bnorm(x.b)===bnorm(b)))return;
+  const all=bMine(),k=bnorm(b+'|'+e),old=all.find(m=>bnorm(m.b+'|'+m.e)===k);
+  if(old){old.u=(old.u||0)+1;old.t=Date.now();if(d.size&&!(old.s||[]).includes(d.size))(old.s=old.s||[]).push(d.size);if(d.cat)old.c=d.cat}
+  else all.push({b:b||e,e:b?e:'',c:d.cat||'',s:d.size?[d.size]:[],u:1,t:Date.now()});
+  all.sort((x,y)=>(y.u-x.u)||(y.t-x.t));
+  LS.set('dantes.bottles',JSON.stringify(all.slice(0,300)));
+}
+function bAll(){ /* your bottles first, then the list; same bottle only once */
+  const out=[],seen=new Set();
+  for(const m of bMine()){const it=bItem(m.b,m.e,m.c,m.s||[]);it.mine=m.u||1;
+    const base=bList().find(x=>bnorm(x.b+'|'+x.e)===bnorm(m.b+'|'+m.e));
+    if(base){it.c=it.c||base.c;it.s=[...new Set([...(m.s||[]),...base.s])]}
+    seen.add(bnorm(m.b+'|'+m.e));out.push(it)}
+  for(const it of bList())if(!seen.has(bnorm(it.b+'|'+it.e)))out.push(it);
+  return out;
+}
+/* "1.75", "750ml", "1 liter", "handle", "fifth", "pint", "mini", "12 pack" -> a size */
+function bSizeIn(t){
+  const s=' '+String(t||'').toLowerCase().replace(/(\d),(\d)/g,'$1.$2')+' ';let m;
+  if((m=/(\d{1,2})\s*-?\s*(?:pk|pack)\b/.exec(s)))return (+m[1])+'-pack';
+  if((m=/(\d{2,4})\s*(?:m\.?\s?l\.?|mls|milliliters?|millilitres?)(?![a-z])/.exec(s))){const v=+m[1];
+    return v===1000?'1 L':v===1500?'1.5 L':v===1750?'1.75 L':v===3000?'3 L':v+' mL'}
+  if((m=/(\d{2,3})\s*cl\b/.exec(s)))return (+m[1]*10)+' mL';
+  if((m=/(\d(?:\.\d{1,3})?)\s*(?:l|lt|ltr|liters?|litres?)(?![a-z])/.exec(s))){const v=parseFloat(m[1]);
+    return v>=0.05&&v<1?Math.round(v*1000)+' mL':v>=1&&v<=5?(+v.toFixed(2))+' L':''}
+  if(/\bhandle\b|(^|\s)1\.75(\s|$)/.test(s))return '1.75 L';
+  if(/\bliter\b|\blitre\b/.test(s))return '1 L';
+  if(/\bhalf[\s-]?pint\b/.test(s))return '200 mL';
+  if(/\bpint\b/.test(s))return '375 mL';
+  if(/\bfifth\b/.test(s))return '750 mL';
+  if(/\b(?:mini|minis|nip|nips|airplane)\b/.test(s))return '50 mL';
+  if((m=/\s(750|375|200|187|100)\s/.exec(s)))return m[1]+' mL';
+  return '';
+}
+const bStrip=t=>String(t||'').replace(/(\d),(\d)/g,'$1.$2')
+  .replace(/\b\d+(?:\.\d+)?\s*(?:m\.?\s?l\.?|mls|milliliters?|millilitres?|cl|l|lt|ltr|liters?|litres?|pk|pack)(?![a-z])/gi,' ')
+  .replace(/\b(?:half[\s-]?pint|handle|fifth|pint|minis?|nips?|airplane|liter|litre)\b/gi,' ')
+  .replace(/(^|\s)(?:750|375|200|187|100|1\.75)(?=\s|$)/g,' ').replace(/\$\s*\d+(?:\.\d{1,2})?/g,' ');
+const bDefSize=it=>it&&it.s.length?(it.s.includes('750 mL')?'750 mL':it.s[0]):'';
+/* what the name boxes suggest: every typed word must start a word of the bottle's name */
+function bSearch(q,n){
+  const want=bSizeIn(q),qt=bnorm(bStrip(q)).split(' ').filter(Boolean).flatMap(t=>(BALIAS[t]||t).split(' '));
+  if(!qt.length)return [];
+  const scored=[];
+  for(const it of bAll()){
+    let s=0;
+    for(let i=0;i<qt.length;i++){const t=qt[i];let hit=0;
+      if(i===0&&it.bt[0]&&it.bt[0].startsWith(t))hit=10;
+      else if(it.bt.some(w=>w.startsWith(t)))hit=6;
+      else if(it.et.some(w=>w.startsWith(t)))hit=4;
+      else if(it.k.split(' ').some(w=>w.startsWith(t)))hit=2;
+      else if(t.length>=3&&it.k.replace(/ /g,'').includes(t))hit=1;
+      if(!hit){s=0;break}s+=hit}
+    if(s)scored.push({it,s:s+(it.mine?4+Math.min(6,it.mine):0)-(it.o||0)*0.3-it.n.length*0.005});
+  }
+  if(scored.length<3){ /* a typo? fall back to near spellings */
+    const have=new Set(scored.map(r=>r.it));
+    for(const it of bAll()){if(have.has(it))continue;
+      const words=it.k.split(' ');let s=0;
+      for(const t of qt){let m=0;if(t.length>=4)for(const w of words){const v=tsim(t,w);if(v>m)m=v}
+        if(m<0.75){s=0;break}s+=m}
+      if(s)scored.push({it,s:s-10})}
+  }
+  scored.sort((a,b)=>b.s-a.s);
+  return scored.slice(0,n||8).map(r=>({it:r.it,size:want||bDefSize(r.it)}));
+}
+/* word likeness, kind to OCR that drops or swaps a letter or two */
+function lev(a,b){
+  if(Math.abs(a.length-b.length)>3)return 9;
+  let p=Array.from({length:b.length+1},(_,j)=>j);
+  for(let i=1;i<=a.length;i++){const q=[i];
+    for(let j=1;j<=b.length;j++)q[j]=Math.min(p[j]+1,q[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=q}
+  return p[b.length];
+}
+function tsim(a,b){
+  if(a===b)return 1;if(a.length<3||b.length<3)return 0;
+  const r=Math.min(a.length,b.length)/Math.max(a.length,b.length); /* most of the word, cut at an edge */
+  if(r>=0.6&&(a.length>=4&&b.includes(a)||b.length>=4&&a.includes(b)))return 0.72+0.28*r;
+  return 1-lev(a,b)/Math.max(a.length,b.length);
+}
+/* the bottle on the list that best explains some words (a label, a typed name, an AI answer).
+   The brand has to match; the expression is only taken when the words single it out. */
+function bMatch(text){
+  /* text recognition splits words ("PATRG N"), so neighbors joined count too */
+  const raw=bnorm(text).split(' ').filter(w=>w.length>=2).slice(0,120);
+  const words=[...new Set([...raw,...raw.slice(1).map((w,i)=>raw[i]+w).filter(w=>w.length<=14)])];
+  if(!words.length)return null;
+  /* short words must be read exactly; longer ones may have a letter or two wrong */
+  const best=(t)=>{let m=0;for(const x of words){const v=tsim(x,t);if(v>m)m=v}return m>=(t.length<=4?1:t.length===5?0.8:0.7)?m:0};
+  let top=null;const byBrand={};
+  for(const it of bAll()){
+    const bt=it.bt.filter(t=>t.length>=2&&!BSTOP.has(t));if(!bt.length)continue;
+    let bw=0,bs=0,solo=0;
+    for(const t of bt){const w=BIDF(t)*Math.min(t.length,8),m=best(t);bw+=w;bs+=w*m;
+      /* a long word only this brand has, spelled (nearly) right, is enough on its own ("PUERTA") */
+      if(m&&t.length>=5&&BDF[t]===1&&!BGENERIC.has(t)){
+        let e=0;for(const x of words){const v=1-lev(x,t)/Math.max(x.length,t.length);if(v>e)e=v}
+        if(e>=0.83)solo=Math.max(solo,0.8+0.15*e)}}
+    const brand=Math.max(bs/bw,solo);if(brand<0.7)continue;
+    let ew=0,es=0;for(const t of it.et){if(t.length<2)continue;const w=Math.min(t.length,8);ew+=w;es+=w*best(t)}
+    const expr=ew?es/ew:0,score=brand*2+expr+(it.mine?0.05:0),key=bnorm(it.b);
+    (byBrand[key]=byBrand[key]||[]).push({it,expr});
+    if(!top||score>top.score)top={it,score,brand,expr};
+  }
+  if(!top||top.brand<0.7)return null;
+  const sibs=(byBrand[bnorm(top.it.b)]||[]).sort((a,b)=>b.expr-a.expr);
+  top.sure=!top.it.e||top.expr>=0.72&&(sibs.length<2||sibs[0].expr-sibs[1].expr>0.15);
+  top.options=[...new Set(sibs.map(x=>x.it.e).filter(Boolean))];
+  return top;
+}
+/* a typed name ("casamigos blanco 750ml $39.99") -> the bottle, size and price it means */
+function dGuess(text){
+  const t=String(text||'').trim();if(!t)return null;
+  const size=bSizeIn(t),pm=/\$\s*(\d{1,4})(?:\.(\d{1,2}))?/.exec(t),m=bMatch(bStrip(t));
+  const d={found:true,brand:'',product:'',cat:'',size,dol:pm?pm[1]:'',cts:pm?((pm[2]||'00')+'0').slice(0,2):'',name:'',sizes:[]};
+  if(m&&m.sure){Object.assign(d,{brand:m.it.b,product:m.it.e,cat:m.it.c,sizes:m.it.s,fromList:true});if(!d.size)d.size=bDefSize(m.it)}
+  else{d.name=bStrip(t).replace(/\s+/g,' ').trim();if(m&&m.it){d.cat=m.it.c;d.sizes=m.it.s}}
+  d.name=d.name||bName(d.brand,d.product);
+  return d;
+}
+
+/* the dropdown under a name box: type a few letters, pick the bottle, the ad fills in */
+function bAuto(input,onPick){
+  const wrap=document.createElement('div');wrap.className='bac';input.parentNode.insertBefore(wrap,input);wrap.appendChild(input);
+  const list=document.createElement('div');list.className='bacl';list.id=input.id+'-list';list.setAttribute('role','listbox');list.hidden=true;
+  wrap.appendChild(list);
+  input.setAttribute('role','combobox');input.setAttribute('aria-autocomplete','list');input.setAttribute('aria-controls',list.id);
+  input.setAttribute('aria-expanded','false');input.autocomplete='off';
+  let rows=[],sel=-1;
+  const close=()=>{list.hidden=true;input.setAttribute('aria-expanded','false');input.removeAttribute('aria-activedescendant');sel=-1};
+  const mark=()=>{[...list.children].forEach((o,i)=>o.classList.toggle('on',i===sel));
+    if(sel>=0){input.setAttribute('aria-activedescendant',list.id+'-'+sel);list.children[sel].scrollIntoView({block:'nearest'})}};
+  const show=()=>{
+    if(input.value.trim().length<2){close();return}
+    rows=bSearch(input.value,8);if(!rows.length){close();return}
+    list.innerHTML=rows.map((r,i)=>'<div class="baco" role="option" id="'+list.id+'-'+i+'" data-i="'+i+'"><b>'+hEsc(r.it.n)+'</b>'+
+      '<span>'+hEsc(r.it.c)+(r.it.mine?' · used before':'')+'</span>'+(r.it.s.length?'<span class="szs">'+r.it.s.map(z=>
+        '<button type="button" tabindex="-1" data-z="'+z+'"'+(z===r.size?' class="on"':'')+'>'+z+'</button>').join('')+'</span>':'')+'</div>').join('');
+    sel=-1;list.hidden=false;input.setAttribute('aria-expanded','true');
+  };
+  const pick=(r,z)=>{close();onPick(r.it,z||r.size)};
+  input.addEventListener('input',e=>{if(e.isTrusted)show()});
+  input.addEventListener('keydown',e=>{
+    if(list.hidden)return;
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();sel=(sel+(e.key==='ArrowDown'?1:rows.length-1))%rows.length;mark()}
+    else if(e.key==='Enter'&&sel>=0){e.preventDefault();pick(rows[sel])}
+    else if(e.key==='Escape')close();
+  });
+  input.addEventListener('blur',()=>setTimeout(close,120));
+  list.addEventListener('pointerdown',e=>e.preventDefault());
+  list.addEventListener('click',e=>{const o=e.target.closest('.baco');if(!o)return;
+    const z=e.target.closest('button[data-z]');pick(rows[+o.dataset.i],z&&z.dataset.z)});
+}
+
+/* ================= Reading the bottle =================
+   When a product photo comes in (AI Studio, Social, Window, Batch) the label gets read and the
+   name, size and any visible shelf price fill in. Readers, best first: Gemini through a Google key
+   (fast, free tier), Gemini through the DAF Helper add-on, Puter if already signed in, and always
+   the on-device reader: text recognition in this browser, checked against the bottle list, which
+   needs no setup and works on phones. What the user typed, or the photo's file name, goes along
+   as a hint. Typed fields are never overwritten unasked: only empty fields, the page's sample
+   text or our own earlier fill get replaced. */
+function dPrompt(hint){
+  return 'Identify the main product (bottle, can or box) in this photo for a liquor store ad. Read the label carefully and only report what you can see.'+
+    (hint?' The store owner says it may be: "'+hint.replace(/"/g,"'")+'". Use that only where the label agrees.':'')+
+    ' Reply with JSON only, no markdown, with exactly these keys: {"found":true,"brand":"","product":"","category":"","size":"","price":"","label_text":"","scene":"","extra":"","confidence":0}.'+
+    ' brand: the brand as printed, e.g. "Casamigos". product: the expression or variety without the brand, e.g. "Blanco", "Reposado", "Single Barrel", "12 Year"; empty for the flagship bottle.'+
+    ' category: the drink in plain English, e.g. "Tequila", "Bourbon", "Vodka", "Cognac", "Rum", "Red Wine", "Champagne", "Beer".'+
+    ' size: the volume printed on the label or a shelf tag, e.g. "750 mL", "1 L", "1.75 L", "375 mL", "50 mL"; if none is printed, judge it from the bottle and end it with "?", e.g. "750 mL?".'+
+    ' price: only if a price tag or sticker for this product is clearly visible, e.g. "39.99", else "".'+
+    ' label_text: every word you can read on the bottle and on any shelf tag, separated by spaces.'+
+    ' scene: the backdrop that best suits an ad for this bottle, one of: '+SCENES.map(s=>s.id).join(', ')+'.'+
+    ' extra: a few words of props that suit this bottle in that scene, e.g. "fresh limes and coarse salt", or "".'+
+    ' confidence: 0 to 1. If there is no product, set found to false.';
+}
 const DET={ai:{seq:0,auto:{}},social:{seq:0,auto:{}},monitor:{seq:0,auto:{}}},DETEL={ai:'#adet',social:'#sdet',monitor:'#mdet'};
+const DVIA={google:'Gemini (Google key)',gemini:'Gemini (add-on)',puter:'Puter',ocr:'the on-device reader',list:'the bottle list'};
 const dOn=()=>LS.get('dantes.autodet')!=='0';
-function dEngines(){ /* fastest first; the next one is tried if one fails */
+function dEngines(){ /* AI readers, fastest first; the next one is tried if one fails */
   const e=[];
   if($('#akey').value.trim())e.push('google');
   if(HELP.ver)e.push('gemini');
   try{if(window.puter&&puter.auth&&puter.auth.isSignedIn())e.push('puter')}catch(err){}
   return e;
 }
-const DMODELS=['gemini-flash-latest','gemini-3-flash','gemini-3-flash-preview','gemini-2.5-flash'];
-async function gText(key,img,prompt){ /* a quick text answer from Gemini Flash (free tier on AI Studio keys) */
+/* the first JSON object or array in an AI reply, forgiving the usual slips */
+function jParse(t){
+  const s=String(t||''),i=[s.indexOf('{'),s.indexOf('[')].filter(x=>x>=0),a=i.length?Math.min(...i):-1,
+    z=Math.max(s.lastIndexOf('}'),s.lastIndexOf(']'));
+  if(a<0||z<a)return null;
+  const body=s.slice(a,z+1);
+  for(const f of [x=>x,x=>x.replace(/,\s*([}\]])/g,'$1'),x=>x.replace(/[“”]/g,'"').replace(/,\s*([}\]])/g,'$1')])
+    try{return JSON.parse(f(body))}catch(e){}
+  return null;
+}
+
+/* ----- Gemini Flash through a Google key: finds a model this key can use ----- */
+const DMODELS=['gemini-flash-latest','gemini-3-flash','gemini-3-flash-preview','gemini-2.5-flash','gemini-2.0-flash'];
+let gModels=null;
+async function gTextModels(key){
+  if(aSt.kind!=='studio')return DMODELS.slice(1);
+  if(gModels)return gModels;
+  try{
+    const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200',{headers:{'x-goog-api-key':key}});
+    const j=await r.json(),ver=n=>parseFloat((/gemini-(\d+(?:\.\d+)?)/.exec(n)||[])[1])||0;
+    const ok=((j&&j.models)||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent'))
+      .map(m=>String(m.name).replace(/^models\//,'')).filter(n=>/^gemini-.*flash/.test(n)&&!/image|tts|audio|live|embed|lite|exp/.test(n))
+      .sort((a,b)=>(b==='gemini-flash-latest')-(a==='gemini-flash-latest')||ver(b)-ver(a)||a.includes('preview')-b.includes('preview'));
+    if(ok.length)return gModels=[...new Set([...ok,...DMODELS])];
+  }catch(e){}
+  return DMODELS;
+}
+async function gText(key,img,prompt){
   let why='';
-  for(const m of DMODELS){
+  const models=await gTextModels(key);
+  for(const m of models){
     const url=aSt.kind==='studio'?'https://generativelanguage.googleapis.com/v1beta/models/'+m+':generateContent'
       :'https://aiplatform.googleapis.com/v1/publishers/google/models/'+m+':generateContent';
+    const parts=img?[{inlineData:{mimeType:'image/jpeg',data:img.split(',')[1]}},{text:prompt}]:[{text:prompt}];
     let res;
     try{res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},
-      body:JSON.stringify({contents:[{role:'user',parts:[{inlineData:{mimeType:'image/jpeg',data:img.split(',')[1]}},{text:prompt}]}],
-        generationConfig:{temperature:0.1,responseMimeType:'application/json'}})})}
+      body:JSON.stringify({contents:[{role:'user',parts}],generationConfig:{temperature:0.2,responseMimeType:'application/json'}})})}
     catch(e){throw new Error('could not reach Google')}
     const j=await res.json().catch(()=>null),msg=(j&&j.error&&j.error.message)||('HTTP '+res.status);
     if(res.status===404||res.status===400&&/not (found|supported)|unknown model|is not available/i.test(msg)){why=msg;continue}
     if(!res.ok)throw new Error(gErr(res.status,msg));
+    if(gModels&&gModels[0]!==m)gModels=[m,...gModels.filter(x=>x!==m)];
     return ((j&&j.candidates)||[]).flatMap(c=>(c.content&&c.content.parts)||[]).filter(p=>p.text&&!p.thought).map(p=>p.text).join('');
   }
-  throw new Error('no Gemini text model answered ('+why+')');
+  throw new Error('no Gemini model answered ('+why+')');
 }
-async function dAsk(eng,img){
-  if(eng==='google')return gText($('#akey').value.trim(),img,DPROMPT);
-  if(eng==='gemini')return (await helperJob('ask',DPROMPT,[{name:'photo.jpg',type:'image/jpeg',data:img}],{})).text;
-  const P=await aPuterLoad();return chatText(await P.ai.chat(DPROMPT,img));
+async function dAsk(eng,img,prompt){
+  if(eng==='google')return gText($('#akey').value.trim(),img,prompt);
+  if(eng==='gemini')return (await helperJob('ask',prompt,img?[{name:'photo.jpg',type:'image/jpeg',data:img}]:[],{})).text;
+  const P=await aPuterLoad();return chatText(await P.ai.chat(prompt,img));
 }
+
+/* ----- making sense of an answer ----- */
 function dParse(t){
-  const s=String(t||''),a=s.indexOf('{'),b=s.lastIndexOf('}');
-  if(a<0||b<a)throw new Error('the answer had no product details');
-  const o=JSON.parse(s.slice(a,b+1)),c=v=>String(v==null?'':v).replace(/\s+/g,' ').trim();
-  let brand=c(o.brand),product=c(o.product),cat=c(o.category),size=c(o.size);
+  const o=jParse(t)||{},s=String(t||''),c=v=>String(v==null?'':v).replace(/\s+/g,' ').trim();
+  if(!jParse(t))for(const k of ['found','brand','product','category','size','price','label_text','scene','extra']){
+    const m=new RegExp('"?'+k+'"?\\s*[:=]\\s*"?([^"\\n,}]*)','i').exec(s);if(m)o[k]=m[1]}
+  let brand=c(o.brand),product=c(o.product);
+  if(!brand&&!product&&!c(o.label_text))throw new Error('the answer had no product details');
   if(brand&&product.toLowerCase().startsWith(brand.toLowerCase()))product=product.slice(brand.length).trim();
-  size=size.replace(/(\d)\s*(?:ml|mls|milliliters?|millilitres?)\b\.?/i,'$1 mL').replace(/(\d)\s*(?:l|lt|ltr|liters?|litres?)\b\.?/i,'$1 L');
-  if(!/\d/.test(size))size='';
-  const pm=/(\d{1,4})(?:[.,](\d{1,2}))?/.exec(c(o.price));
-  return {found:o.found!==false&&!!(brand||product),brand,product,cat,size,
-    dol:pm?pm[1]:'',cts:pm?((pm[2]||'00')+'0').slice(0,2):'',name:[brand,product].filter(Boolean).join(' ')};
+  const pm=/(\d{1,4})(?:[.,](\d{1,2}))?/.exec(c(o.price)),sc=c(o.scene).toLowerCase();
+  return {found:String(o.found)!=='false'&&!!(brand||product),brand,product,cat:c(o.category),
+    size:bSizeIn(c(o.size)),sizeGuess:/\?/.test(c(o.size)),dol:pm?pm[1]:'',cts:pm?((pm[2]||'00')+'0').slice(0,2):'',
+    label:c(o.label_text),scene:(SCENES.find(x=>x.id===sc||x.name.toLowerCase()===sc)||{}).id||'',
+    extra:c(o.extra).replace(/[.\s]+$/,''),name:[brand,product].filter(Boolean).join(' '),sizes:[]};
 }
-function dShot(img){ /* a small JPEG of the photo, enough to read a label */
-  const W=img.naturalWidth||img.width,H=img.naturalHeight||img.height,k=Math.min(1,1024/Math.max(W,H));
+function dFromList(m,size,via){
+  const it=m.it,e=m.sure?it.e:'';
+  return {found:true,brand:it.b,product:e,cat:it.c,size:size||bDefSize(it),sizeGuess:!size,sizes:it.s,
+    options:m.sure?[]:m.options,dol:'',cts:'',name:bName(it.b,e),via,fromList:true};
+}
+/* the AI's reading, spelled the way the list spells it (and sized, if the label didn't say) */
+function dCanon(d){
+  if(!d.found){const m=d.label&&bMatch(d.label);
+    return m?Object.assign(dFromList(m,d.size||bSizeIn(d.label),''),{scene:d.scene,extra:d.extra,dol:d.dol,cts:d.cts}):d}
+  const m=bMatch(d.brand+' '+d.product+' '+d.brand);
+  if(m){
+    const same=!d.product||!m.it.e||tsim(bnorm(d.product).replace(/ /g,''),bnorm(m.it.e).replace(/ /g,''))>=0.7;
+    d.brand=m.it.b;d.cat=m.it.c||d.cat;
+    if(m.sure&&same)d.product=m.it.e;
+    d.sizes=m.it.s;d.fromList=true;
+    if(!d.size){d.size=bDefSize(m.it);d.sizeGuess=true}
+  }
+  d.name=bName(d.brand,d.product)||d.name;
+  return d;
+}
+
+/* ----- the on-device reader: text recognition, then the bottle list ----- */
+const TESS_SRC='https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/tesseract.min.js';
+let tessP=null;
+function ocrWorker(){
+  return tessP||(tessP=(async()=>{
+    await loadScript(TESS_SRC);
+    const w=await Tesseract.createWorker('eng',1);
+    await w.setParameters({tessedit_pageseg_mode:'11'}); /* sparse text: labels are scattered words */
+    return w;
+  })().catch(e=>{tessP=null;throw new Error('the reader could not load ('+(e.message||e)+')')}));
+}
+/* the label area (or the whole photo), grayscale and contrast-stretched, about 1600px */
+function ocrPrep(img,crop){
+  const W=img.naturalWidth||img.width,H=img.naturalHeight||img.height;
+  const [x0,y0,w0,h0]=crop?[W*0.2,H*0.12,W*0.6,H*0.76]:[0,0,W,H],k=1600/Math.max(w0,h0);
+  const c=document.createElement('canvas');c.width=Math.max(1,Math.round(w0*k));c.height=Math.max(1,Math.round(h0*k));
+  const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,x0,y0,w0,h0,0,0,c.width,c.height);
+  const id=x.getImageData(0,0,c.width,c.height),d=id.data,hist=new Uint32Array(256),n=d.length/4;
+  for(let i=0;i<d.length;i+=4){const v=(d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114)|0;d[i]=v;hist[v]++}
+  let lo=0,hi=255,acc=0;while(lo<254&&(acc+=hist[lo])<n*0.02)lo++;acc=0;while(hi>lo+1&&(acc+=hist[hi])<n*0.02)hi--;
+  const sc=255/(hi-lo);
+  for(let i=0;i<d.length;i+=4){const v=Math.max(0,Math.min(255,(d[i]-lo)*sc));d[i]=d[i+1]=d[i+2]=v}
+  x.putImageData(id,0,0);return c;
+}
+async function dOcr(img){
+  const w=await ocrWorker();let text='',m=null;
+  for(const crop of [true,false]){
+    const r=await w.recognize(ocrPrep(img,crop));
+    text+=' '+((r&&r.data&&r.data.text)||'');m=bMatch(text);
+    if(m&&m.sure)break;
+  }
+  return {text,m};
+}
+async function dOcrRead(img){
+  const r=await dOcr(img);
+  if(!r.m)throw new Error(r.text.replace(/[^A-Za-z]/g,'').length<6?'no words found on the label':'the words it found ("'+
+    r.text.replace(/\s+/g,' ').trim().slice(0,40)+'") match no bottle on the list');
+  const d=dFromList(r.m,bSizeIn(r.text),DVIA.ocr),pm=/\$\s?(\d{1,3})[.,](\d{2})\b/.exec(r.text);
+  if(pm){d.dol=pm[1];d.cts=pm[2]}
+  return d;
+}
+
+/* read one photo; onEarly gets the on-device answer while an AI reader is still at work */
+function dShot(img,max){
+  const W=img.naturalWidth||img.width,H=img.naturalHeight||img.height,k=Math.min(1,(max||1600)/Math.max(W,H));
   const c=document.createElement('canvas');c.width=Math.max(1,Math.round(W*k));c.height=Math.max(1,Math.round(H*k));
   const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);
-  return c.toDataURL('image/jpeg',0.88);
+  return c.toDataURL('image/jpeg',0.9);
 }
-function dPairs(tab,d){
-  if(tab==='ai')return [['#aname',[d.name,d.cat&&!d.name.toLowerCase().includes(d.cat.toLowerCase())?d.cat:'',d.size].filter(Boolean).join(' ').slice(0,60)]];
-  if(tab==='monitor')return [['#ml2',d.name.slice(0,34)],['#ml1',d.size],['#mdol',d.dol],['#mcts',d.cts]];
-  return [['#n1',(d.brand||d.name).toUpperCase()],['#n2',(d.brand?d.product||d.cat:d.cat).toUpperCase()],
-    ['#sub',[d.brand&&d.product?d.cat:'',d.size].filter(Boolean).join(' · ')],['#dol',d.dol],['#cts',d.cts]];
+async function dRead(src,hint,onEarly){
+  const engs=dEngines(),why=[],img=engs.length?dShot(src,1600):'';
+  let early=null,done=false;
+  const ocr=()=>dOcrRead(src).then(d=>{early=d;if(onEarly&&!done)onEarly(d);return d},e=>{why.push(DVIA.ocr+': '+e.message);return null});
+  const ocrP=engs[0]==='google'?null:ocr();   /* a Google key answers in seconds; the others take longer */
+  for(const eng of engs){
+    try{const d=dCanon(dParse(await dAsk(eng,img,dPrompt(hint))));
+      if(d.found){d.via=d.via||DVIA[eng];done=true;return d}
+      why.push(DVIA[eng]+': no product found in the photo');
+    }catch(e){why.push(DVIA[eng]+': '+e.message)}
+  }
+  const d=early||await (ocrP||ocr());
+  if(d)return d;
+  throw new Error(why.join('; '));
 }
-function dFill(tab,d,force){ /* returns how many fields kept the user's own text */
+/* what the user already told us: typed names in this tab, or a meaningful file name */
+function dHint(tab,file){
+  const ids={ai:['#aname'],social:['#n1','#n2','#sub'],monitor:['#ml2','#ml1']}[tab]||[];
+  const typed=ids.map(id=>$(id)).filter(el=>el.value.trim()&&el.value!==el.defaultValue&&el.value!==DET[tab].auto['#'+el.id]).map(el=>el.value.trim());
+  return [...typed,dFileHint(file)].filter(Boolean).join(' · ').slice(0,120);
+}
+function dFileHint(file){
+  const f=String(file||'').replace(/\.[a-z0-9]+$/i,'').replace(/[_-]+/g,' ').trim();
+  return /^(img|dsc|dcim|pxl|photo|image|screenshot|screen shot|whatsapp|signal|snapchat|\d)/i.test(f)||!/[a-z]{3}/i.test(f)?'':f;
+}
+
+/* ----- filling the fields ----- */
+function dPairs(tab,d,onlySize){ /* [field, value, depends on the size] */
+  const P=tab==='ai'?[['#aname',[d.name,d.cat&&!bnorm(d.name).includes(bnorm(d.cat))?d.cat:'',d.size].filter(Boolean).join(' ').slice(0,60),1]]
+    :tab==='monitor'?[['#ml2',d.name.slice(0,34),0],['#ml1',d.size,1],['#mdol',d.dol,0],['#mcts',d.cts,0]]
+    :[['#n1',(d.brand||d.name).toUpperCase(),0],['#n2',(d.brand?d.product||d.cat:d.cat).toUpperCase(),0],
+      ['#sub',[d.brand&&d.product?d.cat:'',d.size].filter(Boolean).join(' · '),1],['#dol',d.dol,0],['#cts',d.cts,0]];
+  return onlySize?P.filter(p=>p[2]):P;
+}
+function dFill(tab,d,force,onlySize){ /* returns how many fields kept the user's own text */
   const D=DET[tab],undo=[];let kept=0;
-  for(const [id,v] of dPairs(tab,d)){
+  for(const [id,v] of dPairs(tab,d,onlySize)){
     if(!v)continue;const el=$(id);
     if(el.value===v){D.auto[id]=v;continue}
     if(!force&&el.value.trim()&&el.value!==el.defaultValue&&el.value!==D.auto[id]){kept++;continue}
     undo.push([id,el.value]);el.value=v;D.auto[id]=v;el.dispatchEvent(new Event('input',{bubbles:true}));
   }
-  D.undo=undo;return kept;
+  if(undo.length||!onlySize)D.undo=undo;
+  return kept;
 }
-const dEsc=v=>String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 function dNote(tab,html,busy,tip){
-  const el=$(DETEL[tab]);el.innerHTML=html;el.hidden=false;el.classList.toggle('busy',!!busy);
+  const el=$(DETEL[tab]);el.innerHTML=html;el.hidden=false;el.classList.toggle('busy',!!busy);el.classList.remove('err');
   if(tip)el.dataset.tip='1';else el.removeAttribute('data-tip');
 }
-function dShow(tab,d,kept){
-  const D=DET[tab],bits=[d.cat,d.size,d.dol?'$'+d.dol+'.'+d.cts+' tag':''].filter(Boolean);
-  dNote(tab,'Detected: <b>'+dEsc(d.name||d.cat)+'</b>'+(bits.length?' · '+dEsc(bits.join(' · ')):'')+'. '+
-    (kept?'Your own text was kept. <button type="button" data-act="use">Use these instead</button>'
-      :D.undo&&D.undo.length?'<button type="button" data-act="undo">Undo</button>':''));
+function dChips(d){
+  let h='';
+  if(d.options&&d.options.length)h+='<div class="szs"><span>Which one?</span>'+d.options.slice(0,10).map(o=>'<button type="button" data-ex="'+hEsc(o)+'">'+hEsc(o)+'</button>').join('')+'</div>';
+  if(d.sizes&&d.sizes.length>1)h+='<div class="szs"><span>Size:</span>'+d.sizes.map(z=>'<button type="button" data-size="'+z+'"'+(z===d.size?' class="on"':'')+'>'+z+'</button>').join('')+'</div>';
+  return h;
 }
-async function dRun(tab,img){
-  const D=DET[tab],seq=++D.seq;
+function dShow(tab,d,kept,more){
+  const D=DET[tab],bits=[d.cat,d.size?d.size+(d.sizeGuess?' (guessed)':''):'',d.dol?'$'+d.dol+'.'+d.cts+' tag':''].filter(Boolean);
+  dNote(tab,(d.via===DVIA.list?'From the bottle list: ':d.via?'Read by '+hEsc(d.via)+': ':'Detected: ')+'<b>'+hEsc(d.name||d.cat)+'</b>'+(bits.length?' · '+hEsc(bits.join(' · ')):'')+'. '+
+    (kept?'Your own text was kept. <button type="button" data-act="use">Use these instead</button>'
+      :D.undo&&D.undo.length?'<button type="button" data-act="undo">Undo</button>':'')+(more||'')+dChips(d));
+}
+function dFail(tab,why){
+  dNote(tab,'Couldn’t read the label ('+hEsc(why)+'). Type the first letters of the name above and pick it from the list. '+
+    '<button type="button" data-act="retry">Try again</button>'+(HELP.ver?' · <button type="button" data-act="gem">Open the Gemini tab</button>':''));
+  $(DETEL[tab]).classList.add('err');
+}
+async function dRun(tab,src,file){
+  const D=DET[tab],seq=++D.seq;D.src=src;D.file=file||'';
   if(!dOn()){$(DETEL[tab]).hidden=true;return null}
-  const engs=dEngines();
-  if(!engs.length){dNote(tab,'Tip: add the DAF Helper add-on or a Google key (AI Studio, step 4) and the product name fills in by itself.',false,true);return null}
-  dNote(tab,'Reading the label…',true);
+  dNote(tab,'Reading the label…'+(tessP?'':' (the first time, the reader loads about 6 MB)'),true);
   try{
-    let d=null,err=null;
-    for(const eng of engs){try{d=dParse(await dAsk(eng,img));break}catch(e){err=e}}
-    if(!d)throw err;
+    const d=await dRead(src,dHint(tab,file),e=>{if(seq!==D.seq)return;
+      D.last=e;if(tab==='ai')aSt.det=e;dShow(tab,e,dFill(tab,e),dEngines().length?' Checking with Gemini…':'')});
     if(seq!==D.seq)return null;
-    if(!d.found){dNote(tab,'Couldn’t tell which product this is. Type the name in.');return null}
     D.last=d;if(tab==='ai')aSt.det=d;
-    dShow(tab,d,dFill(tab,d));
+    dShow(tab,d,dFill(tab,d));bRemember(d);
     return d;
-  }catch(e){if(seq===D.seq)dNote(tab,'Couldn’t read the label: '+dEsc(e.message));return null}
+  }catch(e){if(seq===D.seq)dFail(tab,e.message);return null}
+}
+/* picked from the dropdown */
+function bPick(tab,it,size){
+  const d={found:true,brand:it.b,product:it.e,cat:it.c,size:size||bDefSize(it),sizes:it.s,dol:'',cts:'',name:it.n,via:DVIA.list,fromList:true};
+  const D=DET[tab];D.seq++;D.last=d;if(tab==='ai')aSt.det=d;
+  dShow(tab,d,dFill(tab,d,true));bRemember(d);
 }
 function dFrom(tab,r){ /* an AI Studio picture going to an ad: reuse its bottle if known, else read it */
   if(!dOn())return;
   if(r.det){const D=DET[tab];D.seq++;D.last=r.det;dShow(tab,r.det,dFill(tab,r.det))}
-  else dRun(tab,dShot(r.img));
+  else dRun(tab,r.img,'');
 }
 Object.keys(DETEL).forEach(tab=>$(DETEL[tab]).addEventListener('click',e=>{
-  const b=e.target.closest('button[data-act]'),D=DET[tab];if(!b)return;
-  if(b.dataset.act==='use'&&D.last){dFill(tab,D.last,true);dShow(tab,D.last,0)}
-  else if(b.dataset.act==='undo'&&D.undo){
+  const b=e.target.closest('button'),D=DET[tab];if(!b)return;
+  if(b.dataset.size&&D.last){D.last.size=b.dataset.size;D.last.sizeGuess=false;dFill(tab,D.last,true,true);dShow(tab,D.last,0);return}
+  if(b.dataset.ex!=null&&D.last){Object.assign(D.last,{product:b.dataset.ex,name:bName(D.last.brand,b.dataset.ex),options:[]});
+    dShow(tab,D.last,dFill(tab,D.last,true));bRemember(D.last);return}
+  const act=b.dataset.act;
+  if(act==='use'&&D.last){dFill(tab,D.last,true);dShow(tab,D.last,0)}
+  else if(act==='undo'&&D.undo){
     D.undo.forEach(([id,v])=>{const el=$(id);el.value=v;delete D.auto[id];el.dispatchEvent(new Event('input',{bubbles:true}))});
-    D.undo=null;dNote(tab,'Undone. Detected: <b>'+dEsc(D.last.name||D.last.cat)+'</b>. <button type="button" data-act="use">Fill it in again</button>')}
+    D.undo=null;dNote(tab,'Undone. <button type="button" data-act="use">Fill it in again</button>')}
+  else if(act==='retry'&&D.src)dRun(tab,D.src,D.file);
+  else if(act==='gem')helperShow();
 }));
 document.querySelectorAll('.dauto').forEach(cb=>{cb.checked=dOn();cb.addEventListener('change',()=>{
   LS.set('dantes.autodet',cb.checked?'':'0');document.querySelectorAll('.dauto').forEach(x=>x.checked=cb.checked);
   if(!cb.checked)Object.values(DETEL).forEach(id=>$(id).hidden=true)})});
+bAuto($('#aname'),(it,z)=>bPick('ai',it,z));
+bAuto($('#n1'),(it,z)=>bPick('social',it,z));
+bAuto($('#ml2'),(it,z)=>bPick('monitor',it,z));
+
+/* ----- the caption by Gemini: the DAF Helper add-on or a Google key, Puter as the fallback ----- */
+const CAP_RULES="Dante's Liquors is a neighborhood liquor store at 2305 FL-7, Hollywood, Florida, inside Sedano's Plaza. "+
+  'Keep every product name, size and price exactly as given. Warm and local, at most 3 emojis, no health claims, nothing aimed at anyone under 21.';
+const CAP_FIELDS='caption: 40 to 90 words, ending with the line "📍 Dante\'s Liquors: 2305 FL-7, Hollywood (inside Sedano\'s Plaza)" and then the line "21+ only. Please drink responsibly." '+
+  'short: one line under 200 characters for X, Stories and Threads, naming the store. alt: one sentence describing the ad image for screen readers. '+
+  'hashtags: 8 to 14 hashtags on one line, starting with #DantesLiquors and including #HollywoodFL.';
+const capGem=()=>!!(HELP.ver||$('#akey').value.trim());
+async function capAsk(prompt,img,prog){
+  if(HELP.ver)return (await helperJob('ask',prompt,img?[{name:'ad.jpg',type:'image/jpeg',data:img}]:[],{},prog)).text;
+  return gText($('#akey').value.trim(),img,prompt);
+}
+function capClean(o){const c=v=>String(v==null?'':v).trim();return {caption:c(o.caption),short:c(o.short),alt:c(o.alt),hashtags:c(o.hashtags)}}
+/* the facts of one ad, as the AI should read them */
+function capFactsText(){
+  const f=capFacts();
+  return ['Product: '+f.nm,f.detail?'Details: '+f.detail:'',f.priceTxt?'Price: '+f.priceTxt:'',
+    (st.badge||'').trim()?'Badge on the ad: '+tidy(st.badge):'','Kind of post: '+({new:'a new arrival',deal:'a deal',pick:"the store's pick"})[f.kind]].filter(Boolean).join('\n');
+}
+async function capGemini(){
+  draw();
+  const p='Write the social media text for this Instagram post; the ad image is attached. '+CAP_RULES+'\n\n'+capFactsText()+
+    '\n\nReply with JSON only, no markdown: {"caption":"","short":"","alt":"","hashtags":""}. '+CAP_FIELDS;
+  const t=await capAsk(p,dShot(stage,1080),m=>capMsg(m.text||'Gemini is writing…'));
+  const o=jParse(t);
+  if(!o||!o.caption)throw new Error('Gemini’s reply could not be read. Try again.');
+  return capClean(o);
+}
+function capLabel(){$('#capAI').textContent=capGem()?'Write it with Gemini':'Polish the caption with AI · Puter'}
+
+/* ================= Batch: many bottles, all their ads in one go =================
+   Photos (or ZIPs of photos, or a folder) come in, each label is read, and one press makes for
+   every bottle: a scene picked from its photo, the AI picture, the Social posts and Window ads in
+   the chosen sizes, and the caption. Everything comes out as one ZIP, into a folder, or as
+   separate files. The renders reuse the Social and Window engines, so fonts, colors and the
+   address match those tabs. */
+const BOUT={p45:'feed_4x5',sq:'square_1x1',reel:'story_9x16',wide:'wide_16x9',wport:'window_portrait_2160x3840',wland:'window_landscape_3840x2160'};
+const bSt={rows:[],n:0,busy:false,stop:false,reading:false,made:false,
+  outs:['p45','reel','wport'],art:'ai',scene:'auto',cap:true,capBy:'ai',save:'zip',badge:'NEW ARRIVAL',price:true,read:true};
+function bMsg(s){setStatus($('#bstatus'),s)}
+function bSave(){LS.set('dantes.batch',JSON.stringify({outs:bSt.outs,art:bSt.art,scene:bSt.scene,cap:bSt.cap,capBy:bSt.capBy,
+  save:bSt.save,badge:bSt.badge,price:bSt.price,read:bSt.read}))}
+const bSlug=s=>(String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'bottle').slice(0,40);
+/* which scene suits a bottle when no AI picked one */
+function sceneFor(cat){
+  const c=bnorm(cat);
+  return /tequila|mezcal/.test(c)?'agave':/vodka|gin|seltzer|beer|lager|cocktail/.test(c)?'ice':/rum|cachaca|aguardiente|pisco/.test(c)?'neon'
+    :/cognac|brandy|champagne|sparkling|prosecco/.test(c)?'gold':/bourbon|whisk|scotch|rye|wine|rose/.test(c)?'bar':/liqueur|schnapps|cream/.test(c)?'spot':'inferno';
+}
+
+/* ----- photos in: files, ZIPs, folders ----- */
+async function unzipImages(file){
+  if(typeof DecompressionStream==='undefined')throw new Error('this browser can’t open ZIPs; add the photos themselves');
+  const u=new Uint8Array(await file.arrayBuffer()),v=new DataView(u.buffer),out=[];
+  let e=-1;for(let i=u.length-22;i>=Math.max(0,u.length-65558);i--)if(v.getUint32(i,true)===0x06054b50){e=i;break}
+  if(e<0)throw new Error('not a ZIP file');
+  let p=v.getUint32(e+16,true);
+  for(let k=v.getUint16(e+10,true);k>0;k--){
+    if(v.getUint32(p,true)!==0x02014b50)break;
+    const method=v.getUint16(p+10,true),size=v.getUint32(p+20,true),nl=v.getUint16(p+28,true),off=v.getUint32(p+42,true);
+    const name=new TextDecoder().decode(u.subarray(p+46,p+46+nl)),base=name.split('/').pop();
+    p+=46+nl+v.getUint16(p+30,true)+v.getUint16(p+32,true);
+    if(!base||name.startsWith('__MACOSX/')||base[0]==='.'||!/\.(jpe?g|png|webp|gif|bmp|avif)$/i.test(base)||size===0xFFFFFFFF)continue;
+    const start=off+30+v.getUint16(off+26,true)+v.getUint16(off+28,true),raw=u.subarray(start,start+size);
+    let data=null;
+    if(method===0)data=raw;
+    else if(method===8)data=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer());
+    if(!data)continue;
+    const ext=base.split('.').pop().toLowerCase();
+    out.push({name:base,blob:new Blob([data],{type:'image/'+(ext==='jpg'?'jpeg':ext)})});
+  }
+  if(!out.length)throw new Error('no JPG, PNG or WebP photos inside');
+  return out;
+}
+async function bAdd(list){
+  const files=[...list],skipped=[];let added=0;
+  bMsg('Adding photos…');
+  for(const f of files){
+    if(/\.zip$/i.test(f.name)||/zip/.test(f.type)){
+      try{for(const x of await unzipImages(f))if(await bAddImage(x.blob,x.name))added++;else skipped.push(x.name)}
+      catch(e){skipped.push(f.name+' ('+e.message+')')}
+    }else if(/^image\//.test(f.type)||/\.(jpe?g|png|webp|gif|bmp|avif|heic|heif)$/i.test(f.name)){
+      if(await bAddImage(f,f.name))added++;else skipped.push(f.name+(/\.hei[cf]$/i.test(f.name)?' (HEIC: save it as JPG first)':''));
+    }
+  }
+  bMsg((added?added+' photo'+(added>1?'s':'')+' added.':'No photos added.')+(skipped.length?' Skipped: '+skipped.slice(0,6).join(', ')+(skipped.length>6?'…':''):''));
+  bSync();bReadAll();
+}
+async function bAddImage(blob,name){
+  const url=URL.createObjectURL(blob),img=new Image();
+  if(!await new Promise(r=>{img.onload=()=>r(true);img.onerror=()=>r(false);img.src=url})){URL.revokeObjectURL(url);return false}
+  const row={id:++bSt.n,file:name,img,url,name:'',brand:'',product:'',cat:'',size:'',sizes:[],price:'',scene:'auto',
+    aiScene:'',extra:'',status:'new',note:'',outs:[],art:null,cap:null,typed:{}};
+  bSt.rows.push(row);bRowAdd(row);return true;
+}
+
+/* ----- the list on the right ----- */
+const bSceneOpts=()=>'<option value="auto">Picked from the photo</option>'+SCENES.map(s=>'<option value="'+s.id+'">'+s.name+'</option>').join('');
+function bRowAdd(row){
+  const el=document.createElement('div');el.className='brow';row.el=el;
+  el.innerHTML='<img class="bthumb" alt="">'+
+    '<div class="bfields"><div class="field"><label class="lbl" for="bn'+row.id+'">Bottle</label>'+
+      '<input type="text" id="bn'+row.id+'" maxlength="60" placeholder="Start typing the name"></div>'+
+    '<div class="row"><div class="mini2"><label class="lbl" for="bz'+row.id+'">Size</label><input type="text" id="bz'+row.id+'" maxlength="12" list="bsizes"></div>'+
+      '<div class="mini2"><label class="lbl" for="bp'+row.id+'">Price</label><input type="text" id="bp'+row.id+'" maxlength="10" inputmode="decimal" placeholder="39.99"></div>'+
+      '<div class="field"><label class="lbl" for="bs'+row.id+'">Scene</label><select id="bs'+row.id+'">'+bSceneOpts()+'</select></div></div>'+
+    '<div class="bstat" role="status"></div><div class="bouts"></div></div>'+
+    '<button class="btn ghost small bdel" type="button" aria-label="Remove this bottle">&times;</button>';
+  el.querySelector('.bthumb').src=row.url;el.querySelector('.bthumb').alt=row.file;
+  const nm=el.querySelector('#bn'+row.id),sz=el.querySelector('#bz'+row.id),pr=el.querySelector('#bp'+row.id),sc=el.querySelector('#bs'+row.id);
+  nm.addEventListener('input',e=>{if(!e.isTrusted)return;row.typed.name=1;row.name=nm.value;row.brand=row.product='';row.fromList=false});
+  sz.addEventListener('input',e=>{if(e.isTrusted){row.typed.size=1;row.size=sz.value.trim()}});
+  pr.addEventListener('input',e=>{if(e.isTrusted){row.typed.price=1;row.price=pr.value.trim()}});
+  sc.addEventListener('change',()=>{row.scene=sc.value});
+  bAuto(nm,(it,z)=>{Object.assign(row,{name:it.n,brand:it.b,product:it.e,cat:it.c,sizes:it.s,fromList:true});row.typed.name=1;
+    if(!row.typed.size||!row.size){row.size=z||bDefSize(it);sz.value=row.size}nm.value=it.n;
+    bRemember({brand:it.b,product:it.e,cat:it.c,size:row.size})});
+  el.querySelector('.bdel').addEventListener('click',()=>{if(bSt.busy)return;
+    bSt.rows=bSt.rows.filter(r=>r!==row);el.remove();URL.revokeObjectURL(row.url);bSync()});
+  $('#blist').appendChild(el);bRowSync(row);
+}
+function bRowSync(row){
+  const el=row.el;if(!el)return;
+  const set=(id,v)=>{const i=el.querySelector(id);if(document.activeElement!==i)i.value=v||''};
+  set('#bn'+row.id,row.name);set('#bz'+row.id,row.size);set('#bp'+row.id,row.price);el.querySelector('#bs'+row.id).value=row.scene;
+  const st2=el.querySelector('.bstat');
+  st2.textContent={new:'Waiting to be read…',reading:'Reading the label…',making:'Making the ads…'}[row.status]||row.note||'';
+  st2.classList.toggle('err',/couldn|failed|error/i.test(row.note)&&row.status!=='reading');
+  el.classList.toggle('busy',row.status==='reading'||row.status==='making');
+}
+function bSync(){
+  $('#bempty').hidden=bSt.rows.length>0;
+  $('#bcount').textContent=bSt.rows.length?bSt.rows.length+' bottle'+(bSt.rows.length>1?'s':''):'';
+  $('#bgo').textContent=bSt.busy?'Stop':bSt.rows.length?'Make all ads ('+bSt.rows.length+' bottle'+(bSt.rows.length>1?'s':'')+')':'Make all ads';
+  $('#bdl').disabled=bSt.busy||!bSt.rows.some(r=>r.outs.length);
+  $('#bclear').disabled=bSt.busy||!bSt.rows.length;
+}
+
+/* ----- reading every label ----- */
+function bApply(row,d){
+  row.det=d;
+  if(!row.typed.name)Object.assign(row,{name:d.name,brand:d.brand,product:d.product,cat:d.cat,sizes:d.sizes||[],fromList:!!d.fromList});
+  if(!row.typed.size&&d.size)row.size=d.size;
+  if(!row.typed.price&&d.dol)row.price=d.dol+'.'+d.cts;
+  if(d.scene)row.aiScene=d.scene;if(d.extra)row.extra=d.extra;
+  row.note='Read by '+d.via+(d.sizeGuess&&d.size?' (size guessed: check it)':'')+'.';
+}
+async function bReadAll(){
+  if(bSt.reading)return;bSt.reading=true;
+  try{
+    for(const row of bSt.rows){
+      if(row.status!=='new')continue;
+      if(!bSt.read){row.status='ready';row.note='Type the name, then press Make all ads.';bRowSync(row);continue}
+      row.status='reading';bRowSync(row);
+      try{bApply(row,await dRead(row.img,dFileHint(row.file),e=>{bApply(row,e);row.note+=' Checking with Gemini…';bRowSync(row)}))}
+      catch(e){row.note='Couldn’t read the label ('+e.message+'). Type the name.'}
+      row.status='ready';bRowSync(row);
+    }
+  }finally{bSt.reading=false}
+}
+
+/* ----- one bottle's details, the way the ads want them ----- */
+function bProduct(row){
+  let d={brand:row.brand,product:row.product,cat:row.cat,name:row.name.trim()};
+  if(!d.brand||bnorm(bName(d.brand,d.product))!==bnorm(d.name)){const g=dGuess(d.name)||{};
+    d={brand:g.brand||'',product:g.product||'',cat:g.cat||row.cat,name:g.brand?bName(g.brand,g.product):d.name}}
+  const P=parsePrice(row.price),size=bSizeIn(row.size)||row.size.trim();
+  return Object.assign(d,{size,dol:P?P.dol:'',cts:P?P.cts:'',
+    n1:(d.brand||d.name).toUpperCase(),n2:(d.brand?d.product||d.cat:d.cat).toUpperCase(),
+    sub:[d.brand&&d.product?d.cat:'',size].filter(Boolean).join(' · ')});
+}
+const canvasBlob=(c,type,q)=>new Promise((res,rej)=>c.toBlob(b=>b?res(b):rej(new Error('the browser could not make the image')),type||'image/png',q));
+const blobImg=b=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>rej(new Error('that picture could not be opened'));i.src=URL.createObjectURL(b)});
+/* render through the Social engine with this bottle swapped in, then put the user's ad back */
+const BSNAP=['fmt','layout','fit','src','img','iw','ih','k','cx','cy','zoom','blurs','soft','tiny','enhance','n1','n2','sub','price','dol','cts','tag','badge'];
+function bSocial(fmt,P,bg,art){
+  const keep={};BSNAP.forEach(k=>keep[k]=st[k]);
+  try{
+    Object.assign(st,{fmt,layout:'single',fit:art?'fill':'whole',src:bg,blurs:[],cx:0.5,cy:0.5,zoom:1,enhance:art?false:st.enhance,
+      n1:P.n1,n2:P.n2,sub:P.sub,price:bSt.price&&!!P.dol,dol:P.dol||'0',cts:P.cts||'00',tag:'',badge:bSt.badge});
+    processPhoto(st);clampPhoto(st);
+    const [W,H]=FMT[fmt],c=document.createElement('canvas');c.width=W;c.height=H;
+    render(c.getContext('2d'),W,H,{});
+    return canvasBlob(c);
+  }finally{BSNAP.forEach(k=>st[k]=keep[k])}
+}
+const MSNAP=['style','img','iw','ih','zoom','ox','oy','cx','cy','cz','l1','l2','price','dol','cts'];
+function bWindow(land,P,bg,cine){
+  const keep={};MSNAP.forEach(k=>keep[k]=mSt[k]);
+  try{
+    Object.assign(mSt,{style:cine?'cine':'classic',img:bg,iw:bg.naturalWidth||bg.width,ih:bg.naturalHeight||bg.height,
+      zoom:1,ox:0,oy:0,cx:0.5,cy:0.5,cz:1,l1:P.size,l2:P.name.slice(0,34),price:bSt.price&&!!P.dol,dol:P.dol||'0',cts:P.cts||'00'});
+    const p=document.createElement('canvas');p.width=MBASE_W;p.height=MBASE_H;mRenderP(p.getContext('2d'),MBASE_W,MBASE_H);
+    let ex=p;
+    if(land){ex=document.createElement('canvas');ex.width=MBASE_H;ex.height=MBASE_W;
+      const x=ex.getContext('2d');x.translate(MBASE_H,0);x.rotate(Math.PI/2);x.drawImage(p,0,0)}
+    return canvasBlob(ex);
+  }finally{MSNAP.forEach(k=>mSt[k]=keep[k])}
+}
+/* the built-in caption for one bottle, from the same writer as the Social tab */
+function bCaption(P,bg){
+  const keep={};BSNAP.forEach(k=>keep[k]=st[k]);
+  try{
+    Object.assign(st,{layout:'single',src:bg,n1:P.n1,n2:P.n2,sub:P.sub,price:bSt.price&&!!P.dol,dol:P.dol||'0',cts:P.cts||'00',tag:'',badge:bSt.badge});
+    return {caption:capBody(0)+'\n\n'+storeLine()+'\n21+ only. Please drink responsibly.',hashtags:capTags(),short:capShort(),alt:capAlt()};
+  }finally{BSNAP.forEach(k=>st[k]=keep[k])}
+}
+const bCapText=c=>'CAPTION\n'+c.caption.trim()+(c.hashtags?'\n\n'+c.hashtags.trim():'')+'\n\nSHORT VERSION (X / Stories / Threads)\n'+c.short.trim()+
+  '\n\nALT TEXT\n'+c.alt.trim()+'\n\nIf you boost this post as a paid ad, set the audience to 21+.\n';
+/* one AI picture for a bottle, through the engine picked in AI Studio */
+async function bArt(row,prompt,prog){
+  const ref=aPrepRef(row.img),e=aSt.engine,m=AMODELS[aSt.model]||AMODELS.nb2;
+  if(e==='gemini'){
+    if(!HELP.ver)throw new Error('the DAF Helper add-on is not connected (AI Studio, step 4)');
+    const r=await helperJob('image',prompt+'\n\nReply with the finished image.',[{name:'bottle.jpg',type:'image/jpeg',data:ref}],{visible:$('#ashowgem').checked},prog);
+    const im=r.images&&r.images.find(x=>x.data);
+    if(!im)throw new Error(r.text?'Gemini answered without a picture: “'+r.text.slice(0,140)+'”':'Gemini sent no picture');
+    return dataBlob(im.data);
+  }
+  if(e==='google'){const key=$('#akey').value.trim();if(!key)throw new Error('no Google key (AI Studio, step 4)');
+    return aGoogle(key,m.google||AMODELS.nb2.google,prompt,false,{ref,fmt:'reel'})}
+  return aPuter(m.puter,prompt,{ref,fmt:'reel'});
+}
+
+/* ----- the run ----- */
+async function bRun(){
+  if(bSt.busy){bSt.stop=true;helperCancel();bMsg('Stopping after this step…');return}
+  const rows=bSt.rows.filter(r=>r.name.trim());
+  if(!bSt.rows.length){bMsg('Add bottle photos first.');return}
+  if(!rows.length){bMsg('Type or pick a name for each bottle first.');return}
+  if(!bSt.outs.length){bMsg('Pick at least one kind of ad in step 2.');return}
+  if(bSt.art==='ai'&&aSt.engine==='gemini'&&!HELP.ver){bMsg('AI pictures use Gemini through the DAF Helper add-on, which isn’t connected. Set it up in AI Studio (step 4), or choose “My photo as is”.');return}
+  bSt.busy=true;bSt.stop=false;bSync();
+  const total=rows.length,ran=[];let done=0,failed=0;
+  try{
+    while(bSt.reading){bMsg('Waiting for the labels to finish reading…');await sleep(400)}
+    if(bSt.outs.some(o=>o==='wport'||o==='wland'))await mFontReady();
+    for(let i=0;i<rows.length&&!bSt.stop;i++){
+      const row=rows[i],P=bProduct(row),folder=String(i+1).padStart(2,'0')+'_'+bSlug(P.name),pct=k=>Math.round((i+k)/total*100);
+      row.status='making';row.outs=[];row.art=null;row.cap=null;row.note='';row.P=P;row.folder=folder;ran.push(row);
+      bRowSync(row);bOutsShow(row);
+      const head='Bottle '+(i+1)+' of '+total+' ('+P.name+'): ';
+      let bg=row.img,art=false,clean=false;row.sceneUsed='your photo';row.prompt='';
+      if(bSt.art==='ai'){
+        const id=row.scene!=='auto'?row.scene:bSt.scene!=='auto'?bSt.scene:(row.aiScene||sceneFor(P.cat));
+        const sc=SCENES.find(s=>s.id===id)||SCENES[0];clean=!!sc.clean;
+        row.prompt=promptFor({name:[P.name,P.cat&&!bnorm(P.name).includes(bnorm(P.cat))?P.cat:'',P.size].filter(Boolean).join(' '),
+          scene:sc.id,extra:row.scene==='auto'&&bSt.scene==='auto'?row.extra:'',fmt:'reel',ref:true});
+        try{bMsg(head+'making the '+sc.name+' picture… '+pct(0)+'%');
+          const blob=await bArt(row,row.prompt,p=>bMsg(head+(p.text||'Gemini is working…')+' '+pct(0.3)+'%'));
+          row.art={blob,img:await blobImg(blob)};bg=row.art.img;art=true;row.sceneUsed=sc.name;
+        }catch(e){if(bSt.stop){row.status='ready';row.note='Stopped.';bRowSync(row);break}
+          row.note='The AI picture failed ('+e.message+'), so these use your photo.'}
+      }
+      try{
+        for(const o of bSt.outs){
+          bMsg(head+'drawing the '+BOUT[o].replace(/_/g,' ')+'… '+pct(0.7)+'%');await sleep(0);
+          const blob=o==='wport'||o==='wland'?await bWindow(o==='wland',P,bg,art&&!clean):await bSocial(o,P,bg,art);
+          row.outs.push({path:folder+'/'+BOUT[o]+'.png',blob,kind:o});
+        }
+        if(row.art)row.outs.push({path:folder+'/ai_picture.'+(row.art.blob.type==='image/jpeg'?'jpg':'png'),blob:row.art.blob});
+        if(row.prompt)row.outs.push({path:folder+'/ai_prompt.txt',blob:new Blob([row.prompt+'\n'],{type:'text/plain'})});
+        row.cap=bSt.cap?bCaption(P,bg):null;
+        bRemember({brand:P.brand||P.name,product:P.brand?P.product:'',cat:P.cat,size:P.size});
+        row.status='done';row.note=(row.note?row.note+' ':'')+'Made '+bSt.outs.length+' ad'+(bSt.outs.length>1?'s':'')+'.';done++;
+      }catch(e){row.status='ready';row.note='Failed: '+e.message;failed++}
+      bRowSync(row);bOutsShow(row);
+    }
+    /* captions: Gemini writes them all in one go, the built-in writer covers any it misses */
+    const capRows=ran.filter(r=>r.cap);
+    if(bSt.cap&&bSt.capBy==='ai'&&capGem()&&capRows.length&&!bSt.stop){
+      bMsg('Gemini is writing the captions for '+capRows.length+' bottle'+(capRows.length>1?'s':'')+'…');
+      try{
+        const list=capRows.map((r,k)=>(k+1)+'. '+[r.P.name,r.P.cat,r.P.size,r.P.dol&&bSt.price?'$'+r.P.dol+'.'+r.P.cts:'',bSt.badge?'badge: '+bSt.badge:''].filter(Boolean).join(' · ')).join('\n');
+        const t=await capAsk('Write the social media text for '+capRows.length+' Instagram posts, one per product below. '+CAP_RULES+
+          '\n\nReply with JSON only, no markdown: an array with one object per product, in the same order, each {"caption":"","short":"","alt":"","hashtags":""}. '+CAP_FIELDS+'\n\nProducts:\n'+list,
+          null,p=>bMsg('Gemini is writing the captions… '+(p.text||'')));
+        const a=jParse(t);
+        if(Array.isArray(a))capRows.forEach((r,k)=>{if(a[k]&&a[k].caption)r.cap=capClean(a[k])});
+      }catch(e){bMsg('Gemini couldn’t write the captions ('+e.message+'); the built-in writer did.');await sleep(1500)}
+    }
+    for(const r of capRows)r.outs.push({path:r.folder+'/caption.txt',blob:new Blob([bCapText(r.cap)],{type:'text/plain'})});
+    bSt.made=true;
+    bMsg((bSt.stop?'Stopped. ':'Done. ')+done+' of '+total+' bottle'+(total>1?'s':'')+' made'+(failed?', '+failed+' failed':'')+'. Press Download to save them.');
+  }catch(e){bMsg('Batch stopped: '+e.message)}
+  finally{bSt.busy=false;bSt.stop=false;bSync()}
+}
+function bOutsShow(row){
+  const box=row.el&&row.el.querySelector('.bouts');if(!box)return;
+  (row.thumbs||[]).forEach(u=>URL.revokeObjectURL(u));
+  const pics=row.outs.filter(o=>/\.(png|jpg)$/.test(o.path));row.thumbs=pics.map(o=>URL.createObjectURL(o.blob));
+  box.innerHTML=pics.map((o,k)=>'<img src="'+row.thumbs[k]+'" alt="'+hEsc(o.path)+'" title="'+hEsc(o.path.split('/').pop())+'">').join('');
+}
+
+/* ----- saving ----- */
+function bFiles(){
+  const rows=bSt.rows.filter(r=>r.outs.length),files=rows.flatMap(r=>r.outs.map(o=>({path:o.path,blob:o.blob})));
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  files.push({path:'bottles.csv',blob:new Blob(['﻿'+[['folder','bottle','size','price','scene','caption'].map(q).join(',')]
+    .concat(rows.map(r=>[r.folder,r.P.name,r.P.size,r.P.dol?'$'+r.P.dol+'.'+r.P.cts:'',r.sceneUsed,
+      r.cap?r.cap.caption+(r.cap.hashtags?'\n\n'+r.cap.hashtags:''):''].map(q).join(','))).join('\r\n')],{type:'text/csv'})});
+  const caps=rows.filter(r=>r.cap);
+  if(caps.length)files.push({path:'captions.txt',blob:new Blob([caps.map(r=>r.folder.replace('_',' · ')+'\n\n'+bCapText(r.cap)).join('\n\n————————————\n\n')],{type:'text/plain'})});
+  return files;
+}
+/* a ZIP of blobs, assembled without copying the pictures (stored: PNGs are compressed already) */
+async function zipBlobs(files){
+  const parts=[],dir=[],d=new Date(),tm=(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1),
+    dt=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate();
+  let off=0;
+  for(const f of files){
+    const nm=new TextEncoder().encode(f.path),n=f.blob.size,crc=crc32(new Uint8Array(await f.blob.arrayBuffer()));
+    const lh=new DataView(new ArrayBuffer(30)),ch=new DataView(new ArrayBuffer(46));
+    lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x800,true);
+    lh.setUint16(10,tm,true);lh.setUint16(12,dt,true);lh.setUint32(14,crc,true);lh.setUint32(18,n,true);lh.setUint32(22,n,true);lh.setUint16(26,nm.length,true);
+    ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x800,true);
+    ch.setUint16(12,tm,true);ch.setUint16(14,dt,true);ch.setUint32(16,crc,true);ch.setUint32(20,n,true);ch.setUint32(24,n,true);
+    ch.setUint16(28,nm.length,true);ch.setUint32(42,off,true);
+    parts.push(lh,nm,f.blob);dir.push(ch,nm);off+=30+nm.length+n;
+  }
+  const size=dir.reduce((a,p)=>a+p.byteLength,0),end=new DataView(new ArrayBuffer(22));
+  end.setUint32(0,0x06054b50,true);end.setUint16(8,files.length,true);end.setUint16(10,files.length,true);
+  end.setUint32(12,size,true);end.setUint32(16,off,true);
+  return new Blob([...parts,...dir,end],{type:'application/zip'});
+}
+async function bDownload(){
+  const files=bFiles();if(!files.length)return;
+  const b=$('#bdl');b.disabled=true;
+  try{
+    if(bSt.save==='folder'&&window.showDirectoryPicker){
+      const root=await window.showDirectoryPicker({mode:'readwrite'});
+      for(let i=0;i<files.length;i++){
+        const parts=files[i].path.split('/');let dir=root;
+        for(const p of parts.slice(0,-1))dir=await dir.getDirectoryHandle(p,{create:true});
+        const w=await (await dir.getFileHandle(parts[parts.length-1],{create:true})).createWritable();
+        await w.write(files[i].blob);await w.close();
+        bMsg('Saving into the folder… '+Math.round((i+1)/files.length*100)+'%');
+      }
+      bMsg('Saved '+files.length+' files into the folder you picked.');
+    }else if(bSt.save==='files'){
+      for(let i=0;i<files.length;i++){dl(files[i].blob,'dantes_'+files[i].path.replace(/\//g,'_'));
+        bMsg('Downloading file '+(i+1)+' of '+files.length+'… '+Math.round((i+1)/files.length*100)+'%');await sleep(400)}
+      bMsg('Downloaded '+files.length+' files. If the browser asked, allow multiple downloads for this site.');
+    }else{
+      bMsg('Packing the ZIP…');
+      dl(await zipBlobs(files),'dantes_batch_'+new Date().toISOString().slice(0,10)+'.zip');
+      bMsg('ZIP downloaded: a folder for each bottle, plus captions.txt and bottles.csv.');
+    }
+  }catch(e){bMsg(e&&e.name==='AbortError'?'Saving cancelled.':'Saving failed: '+((e&&e.message)||e))}
+  finally{b.disabled=false}
+}
+
+/* ----- bindings ----- */
+function bOptsUI(){
+  document.querySelectorAll('.bout').forEach(cb=>cb.checked=bSt.outs.includes(cb.dataset.o));
+  [['#bart','art'],['#bcapby','capBy'],['#bsave','save']].forEach(([id,k])=>[...$(id).children].forEach(b=>b.classList.toggle('on',b.dataset.v===bSt[k])));
+  $('#bscene').value=bSt.scene;$('#bcap').checked=bSt.cap;$('#bbadge').value=bSt.badge;$('#bprice').checked=bSt.price;$('#bread').checked=bSt.read;
+  $('#bscenerow').hidden=bSt.art!=='ai';$('#bcapbyrow').hidden=!bSt.cap;
+  if(!window.showDirectoryPicker){const f=$('#bsave [data-v="folder"]');f.disabled=true;f.title='Saving into a folder needs Chrome or Edge on a computer'}
+  const eng={gemini:'Gemini through the DAF Helper add-on',google:'your Google key',puter:'Puter'}[aSt.engine];
+  $('#bartnote').textContent=bSt.art==='ai'?'One new picture per bottle, made by '+eng+' (the engine picked in AI Studio). Free Gemini accounts get a limited number of pictures a day.'
+    :'Your photos go in as they are: on white, product photos suit the classic Window look; Social posts show the whole photo over a soft blurred copy.';
+}
+document.querySelectorAll('.bout').forEach(cb=>cb.addEventListener('change',()=>{
+  bSt.outs=[...document.querySelectorAll('.bout')].filter(x=>x.checked).map(x=>x.dataset.o);bSave()}));
+[['#bart','art'],['#bcapby','capBy'],['#bsave','save']].forEach(([id,k])=>$(id).addEventListener('click',e=>{
+  const b=e.target.closest('[data-v]');if(!b||b.disabled)return;bSt[k]=b.dataset.v;bSave();bOptsUI()}));
+$('#bscene').addEventListener('change',e=>{bSt.scene=e.target.value;bSave()});
+$('#bcap').addEventListener('change',e=>{bSt.cap=e.target.checked;bSave();bOptsUI()});
+$('#bbadge').addEventListener('input',e=>{bSt.badge=e.target.value;bSave()});
+$('#bprice').addEventListener('change',e=>{bSt.price=e.target.checked;bSave()});
+$('#bread').addEventListener('change',e=>{bSt.read=e.target.checked;bSave();if(bSt.read)bReadAll()});
+$('#bpick').addEventListener('click',()=>$('#bfiles').click());
+$('#bpickdir').addEventListener('click',()=>$('#bfolder').click());
+['#bfiles','#bfolder'].forEach(id=>$(id).addEventListener('change',e=>{const f=[...e.target.files];e.target.value='';if(f.length)bAdd(f)}));
+$('#bgo').addEventListener('click',bRun);
+$('#bdl').addEventListener('click',bDownload);
+$('#bclear').addEventListener('click',()=>{if(bSt.busy)return;bSt.rows.forEach(r=>{URL.revokeObjectURL(r.url);(r.thumbs||[]).forEach(u=>URL.revokeObjectURL(u))});
+  bSt.rows=[];$('#blist').innerHTML='';bMsg('');bSync()});
+function bInit(){
+  try{Object.assign(bSt,JSON.parse(LS.get('dantes.batch')||'{}'))}catch(e){}
+  $('#bscene').innerHTML='<option value="auto">Picked for each bottle from its photo</option>'+SCENES.map(s=>'<option value="'+s.id+'">'+s.name+'</option>').join('');
+  bOptsUI();bSync();
+}
 
 /* ---------- tabs ---------- */
 let activeTab='ai';
@@ -2794,11 +3677,13 @@ function showTab(t){
   $('#tab-ai').hidden=t!=='ai';
   $('#tab-social').hidden=t!=='social';
   $('#tab-monitor').hidden=t!=='monitor';
+  $('#tab-batch').hidden=t!=='batch';
+  if(t==='batch')bOptsUI();
   if(t==='monitor'){mDraw();mFontsLoad().then(()=>document.fonts&&document.fonts.ready).then(()=>mDraw())}
 }
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
 
-$('#burst').addEventListener('click',()=>showTab('ai'));
+$('#burst').addEventListener('click',()=>showTab('batch'));
 
 /* ---------- sidebar modules collapse with their [–] toggle ---------- */
 document.querySelectorAll('.card h3').forEach(h=>{
@@ -2821,6 +3706,7 @@ mFontUI();
 mDraw();
 if(mSt.font!=='baloo')mFontReady().then(()=>mDraw());
 aInit();
+bInit();capLabel();
 if(document.fonts){
   ['100px Anton','700 100px Oswald','600 100px Oswald','400 100px Oswald','700 100px "Zilla Slab"','800 100px "Baloo 2"']
     .forEach(f=>{try{document.fonts.load(f).then(()=>{draw();mDraw()}).catch(()=>{})}catch(e){}});
