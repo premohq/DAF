@@ -68,7 +68,7 @@ Replicates the exact format of the in-store window monitor ads.
 
 You don't pick the look. The look picks you.
 
-- **Logo:** the real Dante's Liquors logo, rebuilt as vector art from the original: the plate with its corner screws, DANTE'S with the red apostrophe, LIQUORS, and the fire glass. The glass is fitted to the original's pixels, with both white slashes kept inside the flame and the right-hand flame sitting straight on its neck. It is drawn as shapes, so it stays sharp at any size, from the tab icon to 4K window screens. Dark ads get the white version, white ads get the black one.
+- **Logo:** the real Dante's Liquors logo, rebuilt as vector art: the plate with its corner screws, DANTE'S with the red apostrophe, LIQUORS, and the fire glass. The glass is traced from a clear photo of the real logo: a separate top-left flame with a curl, split from the body by an S-shaped gap that runs out both sides, a short slash cutting in on the right, one solid red with a thin darker rim, and a stem and foot that shade to maroon. The gaps are see-through, just like the PNG. It is drawn as shapes, so it stays sharp at any size, from the tab icon to 4K window screens. Dark ads get the white version (with a lighter stem so it doesn't disappear on black), white ads get the black one.
 - **Logo files:** [`brand/`](brand/) has the logo as SVG (any size, for print and signage) and 4000px transparent PNG, black and white versions, plus the glass on its own.
 
 - **Palette:** Ink `#0B0908` · Bone `#F6F1E7` · Ember `#C8102E` · Gold `#E3B264`
