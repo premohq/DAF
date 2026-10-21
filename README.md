@@ -103,6 +103,9 @@ Many bottles, all their ads, one click.
 
 AI scenes come from the engine picked in AI Studio. Free Gemini accounts get a limited number of pictures a day, so for big batches start with your best sellers.
 
+### The September ad set
+[`ads/`](ads/) holds the New Arrivals + Weekly Deals set made with the Forge from in-store photos: 14 ads (La Puerta Negra, Patrón, Casamigos, Teremana, Absolut, Frïs, Barton, the handle sale, the weekly price list and a carousel), each in feed, square, story and wide sizes with Reels, plus captions, hashtags and a posting plan in `social-media-descriptions.txt`. See [`ads/README.md`](ads/README.md).
+
 ---
 
 ## The Brand System (Baked In)

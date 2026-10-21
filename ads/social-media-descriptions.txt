@@ -1,0 +1,496 @@
+DANTE'S LIQUORS: SOCIAL MEDIA DESCRIPTIONS
+Ad set: New Arrivals + Weekly Deals
+Made with Dante's Ad Forge (https://premohq.github.io/DAF/) from in-store photos
+Store line: 2305 FL-7, Hollywood · Inside Sedano's Plaza
+
+==========================================================================
+HOW TO USE THIS FILE
+==========================================================================
+
+Each numbered section below matches a folder in /ads. Copy the caption,
+then paste the hashtag block at the end (or drop it in the first comment).
+
+Files in each folder:
+  feed_4x5.jpg        Instagram / Facebook feed post (1080x1350). Use this one first.
+  square_1x1.jpg      Grid posts, Facebook, Google Business Profile (1080x1080)
+  story_9x16.jpg      Instagram / Facebook Stories, WhatsApp Status (1080x1920)
+  reel_9x16.mp4       Reels / TikTok / YouTube Shorts: 6-second animated cut
+                      (the list reel is 9 seconds). Silent, so add a trending
+                      sound in the app.
+  wide_16x9.jpg       X (Twitter), Facebook link posts, YouTube community (1920x1080)
+  window_display_3840x2160.png
+                      In-store window monitor file. Landscape file with the
+                      rotated layout the current window monitors use.
+
+Every caption below already ends with "21+ only. Please drink responsibly."
+Keep that line in.
+
+If you BOOST or run any of these as paid ads, set the audience to 21+.
+Meta requires this for alcohol ads in the US.
+
+Prices are the shelf prices from the photos. If a price changes, don't post
+the old ad. Make a new one in the Forge.
+
+
+==========================================================================
+01  LA PUERTA NEGRA REPOSADO | $14.99 | NEW
+    Folder: ads/01_la-puerta-negra-reposado/
+==========================================================================
+
+CAPTION
+New on the shelf: La Puerta Negra Reposado 🔥
+
+100% puro de agave tequila, rested for a smooth, warm finish, in a full
+1 Liter bottle for just $14.99. Grab one for the weekend, the margarita
+pitcher, or the next family party.
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #LaPuertaNegra #TequilaReposado #Reposado #Tequila #NewArrival
+#HollywoodFL #HollywoodFlorida #BrowardCounty #SouthFlorida #954 #LiquorStore
+
+SHORT VERSION (X / Stories / Threads)
+NEW: La Puerta Negra Reposado, 1 Liter for $14.99 🔥 Dante's Liquors, 2305 FL-7
+Hollywood (inside Sedano's Plaza). 21+ · Drink responsibly. #Tequila #HollywoodFL
+
+ALT TEXT
+Bottle of La Puerta Negra Reposado tequila on the shelf at Dante's Liquors,
+with a $14.99 price card and a "New Arrival" badge.
+
+
+==========================================================================
+02  LA PUERTA NEGRA BLANCO | $13.99 | NEW
+    Folder: ads/02_la-puerta-negra-blanco/
+==========================================================================
+
+CAPTION
+La Puerta Negra means "The Black Door." Come on in. 🚪
+
+Just landed: La Puerta Negra Blanco. 100% puro de agave, crisp and clean,
+made for margaritas, palomas, and ranch water. Full 1 Liter bottle,
+only $13.99.
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #LaPuertaNegra #TequilaBlanco #BlancoTequila #Tequila #Margarita
+#Paloma #NewArrival #HollywoodFL #BrowardCounty #SouthFlorida #LiquorStore
+
+SHORT VERSION
+Just landed: La Puerta Negra Blanco, 1 Liter for $13.99. Margarita season never
+ends in South Florida 🍋 Dante's Liquors, inside Sedano's Plaza. 21+ #Tequila
+
+ALT TEXT
+Bottle of La Puerta Negra Blanco tequila on the shelf at Dante's Liquors,
+with a $13.99 price card.
+
+
+==========================================================================
+03  LA PUERTA NEGRA: REPOSADO + BLANCO | FROM $13.99
+    Folder: ads/03_la-puerta-negra-duo/
+==========================================================================
+
+CAPTION
+Reposado or Blanco? Why choose. 🔥
+
+La Puerta Negra just landed at Dante's in both styles:
+• Reposado, 1 Liter: $14.99
+• Blanco, 1 Liter: $13.99
+
+100% puro de agave. Grab one of each and host the tasting yourself.
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #LaPuertaNegra #Tequila #TequilaReposado #TequilaBlanco
+#NewArrivals #TequilaTime #HollywoodFL #BrowardCounty #SouthFlorida #LiquorStore
+
+SHORT VERSION
+Reposado $14.99 or Blanco $13.99? La Puerta Negra is here in both, full liters.
+Dante's Liquors, 2305 FL-7 Hollywood. 21+ · Drink responsibly. #Tequila
+
+ALT TEXT
+Split image of La Puerta Negra Reposado (left) and Blanco (right) tequila
+bottles, from $13.99.
+
+
+==========================================================================
+04  NEW ON THE SHELF: LA PUERTA NEGRA (teaser, no price card)
+    Folder: ads/04_new-on-the-shelf/
+==========================================================================
+
+CAPTION
+Fresh stock alert 🚨 La Puerta Negra tequila is officially on our shelves.
+
+Reposado $14.99 · Blanco $13.99 · full 1 Liter bottles.
+Look for the NEW ITEM tags when you come in.
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #NewArrivals #JustLanded #LaPuertaNegra #Tequila #HollywoodFL
+#HollywoodFlorida #BrowardCounty #SouthFlorida #954 #LiquorStore
+
+SHORT VERSION
+Fresh stock: La Puerta Negra tequila just hit our shelves. Reposado $14.99,
+Blanco $13.99. Dante's Liquors, inside Sedano's Plaza. 21+ #NewArrivals
+
+ALT TEXT
+A shelf row of La Puerta Negra Reposado tequila bottles at Dante's Liquors
+with "New Item" tags.
+
+
+==========================================================================
+05  PATRÓN REPOSADO 375 mL | 2 FOR $41.99
+    Folder: ads/05_patron-reposado-2-for/
+==========================================================================
+
+CAPTION
+Double up. 🥃 Patrón Reposado 375 mL: 2 for $41.99.
+
+Tequila 100% de agave in the perfect size for gifting, sharing, or keeping
+one for yourself (we won't tell).
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #Patron #PatronReposado #PatronTequila #Tequila #TequilaReposado
+#LiquorDeals #HollywoodFL #BrowardCounty #SouthFlorida #LiquorStore
+
+SHORT VERSION
+Patrón Reposado 375 mL: 2 for $41.99 🥃 Dante's Liquors, 2305 FL-7 Hollywood
+(inside Sedano's Plaza). 21+ · Drink responsibly. #Patron #Tequila
+
+ALT TEXT
+Two boxed bottles of Patrón Reposado 375 mL stacked on the counter, with a
+"2 for $41.99" price card.
+
+
+==========================================================================
+06  CASAMIGOS 2-PACK (2 x 375 mL) | $39.99 | SALE
+    Folder: ads/06_casamigos-2-pack/
+==========================================================================
+
+CAPTION
+Casamigos 2-Pack: on SALE for $39.99. 🎁
+
+Two 375 mL bottles of Casamigos Tequila in one box. Easy gift, easy share,
+easy yes.
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #Casamigos #CasamigosTequila #Tequila #GiftIdeas #LiquorDeals
+#Sale #HollywoodFL #BrowardCounty #SouthFlorida #LiquorStore
+
+SHORT VERSION
+SALE: Casamigos 2-Pack (2 x 375 mL), $39.99 🎁 Dante's Liquors, inside
+Sedano's Plaza, Hollywood. 21+ · Drink responsibly. #Casamigos
+
+ALT TEXT
+Stacked teal Casamigos Tequila two-pack gift boxes on the shelf, with a sale
+price card of $39.99.
+
+
+==========================================================================
+07  TEREMANA BLANCO 1 LITER | $29.99 | WEEKLY PICK
+    Folder: ads/07_teremana-blanco/
+==========================================================================
+
+CAPTION
+This week's pick: Teremana Blanco. 🌿
+
+Small batch tequila in the big 1 Liter bottle, $29.99. Margarita night just
+got an upgrade.
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #Teremana #TeremanaTequila #TequilaBlanco #Tequila #Margarita
+#WeeklyPick #HollywoodFL #BrowardCounty #SouthFlorida #LiquorStore
+
+SHORT VERSION
+Weekly pick: Teremana Blanco, 1 Liter for $29.99. Dante's Liquors, 2305 FL-7
+Hollywood. 21+ · Drink responsibly. #Teremana #Tequila
+
+ALT TEXT
+Display of Teremana Blanco tequila 1 Liter bottles with a $29.99 price card.
+
+
+==========================================================================
+08  ABSOLUT VODKA 1.75 L | $32.99 | BIG BOTTLE
+    Folder: ads/08_absolut-1-75/
+==========================================================================
+
+CAPTION
+The party-size handle. 🍸
+
+Absolut Vodka 1.75 L: $32.99. Product of Sweden, ready for every cocktail on
+the list, from Cosmos to vodka sodas.
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #Absolut #AbsolutVodka #Vodka #Handle #PartySupplies
+#HollywoodFL #BrowardCounty #SouthFlorida #LiquorStore
+
+SHORT VERSION
+Absolut Vodka 1.75 L handle: $32.99 🍸 Dante's Liquors, inside Sedano's
+Plaza, Hollywood. 21+ · Drink responsibly. #Absolut #Vodka
+
+ALT TEXT
+Absolut Vodka 1.75 liter bottles and cases on a floor display, with a $32.99
+price card.
+
+
+==========================================================================
+09  FRÏS VODKA 1.75 L | $10.99 | SALE
+    Folder: ads/09_fris-vodka-1-75/
+==========================================================================
+
+CAPTION
+Smooth as ice, priced to stock up. ❄️
+
+Frïs Vodka 1.75 L is on SALE for $10.99. Big bottle, small price, zero
+excuses for an empty freezer.
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #FrisVodka #Vodka #Handle #LiquorDeals #Sale #StockUp
+#HollywoodFL #BrowardCounty #SouthFlorida #LiquorStore
+
+SHORT VERSION
+SALE: Frïs Vodka 1.75 L, $10.99 ❄️ Dante's Liquors, 2305 FL-7 Hollywood.
+21+ · Drink responsibly. #Vodka #LiquorDeals
+
+ALT TEXT
+Rows of Frïs Vodka 1.75 liter bottles above their cases, with a sale price
+card of $10.99.
+
+
+==========================================================================
+10  BARTON VODKA 1.75 L | $10.49 | SALE
+    Folder: ads/10_barton-vodka-1-75/
+==========================================================================
+
+CAPTION
+The house-party handle. 🎉
+
+Barton Vodka 1.75 L: on SALE for $10.49. Stock the bar, fill the cooler,
+and keep the punch bowl honest.
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #BartonVodka #Vodka #Handle #LiquorDeals #Sale #PartyTime
+#HollywoodFL #BrowardCounty #SouthFlorida #LiquorStore
+
+SHORT VERSION
+SALE: Barton Vodka 1.75 L, just $10.49 🎉 Dante's Liquors, inside Sedano's
+Plaza, Hollywood. 21+ · Drink responsibly. #Vodka
+
+ALT TEXT
+Barton Vodka 1.75 liter bottles and cases on the shelf, with a sale price
+card of $10.49.
+
+
+==========================================================================
+11  HANDLE SALE: 1.75 L VODKA FROM $10.49
+    Folder: ads/11_handle-sale/
+==========================================================================
+
+CAPTION
+HANDLE SALE 🔥 Big bottles, small prices.
+
+1.75 L vodka from $10.49:
+• Barton Vodka 1.75 L: $10.49
+• Frïs Vodka 1.75 L: $10.99
+
+Stock the bar before the weekend.
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #HandleSale #Vodka #LiquorDeals #StockUp #WeekendVibes
+#HollywoodFL #BrowardCounty #SouthFlorida #954 #LiquorStore
+
+SHORT VERSION
+HANDLE SALE 🔥 1.75 L vodka from $10.49: Barton $10.49, Frïs $10.99.
+Dante's Liquors, 2305 FL-7 Hollywood. 21+ #LiquorDeals
+
+ALT TEXT
+Split image of Barton Vodka and Frïs Vodka 1.75 liter bottles, "1.75 L vodka
+from $10.49."
+
+
+==========================================================================
+12  VISIT DANTE'S (brand / store post, no price)
+    Folder: ads/12_visit-dantes/
+==========================================================================
+
+CAPTION
+Your neighborhood liquor store in Hollywood. 🔥
+
+Tequila, vodka, whiskey, scotch, wine, and cold beer, plus new arrivals and
+fresh deals every week. Come see what just landed.
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #HollywoodFL #HollywoodFlorida #SedanosPlaza #LiquorStore
+#ShopLocal #SupportLocal #BrowardCounty #SouthFlorida #954 #Tequila #ColdBeer
+
+SHORT VERSION
+Tequila, vodka, whiskey, wine & cold beer: Dante's Liquors, inside Sedano's
+Plaza, 2305 FL-7 Hollywood. New arrivals every week. 21+ #ShopLocal
+
+ALT TEXT
+Inside Dante's Liquors: shelves of tequila, gift sets, and liqueurs under
+hanging aisle signs.
+
+
+==========================================================================
+13  WEEKLY DEALS PRICE LIST (every price in one post)
+    Folder: ads/13_weekly-deals-list/
+    Files: feed_4x5.jpg, square_1x1.jpg, story_9x16.jpg,
+           reel_9x16.mp4 (rows animate in one by one; 9 seconds)
+==========================================================================
+
+CAPTION
+This week at Dante's 🔥 New arrivals + weekly deals:
+
+NEW  La Puerta Negra Reposado 1 L ... $14.99
+NEW  La Puerta Negra Blanco 1 L ... $13.99
+     Teremana Blanco 1 L ... $29.99
+SALE Casamigos 2-Pack (2 x 375 mL) ... $39.99
+DEAL Patrón Reposado 375 mL ... 2 for $41.99
+     Absolut Vodka 1.75 L ... $32.99
+SALE Frïs Vodka 1.75 L ... $10.99
+SALE Barton Vodka 1.75 L ... $10.49
+
+Save this post for your next run. 📌
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+While supplies last. 21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #WeeklyDeals #LiquorDeals #NewArrivals #Tequila #Vodka
+#Patron #Casamigos #Teremana #Absolut #LaPuertaNegra
+#HollywoodFL #BrowardCounty #SouthFlorida #LiquorStore
+
+SHORT VERSION
+This week at Dante's: La Puerta Negra from $13.99, Casamigos 2-Pack $39.99,
+Patrón Reposado 2/$41.99, 1.75 L vodka from $10.49. 2305 FL-7 Hollywood. 21+
+
+ALT TEXT
+Price list titled "This Week at Dante's" with eight products and prices,
+from La Puerta Negra Reposado at $14.99 to Barton Vodka at $10.49.
+
+STORY TIP
+Post story_9x16.jpg, then add a "Location" sticker (Dante's Liquors) and a
+poll sticker: "Tequila or vodka this weekend?"
+
+
+==========================================================================
+14  CAROUSEL: "THIS WEEK'S DEALS" (one swipeable Instagram/Facebook post)
+    Folder: ads/14_carousel/  (plus the feed_4x5.jpg files from other folders)
+==========================================================================
+
+SLIDE ORDER (all 4:5, so they line up in a carousel)
+  1. 14_carousel/00_cover_feed_4x5.jpg
+  2. 01_la-puerta-negra-reposado/feed_4x5.jpg
+  3. 02_la-puerta-negra-blanco/feed_4x5.jpg
+  4. 05_patron-reposado-2-for/feed_4x5.jpg
+  5. 06_casamigos-2-pack/feed_4x5.jpg
+  6. 07_teremana-blanco/feed_4x5.jpg
+  7. 08_absolut-1-75/feed_4x5.jpg
+  8. 09_fris-vodka-1-75/feed_4x5.jpg
+  9. 10_barton-vodka-1-75/feed_4x5.jpg
+ 10. 13_weekly-deals-list/feed_4x5.jpg
+ 11. 14_carousel/99_closer_feed_4x5.jpg
+
+CAPTION
+Swipe for this week's deals 👉🔥
+
+New tequila, big bottles, and a couple of steals:
+• La Puerta Negra Reposado 1 L: $14.99 (NEW)
+• La Puerta Negra Blanco 1 L: $13.99 (NEW)
+• Patrón Reposado 375 mL: 2 for $41.99
+• Casamigos 2-Pack: $39.99 (SALE)
+• Teremana Blanco 1 L: $29.99
+• Absolut 1.75 L: $32.99
+• Frïs Vodka 1.75 L: $10.99 (SALE)
+• Barton Vodka 1.75 L: $10.49 (SALE)
+
+Which one's coming home with you? Tell us below 👇
+
+📍 Dante's Liquors: 2305 FL-7, Hollywood (inside Sedano's Plaza)
+While supplies last. 21+ only. Please drink responsibly.
+
+HASHTAGS
+#DantesLiquors #WeeklyDeals #NewArrivals #LiquorDeals #Tequila #Vodka
+#HollywoodFL #HollywoodFlorida #BrowardCounty #SouthFlorida #954 #LiquorStore
+
+EXTRA FILES
+  99_closer_story_9x16.jpg: use as the last frame of a Story sequence
+  99_closer_square_1x1.jpg: general "come see us" post / profile highlight
+
+
+==========================================================================
+WINDOW DISPLAY MONITORS (in-store)
+==========================================================================
+
+Files (3840x2160 PNG, same format as the existing monitor files):
+  01_la-puerta-negra-reposado/window_display_3840x2160.png  $14.99
+  02_la-puerta-negra-blanco/window_display_3840x2160.png    $13.99
+  05_patron-reposado-2-for/window_display_3840x2160.png     2 for $41.99
+  06_casamigos-2-pack/window_display_3840x2160.png          $39.99
+  07_teremana-blanco/window_display_3840x2160.png           $29.99
+  08_absolut-1-75/window_display_3840x2160.png              $32.99
+  09_fris-vodka-1-75/window_display_3840x2160.png           $10.99
+  10_barton-vodka-1-75/window_display_3840x2160.png         $10.49
+
+These use the Forge's landscape setting, so the layout is rotated 90° the
+same way as the current window monitor files. The credit line in the corner
+is the Forge default ("A&M Partners 2025"). If that should read differently,
+change the Credit line field in the Forge's Window Display tab and re-export.
+
+
+==========================================================================
+SUGGESTED 2-WEEK POSTING PLAN
+==========================================================================
+
+WEEK 1
+  Mon  Feed: 14 Carousel "This Week's Deals"   | Story: 13 price list
+  Tue  Reel: 01 La Puerta Negra Reposado       | Story: 02 Blanco
+  Wed  Feed: 05 Patrón 2 for $41.99            | Story: 05 Patrón
+  Thu  Reel: 11 Handle Sale                    | Story: 09 Frïs + 10 Barton
+  Fri  Feed: 06 Casamigos 2-Pack               | Story: 13 price list again (weekend reminder)
+  Sat  Reel: 13 Weekly Deals list              | Story: 12 Visit Dante's + closer
+  Sun  Rest (or reshare customer tags)
+
+WEEK 2
+  Mon  Feed: 03 La Puerta Negra duo            | Story: 04 New on the shelf
+  Tue  Reel: 07 Teremana                       | Story: 07 Teremana
+  Wed  Feed: 08 Absolut 1.75 L                 | Story: 08 Absolut
+  Thu  Reel: 10 Barton                         | Story: 11 Handle Sale
+  Fri  Feed: 13 Weekly Deals list              | Story: 13 price list
+  Sat  Reel: 12 Visit Dante's                  | Story: 14 closer
+
+Best times for a local store: late afternoon (4–7 PM), and Thursday/Friday
+before the weekend. X/Facebook: post the wide_16x9.jpg version with the
+SHORT VERSION text.

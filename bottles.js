@@ -81,7 +81,7 @@ Deep Eddy|Original;Lemon;Ruby Red;Peach;Lime;Sweet Tea;Cranberry;Orange|Vodka|53
 Pinnacle|Original;Whipped|Vodka|537LH
 Skyy|Vodka|Vodka|537LH
 Barton|Vodka|Vodka|537LH
-Fris|Vodka|Vodka|7LH
+Frïs|Vodka|Vodka|7LH
 Wheatley|Vodka|Vodka|7
 Western Son|Original;Blueberry;Lemon;Prickly Pear|Vodka|7LH
 Burnett's|Vodka;Fruit Punch;Pink Lemonade|Vodka|537LH
