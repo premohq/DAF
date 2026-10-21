@@ -195,6 +195,25 @@ input[type=range]::-moz-range-thumb{
 .btn.small{display:inline-block;width:auto;padding:3px 10px}
 .btn.ghost[aria-pressed="true"]{background:linear-gradient(180deg,#CDCAC3 0%,#E3E3DB 10%,#E5E5DE 90%,#F2F2F1 100%);box-shadow:inset 0 1px 3px rgba(0,0,0,.35);font-weight:bold}
 
+/* add-on setup steps, label detection line */
+ol.steps{margin:8px 0 0;padding-left:18px;font:12px/1.5 var(--ui)}
+ol.steps li+li{margin-top:5px}
+ol.steps .btn.small{margin:0 4px 0 0;vertical-align:baseline}
+b.ok{color:#167D16}
+.det{margin-top:8px;padding:6px 8px;border:1px solid #E5D7A8;background:#FFFBEA;font:11px/1.5 var(--ui);color:#3B3320}
+.det.busy{border-color:var(--boxline);background:#F7F6F1;color:#555}
+.det button{appearance:none;padding:0;border:0;background:none;font:inherit;color:var(--link);text-decoration:underline;cursor:pointer}
+
+/* window font picker: each option is shown in its own typeface */
+.fontgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.fbtn{
+  appearance:none;min-width:0;padding:7px 4px 6px;border:1px solid var(--boxline);background:#fff;cursor:pointer;
+  font-size:17px;line-height:1.15;color:#141110;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.fbtn:hover{border-color:#E5A01A;box-shadow:inset 0 0 0 1px #FBC761}
+.fbtn.on{border-color:var(--ember);box-shadow:inset 0 0 0 1px var(--ember);background:#FFF6EC}
+.fbtn:focus-visible{outline:1px dotted #000;outline-offset:1px}
+
 /* deals list editor */
 .drow{padding:8px 0 2px;border-top:1px dotted var(--boxline)}
 .drow:first-child{margin-top:10px;border-top:0}
@@ -354,6 +373,8 @@ details.how .btn{margin-top:8px}
       </div>
       <div class="row" style="margin-top:12px"><div class="field"><label class="lbl" for="aname">Product name</label>
         <input type="text" id="aname" value="" placeholder="e.g. Casamigos Blanco Tequila 750 mL" maxlength="60"></div></div>
+      <div class="det" id="adet" hidden></div>
+      <label class="switch" style="margin-top:8px"><input type="checkbox" class="dauto" checked> Fill in the name from the photo</label>
       <p class="note">A clear photo of the real bottle gives the most accurate label. With only a name, the AI draws the bottle from memory and the label may be wrong.</p>
     </div>
 
@@ -383,16 +404,34 @@ details.how .btn{margin-top:8px}
         <button class="chip on" data-s="2K" type="button">2K</button>
         <button class="chip" data-s="4K" type="button">4K</button>
       </div>
-      <p class="note">2K is plenty for social posts. Pick 4K for the window monitors. Nano Banana Pro is the most detailed and the slowest.</p>
+      <p class="note" id="amodelnote">2K is plenty for social posts. Pick 4K for the window monitors. Nano Banana Pro is the most detailed and the slowest.</p>
     </div>
 
     <div class="card">
       <h3>4 · Engine</h3>
       <div class="chips" id="aengines">
-        <button class="chip on" data-e="puter" type="button">Puter · free sign-in</button>
+        <button class="chip on" data-e="gemini" type="button">Gemini · DAF Helper add-on</button>
+        <button class="chip" data-e="puter" type="button">Puter · free sign-in</button>
         <button class="chip" data-e="google" type="button">Google key</button>
       </div>
-      <div id="aPuterBox">
+      <div id="aGeminiBox">
+        <div id="aHelpOn" hidden>
+          <p class="note"><b class="ok">Add-on connected.</b> Generate sends your photo and the prompt to Gemini in a pinned tab and brings the picture back here. It runs on your own Gemini account, so it's free within Gemini's daily image limit.</p>
+          <label class="switch" style="margin-top:8px"><input type="checkbox" id="ashowgem"> Show Gemini while it works</label>
+          <button class="btn ghost" id="aopengem" type="button" style="margin-top:8px">Open the Gemini tab</button>
+        </div>
+        <div id="aHelpOff">
+          <p class="note">Gemini makes the picture in the background, right from this page. It needs the free <b>DAF Helper</b> add-on, a one-time setup of about 2 minutes on a computer with Chrome, Edge or Brave:</p>
+          <ol class="steps">
+            <li><button class="btn small" id="aaddon" type="button">Download the add-on</button> and unzip it.</li>
+            <li>Open <b>chrome://extensions</b> (Edge: <b>edge://extensions</b>) and turn on <b>Developer mode</b>.</li>
+            <li>Click <b>Load unpacked</b> and pick the <b>daf-helper</b> folder.</li>
+            <li>Sign in at <a href="https://gemini.google.com/app" target="_blank" rel="noopener">gemini.google.com</a>, then reload this page.</li>
+          </ol>
+          <p class="note">Phones can't run add-ons. On a phone, use the Gemini app steps under Generate.</p>
+        </div>
+      </div>
+      <div id="aPuterBox" hidden>
         <p class="note">No setup. You sign in to a free Puter account once, and every account gets a free monthly allowance. Puter's terms cover personal and demo use, so switch to a Google key for paid client ads.</p>
         <button class="btn ghost" id="aPuterIn" type="button" style="margin-top:10px">Sign in to Puter</button>
       </div>
@@ -423,16 +462,18 @@ details.how .btn{margin-top:8px}
         <button class="chip on" data-n="2" type="button">2 images</button>
         <button class="chip" data-n="4" type="button">4 images</button>
       </div>
+      <label class="switch" style="margin-top:10px"><input type="checkbox" id="aauto"> Start as soon as I add a bottle photo</label>
       <button class="btn" id="agen" type="button" style="margin-top:12px">Generate</button>
       <div id="astatus" role="status"></div>
       <details class="how">
-        <summary>No allowance left? Use the free Gemini app</summary>
+        <summary>No add-on? Use the Gemini app by hand</summary>
         <ol>
           <li>Tap the button below. It copies your prompt and opens Gemini.</li>
           <li>In Gemini, attach your bottle photo, paste the prompt and send.</li>
-          <li>Download the image, then bring it back here with <b>Add a finished image</b>.</li>
+          <li>Right-click the finished picture and choose <b>Copy image</b> (on a phone: save it). Back here, press <b>Ctrl+V</b> or <b>Paste image</b>, or use <b>Add a finished image</b>.</li>
         </ol>
         <button class="btn ghost" id="agemini" type="button">Copy prompt &amp; open Gemini</button>
+        <button class="btn ghost" id="apaste" type="button">Paste image</button>
         <input type="file" id="aimp" accept="image/*" hidden>
         <button class="btn ghost" id="aimport" type="button">Add a finished image</button>
         <label class="lbl" for="aprompt" style="margin-top:12px">Prompt</label>
@@ -489,6 +530,8 @@ details.how .btn{margin-top:8px}
           <button class="chip" data-v="whole" type="button">Whole product</button>
         </div></div></div>
       <label class="switch" style="margin-top:10px"><input type="checkbox" id="enh"> Enhance photo (sharpen + color)</label>
+      <div data-for="single"><div class="det" id="sdet" hidden></div>
+        <label class="switch" style="margin-top:8px"><input type="checkbox" class="dauto" checked> Fill in the name and size from the photo</label></div>
       <p class="note" id="photonote">Drag the preview to position your photo. Pinch or scroll to zoom. If no photo is loaded, the Inferno background is used.</p>
       <div class="btnrow" style="margin-top:4px">
         <button class="btn ghost" id="recenter" type="button">Re-center crop</button>
@@ -676,6 +719,8 @@ details.how .btn{margin-top:8px}
         <div class="field"><label class="lbl" for="mzoom">Zoom</label>
           <input type="range" id="mzoom" min="0.5" max="3" step="0.01" value="1"></div>
       </div>
+      <div class="det" id="mdet" hidden></div>
+      <label class="switch" style="margin-top:8px"><input type="checkbox" class="dauto" checked> Fill in the name and size from the photo</label>
       <p class="note" id="mphotonote">Product photos on a white background work best. Drag the preview to position; pinch or scroll to zoom.</p>
       <button class="btn ghost" id="mrecenter" type="button" style="margin-top:4px">Re-center photo</button>
     </div>
@@ -704,6 +749,9 @@ details.how .btn{margin-top:8px}
           <button class="chip" data-c="red" type="button">Red</button>
           <button class="chip" data-c="black" type="button">Black</button>
         </div></div></div>
+      <div class="row"><div class="field"><label class="lbl">Font</label>
+        <div class="fontgrid" id="mfonts"></div></div></div>
+      <label class="switch" style="margin-top:8px"><input type="checkbox" id="mfontPrice" checked> Price uses this font too</label>
       <div class="row"><div class="field"><label class="lbl" for="mcredit">Credit line</label>
         <input type="text" id="mcredit" value="A&amp;M Partners 2026" maxlength="40"></div></div>
     </div>
@@ -1449,7 +1497,8 @@ function setPhoto(s,img){
 function setSocialImage(img){setPhoto(st,img)}
 function loadFile(f,s){
   if(!f||!f.type.startsWith('image/'))return;
-  const img=new Image();img.onload=()=>setPhoto(s||st,img);img.src=URL.createObjectURL(f);
+  const img=new Image();img.onload=()=>{setPhoto(s||st,img);
+    if((s||st)===st&&st.layout==='single')dRun('social',dShot(img))};img.src=URL.createObjectURL(f);
 }
 $('#file').addEventListener('change',e=>{loadFile(e.target.files[0],st);e.target.value=''});
 $('#file2').addEventListener('change',e=>{loadFile(e.target.files[0],st.b);e.target.value=''});
@@ -1465,6 +1514,15 @@ document.addEventListener('drop',e=>{
   else if(st.layout==='split'&&fs.length>1){loadFile(fs[0],st);loadFile(fs[1],st.b)}
   else{const r=stage.getBoundingClientRect(),over=e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;
     loadFile(fs[0],over?photoAt(...stageXY(e)):st)}
+});
+
+document.addEventListener('paste',e=>{
+  if(e.target.closest&&e.target.closest('input,textarea,[contenteditable="true"]'))return;
+  const f=[...((e.clipboardData&&e.clipboardData.files)||[])].find(x=>x.type.startsWith('image/'));
+  if(!f)return;e.preventDefault();
+  if(activeTab==='ai')aAdd(f,'Pasted',null).then(()=>aMsg('Pasted image added. Send it to an ad below.'),err=>aMsg(err.message));
+  else if(activeTab==='monitor')mLoadFile(f);
+  else loadFile(f,st);
 });
 
 /* ---------- bindings ---------- */
@@ -1850,14 +1908,64 @@ const MCOL={
 const mSt={or:'port',style:'classic',img:null,iw:0,ih:0,zoom:1,ox:0,oy:0,cx:.5,cy:.5,cz:1,
   l1:'750 mL',l2:'Casamigos Blanco',nc:'orange',
   price:true,dol:'39',cts:'99',pc:'yellow',
-  credit:'A&M Partners 2026',dur:10,res:1080};
+  credit:'A&M Partners 2026',dur:10,res:1080,font:'baloo',fontPrice:true};
 const mstage=$('#mstage'), mctx=mstage.getContext('2d');
 const moff=document.createElement('canvas');
 
+/* ----- fonts: Baloo 2 is the house style; the others load the first time the Window tab opens ----- */
+const MFONTS=[
+  ['baloo','Baloo','Baloo 2',800],['anton','Anton','Anton',400],['bebas','Bebas Neue','Bebas Neue',400],
+  ['oswald','Oswald','Oswald',700],['archivo','Archivo','Archivo Black',400],['alfa','Alfa Slab','Alfa Slab One',400],
+  ['zilla','Zilla Slab','Zilla Slab',700],['ultra','Ultra','Ultra',400],['abril','Abril Fatface','Abril Fatface',400],
+  ['playfair','Playfair','Playfair Display',900],['rye','Rye','Rye',400],['lilita','Lilita One','Lilita One',400],
+  ['titan','Titan One','Titan One',400],['fredoka','Fredoka','Fredoka',700],['luckiest','Luckiest Guy','Luckiest Guy',400],
+  ['bangers','Bangers','Bangers',400],['bungee','Bungee','Bungee',400],['righteous','Righteous','Righteous',400],
+  ['lobster','Lobster','Lobster',400],['pacifico','Pacifico','Pacifico',400],['marker','Marker','Permanent Marker',400]
+].map(([id,name,fam,wt])=>({id,name,fam,wt}));
+const MFONT_CSS='https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alfa+Slab+One&family=Archivo+Black'+
+  '&family=Bangers&family=Bebas+Neue&family=Bungee&family=Fredoka:wght@700&family=Lilita+One&family=Lobster'+
+  '&family=Luckiest+Guy&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:wght@900&family=Righteous'+
+  '&family=Rye&family=Titan+One&family=Ultra&display=swap';
+function mFontOf(price){return MFONTS.find(f=>f.id===(price&&!mSt.fontPrice?'baloo':mSt.font))||MFONTS[0]}
+function mFontStr(px,price){const f=mFontOf(price);
+  return f.id==='baloo'?font(px,'baloo',800):f.wt+' '+px+'px "'+f.fam+'", "Baloo 2", Arial, sans-serif'}
+function mFaceOn(fam,wt){ /* a face of that family and weight has actually loaded (not just the fallback) */
+  if(!document.fonts)return false;
+  for(const x of document.fonts){
+    if(x.status!=='loaded'||x.family.replace(/["']/g,'')!==fam)continue;
+    const w=String(x.weight).replace('normal','400').replace('bold','700').split(/\s+/).map(Number);
+    if(wt>=w[0]-1&&wt<=(w[1]||w[0])+1)return true;
+  }
+  return false;
+}
+/* the scale that brings a font's letter size toward Baloo's, so switching fonts keeps the layout:
+   names by cap and x-height together (they're mixed case), prices by digit height. Only halfway
+   (square root), since narrow faces like Anton look small when matched by height alone. */
+const mFK={},mFC=document.createElement('canvas').getContext('2d');
+function mFontK(price){const f=mFontOf(price),key=f.id+(price?'$':'');
+  if(f.id==='baloo')return 1;
+  if(mFK[key])return mFK[key];
+  if(!mFaceOn(f.fam,f.wt)||!mFaceOn('Baloo 2',800))return 1;
+  const size=()=>price?cap(mFC,'0'):(cap(mFC,'H')+cap(mFC,'x'))/2;
+  mFC.font=font(100,'baloo',800);const b=size();mFC.font=mFontStr(100,price);const h=size();
+  return mFK[key]=h>0?Math.max(0.75,Math.min(1.2,Math.sqrt(b/h))):1;
+}
+let mFontsP=null;
+function mFontsLoad(){ /* the extra families' stylesheet, once; the browser fetches each face as it is used */
+  return mFontsP||(mFontsP=new Promise(res=>{const l=document.createElement('link');l.rel='stylesheet';l.href=MFONT_CSS;
+    l.onload=l.onerror=()=>res();document.head.appendChild(l)}));
+}
+async function mFontReady(){ /* resolves once the chosen faces can be drawn */
+  const fs=[mFontOf(false),mFontOf(true)].filter(f=>f.id!=='baloo');
+  if(!fs.length||!document.fonts)return;
+  await mFontsLoad();
+  await Promise.all(fs.map(f=>document.fonts.load(f.wt+' 100px "'+f.fam+'"').catch(()=>{})));
+}
+
 /* ----- text with white outline + soft shadow (window display style) ----- */
-function mOut(c,t,x,y,px,fill,align){
+function mOut(c,t,x,y,px,fill,align,price){
   c.save();
-  c.font=font(px,'baloo',800);
+  c.font=mFontStr(px,price);
   c.textAlign=align||'left';c.textBaseline='alphabetic';
   c.lineJoin='round';c.miterLimit=2;
   c.shadowColor='rgba(40,28,18,0.40)';c.shadowBlur=px*0.09;c.shadowOffsetY=px*0.05;
@@ -1868,31 +1976,31 @@ function mOut(c,t,x,y,px,fill,align){
   c.restore();
 }
 function mFit(c,t,px,maxW,minPx){let s=px;
-  for(let i=0;i<30;i++){c.font=font(s,'baloo',800);
+  for(let i=0;i<30;i++){c.font=mFontStr(s);
     if(c.measureText(t).width<=maxW||s<=minPx)break;s*=0.95}
   return s}
 
 /* ----- price ----- */
 function mPriceMetrics(c,P){
-  c.font=font(P,'baloo',800);
+  c.font=mFontStr(P,true);
   const dW=c.measureText(mSt.dol).width,dCap=cap(c,'0');
-  const sub=P*0.52;c.font=font(sub,'baloo',800);
+  const sub=P*0.52;c.font=mFontStr(sub,true);
   const sW=c.measureText('$').width,ctW=c.measureText(mSt.cts).width,sCap=cap(c,'0');
   const gap=P*0.05;
   return{P,sub,dW,dCap,sW,ctW,sCap,gap,total:sW+dW+ctW+gap*2};
 }
 function mDrawPrice(c,W,S,yb){
   const fill=MCOL.prices[mSt.pc]||MCOL.prices.yellow;
-  const maxW=(W-380*S)*0.94;
-  let P=470*S;
+  const maxW=(W-380*S)*0.94,k=mFontK(true);
+  let P=470*S*k;
   for(let i=0;i<30;i++){const m=mPriceMetrics(c,P);
-    if(m.total<=maxW||P<=160*S)break;P*=0.95}
+    if(m.total<=maxW||P<=160*S*k)break;P*=0.95}
   const m=mPriceMetrics(c,P);
   let x=W/2-m.total/2;
   const subBase=yb-m.dCap+m.sCap;
-  mOut(c,'$',x,subBase,m.sub,fill);x+=m.sW+m.gap;
-  mOut(c,mSt.dol,x,yb,m.P,fill);x+=m.dW+m.gap;
-  mOut(c,mSt.cts,x,subBase,m.sub,fill);
+  mOut(c,'$',x,subBase,m.sub,fill,'left',true);x+=m.sW+m.gap;
+  mOut(c,mSt.dol,x,yb,m.P,fill,'left',true);x+=m.dW+m.gap;
+  mOut(c,mSt.cts,x,subBase,m.sub,fill,'left',true);
 }
 
 /* ----- photo ----- */
@@ -1991,12 +2099,12 @@ function mRenderP(c,W,H,o){
   /* product text */
   const maxW=(W-380*S)*0.94;
   const nFill=MCOL.names[mSt.nc]||MCOL.name;
-  const l1=(mSt.l1||'').trim(),l2=(mSt.l2||'').trim();
+  const l1=(mSt.l1||'').trim(),l2=(mSt.l2||'').trim(),k=mFontK();
   let y=2700*S;
-  if(l1){const p1=mFit(c,l1,150*S,maxW,80*S);
-    y+=p1*0.78;mOut(c,l1,W/2,y,p1,nFill,'center');y+=p1*0.30}
-  if(l2){const p2=mFit(c,l2,190*S,maxW,90*S);
-    y+=p2*0.82;mOut(c,l2,W/2,y,p2,nFill,'center')}
+  if(l1){const p1=mFit(c,l1,150*S*k,maxW,80*S*k);
+    y+=p1/k*0.78;mOut(c,l1,W/2,y,p1,nFill,'center');y+=p1/k*0.30}
+  if(l2){const p2=mFit(c,l2,190*S*k,maxW,90*S*k);
+    y+=p2/k*0.82;mOut(c,l2,W/2,y,p2,nFill,'center')}
   /* price (pulses twice per loop when animated) */
   if(mSt.price){const pz=1+0.035*(1-Math.cos(4*Math.PI*ph))/2;
     c.save();c.translate(W/2,3400*S);c.scale(pz,pz);c.translate(-W/2,-3400*S);
@@ -2082,7 +2190,7 @@ function setWindowImage(img){
 }
 function mLoadFile(f){
   if(!f||!f.type.startsWith('image/'))return;
-  const img=new Image();img.onload=()=>setWindowImage(img);img.src=URL.createObjectURL(f);
+  const img=new Image();img.onload=()=>{setWindowImage(img);dRun('monitor',dShot(img))};img.src=URL.createObjectURL(f);
 }
 $('#mfile').addEventListener('change',e=>mLoadFile(e.target.files[0]));
 $('#mpick').addEventListener('click',()=>$('#mfile').click());
@@ -2109,6 +2217,20 @@ $('#mncols').addEventListener('click',e=>{
   [...$('#mncols').children].forEach(x=>x.classList.remove('on'));b.classList.add('on');
   mSt.nc=b.dataset.c;mDraw();
 });
+/* font picker */
+function mFontUI(){
+  $('#mfonts').innerHTML=MFONTS.map(f=>'<button class="fbtn'+(f.id===mSt.font?' on':'')+'" data-f="'+f.id+
+    '" type="button" style="font-family:\''+f.fam+'\',sans-serif;font-weight:'+f.wt+'">'+f.name+'</button>').join('');
+  $('#mfontPrice').checked=mSt.fontPrice;
+}
+function setMFont(id){
+  mSt.font=MFONTS.some(f=>f.id===id)?id:'baloo';LS.set('dantes.mfont',mSt.font==='baloo'?'':mSt.font);
+  [...$('#mfonts').children].forEach(b=>b.classList.toggle('on',b.dataset.f===mSt.font));
+  mDraw();mFontReady().then(()=>mDraw());
+}
+$('#mfonts').addEventListener('click',e=>{const b=e.target.closest('.fbtn');if(b)setMFont(b.dataset.f)});
+$('#mfontPrice').addEventListener('change',e=>{mSt.fontPrice=e.target.checked;LS.set('dantes.mfontPrice',mSt.fontPrice?'':'0');
+  mDraw();mFontReady().then(()=>mDraw())});
 $('#mors').addEventListener('click',e=>{
   const b=e.target.closest('.chip');if(!b)return;
   [...$('#mors').children].forEach(x=>x.classList.remove('on'));b.classList.add('on');
@@ -2161,6 +2283,7 @@ $('#mvid').addEventListener('click',async()=>{
   const name='dantes_monitor_'+mSlug()+'_'+out.width+'x'+out.height+'_loop';
   setBusy(true);mMsg('Rendering loop…');
   try{
+    await mFontReady();
     const r=await encodeMP4(out,30,Math.round(dur*30),frame,
       p=>mMsg('Rendering loop… '+Math.round(p*100)+'%')).catch(()=>null);
     if(r){dl(r.blob,name+'.mp4');
@@ -2176,8 +2299,9 @@ $('#mvid').addEventListener('click',async()=>{
 
 /* ----- monitor export ----- */
 function mSlug(){return ((mSt.l2||'dantes').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''))||'dantes'}
-$('#mpng').addEventListener('click',()=>{
+$('#mpng').addEventListener('click',async()=>{
   mMsg('Rendering full-resolution image\u2026');
+  await mFontReady();
   const p=document.createElement('canvas');p.width=MBASE_W;p.height=MBASE_H;
   mRenderP(p.getContext('2d'),MBASE_W,MBASE_H);
   let ex=p;
@@ -2191,6 +2315,44 @@ $('#mpng').addEventListener('click',()=>{
     mMsg('PNG exported at '+ex.width+'\u00D7'+ex.height+'.');
   }else{mMsg('Export failed. Please try again.')}},'image/png');
 });
+
+/* ================= DAF Helper add-on =================
+   The add-on (addon/ in this repo) runs jobs in the user's own Gemini tab in the
+   background: {op:'image'} returns the picture, {op:'ask'} returns Gemini's text.
+   It talks to this page through window messages, so the page works without it. */
+const HELP={ver:'',jobs:new Map(),n:0};
+window.addEventListener('message',e=>{
+  const m=e.data;if(e.source!==window||!m||m.dafHelper!=='from-ext')return;
+  if(m.kind==='hello'){if(!HELP.ver){HELP.ver=m.version||'1';helperReady()}return}
+  const j=HELP.jobs.get(m.id);if(!j)return;
+  if(m.kind==='progress'){j.prog(m);return}
+  HELP.jobs.delete(m.id);clearTimeout(j.t);
+  if(m.kind==='done')j.res(m);else j.rej(Object.assign(new Error(m.message||'The add-on failed.'),{code:m.code}));
+});
+function helperJob(op,prompt,images,opts,prog){
+  if(!HELP.ver)return Promise.reject(new Error('The DAF Helper add-on is not installed in this browser.'));
+  const id='j'+(++HELP.n)+'_'+Date.now();
+  return new Promise((res,rej)=>{
+    const t=setTimeout(()=>{if(HELP.jobs.delete(id))rej(new Error('Gemini did not answer in time. Press “Open the Gemini tab” to look.'))},420000);
+    HELP.jobs.set(id,{res,rej,t,prog:prog||(()=>{})});
+    window.postMessage({dafHelper:'to-ext',kind:'job',id,op,prompt,images,opts:opts||{}},'*');
+  });
+}
+const helperCancel=()=>HELP.jobs.forEach((j,id)=>window.postMessage({dafHelper:'to-ext',kind:'cancel',id},'*'));
+const helperShow=()=>window.postMessage({dafHelper:'to-ext',kind:'show'},'*');
+function dataBlob(u){const i=u.indexOf(',');return b64Blob(u.slice(i+1),(/data:([^;,]+)/.exec(u.slice(0,i))||[])[1]||'image/png')}
+/* the add-on as a ZIP, built from the files next to this page */
+const ADDON_FILES=['manifest.json','background.js','bridge.js','gemini.js','README.txt','icons/16.png','icons/32.png','icons/48.png','icons/128.png'];
+async function addonZip(){
+  try{
+    const files=[];
+    for(const f of ADDON_FILES){const r=await fetch('addon/'+f,{cache:'no-cache'});if(!r.ok)throw new Error(f);
+      files.push({name:'daf-helper/'+f,data:new Uint8Array(await r.arrayBuffer())})}
+    dl(zipBlob(files),'daf-helper-addon.zip');
+    aMsg('Downloaded. Unzip it, then follow steps 2–4.');
+  }catch(e){window.open('https://github.com/premohq/DAF/tree/main/addon','_blank','noopener');
+    aMsg('Opened the add-on folder on GitHub: use Code → Download ZIP, then load the addon folder.')}
+}
 
 /* ================= AI Studio ================= */
 /* Cinematic product shots from Google's Nano Banana models (plus GPT Image and
@@ -2239,7 +2401,7 @@ const ARATIO={p45:[4,5],reel:[9,16],wide:[16,9],sq:[1,1]};
 const PUTER_SRC='https://js.puter.com/v2/';
 const aTest=/[?&]aitest=1/.test(location.search); /* Puter test mode: sample images, no credits */
 const aSt={ref:null,refURL:'',scene:'inferno',fmt:'p45',model:'nb2',size:'2K',
-  engine:'puter',kind:'vertex',n:2,busy:false,res:[],sel:-1};
+  engine:'gemini',kind:'vertex',n:2,busy:false,res:[],sel:-1,det:null};
 
 function aMsg(s){setStatus($('#astatus'),s)}
 function aChips(sel,key,fn){$(sel).addEventListener('click',e=>{
@@ -2258,13 +2420,21 @@ function aPrompt(){
     'No added text, captions, prices, extra logos, watermarks, hands or people.'].filter(Boolean).join('\n\n');
 }
 function aSync(){
-  const g=aSt.engine==='google';
-  $('#aPuterBox').hidden=g;$('#aGoogleBox').hidden=!g;
+  const e=aSt.engine,g=e==='google',gem=e==='gemini';
+  $('#aGeminiBox').hidden=!gem;$('#aPuterBox').hidden=e!=='puter';$('#aGoogleBox').hidden=!g;
   if(g&&!AMODELS[aSt.model].google)aSt.model='nb2';
-  [...$('#amodels').children].forEach(b=>{const ok=!g||!!AMODELS[b.dataset.m].google;
-    b.disabled=!ok;b.style.opacity=ok?'':'0.4';b.classList.toggle('on',b.dataset.m===aSt.model)});
-  $('#agen').textContent=(aSt.n>1?'Generate '+aSt.n+' images':'Generate image')+(g?' with Google':' with Puter');
+  [...$('#amodels').children].forEach(b=>{const ok=!gem&&(!g||!!AMODELS[b.dataset.m].google);
+    b.disabled=!ok;b.style.opacity=ok?'':'0.4';b.classList.toggle('on',!gem&&b.dataset.m===aSt.model)});
+  [...$('#asizes').children].forEach(b=>{b.disabled=gem;b.style.opacity=gem?'0.4':''});
+  $('#amodelnote').textContent=gem
+    ?'Gemini picks its own image model (Nano Banana) and size. For Nano Banana Pro, pick the Thinking or Pro model in the Gemini tab.'
+    :'2K is plenty for social posts. Pick 4K for the window monitors. Nano Banana Pro is the most detailed and the slowest.';
+  if(!aSt.busy)$('#agen').textContent=(aSt.n>1?'Generate '+aSt.n+' images':'Generate image')+(gem?' with Gemini':g?' with Google':' with Puter');
   $('#aprompt').value=aPrompt();
+}
+function helperReady(){
+  $('#aHelpOn').hidden=false;$('#aHelpOff').hidden=true;
+  document.querySelectorAll('.det[data-tip]').forEach(el=>{el.hidden=true;el.removeAttribute('data-tip')});
 }
 
 /* ----- product reference ----- */
@@ -2277,8 +2447,10 @@ function aPrepRef(img){ /* flattened on white, capped at 1280px, small enough to
   return c.toDataURL('image/jpeg',0.9);
 }
 function aSetRef(img){
-  aSt.ref=img;aSt.refURL=aPrepRef(img);
+  aSt.ref=img;aSt.refURL=aPrepRef(img);aSt.det=null;
   $('#athumbImg').src=aSt.refURL;$('#athumb').hidden=false;$('#apick').textContent='Replace bottle photo';aSync();
+  const d=dRun('ai',aSt.refURL);
+  if($('#aauto').checked)d.then(()=>{if(aSt.ref===img&&!aSt.busy)aGenerate()});
 }
 function aLoadFile(f){
   if(!f||!f.type.startsWith('image/'))return;
@@ -2366,6 +2538,16 @@ async function aPuter(model,prompt){
     throw new Error('The image opened in a new tab. Save it, then bring it back with “Add a finished image”.')}
 }
 
+/* ----- Gemini through the DAF Helper add-on ----- */
+async function aGemini(prompt,i){
+  const imgs=aSt.ref?[{name:'bottle.jpg',type:'image/jpeg',data:aSt.refURL}]:[];
+  const r=await helperJob('image',prompt+'\n\nReply with the finished image.',imgs,{visible:$('#ashowgem').checked},
+    p=>aMsg((aSt.n>1?'Image '+(i+1)+' of '+aSt.n+': ':'')+(p.text||'Gemini is working…')));
+  const im=r.images&&r.images.find(x=>x.data);
+  if(!im)throw new Error(r.text?'Gemini answered without a picture: “'+r.text.slice(0,220)+'”':'Gemini sent no picture. Try again.');
+  return dataBlob(im.data);
+}
+
 /* ----- results ----- */
 function nearestFmt(w,h){let best='p45',bd=9;
   for(const k in ARATIO){const d=Math.abs(Math.log((w/h)/(ARATIO[k][0]/ARATIO[k][1])));if(d<bd){bd=d;best=k}}
@@ -2376,11 +2558,11 @@ function whiteBg(img){ /* imported packshot on white? then it suits the classic 
     for(let i=0;i<24;i++)for(const [px,py] of [[i,0],[i,23],[0,i],[23,i]]){const o=(py*24+px)*4;s+=d[o]+d[o+1]+d[o+2];n+=3}
     return s/n>232}catch(e){return false}
 }
-async function aAdd(blob,label,clean){
+async function aAdd(blob,label,clean,det){
   const url=URL.createObjectURL(blob),img=new Image();
   await new Promise((res,rej)=>{img.onload=res;img.onerror=()=>rej(new Error('That image could not be opened.'));img.src=url});
   aSt.res.push({blob,url,img,label,fmt:nearestFmt(img.naturalWidth,img.naturalHeight),
-    clean:clean==null?whiteBg(img):clean});
+    clean:clean==null?whiteBg(img):clean,det:det||null});
   aSt.sel=aSt.res.length-1;aRender();
 }
 function aRender(){
@@ -2393,24 +2575,27 @@ function aRender(){
   $('#aactions').hidden=!r;
 }
 async function aGenerate(){
-  if(aSt.busy)return;
-  const g=aSt.engine==='google',m=AMODELS[aSt.model],key=$('#akey').value.trim();
+  if(aSt.busy){if(aSt.engine==='gemini'){aSt.stop=true;helperCancel()}return}
+  const e=aSt.engine,g=e==='google',gem=e==='gemini',m=AMODELS[aSt.model],key=$('#akey').value.trim();
   if(!aSt.ref&&!$('#aname').value.trim()){aMsg('Upload the bottle photo or type the product name first.');return}
   if(g&&!key){aMsg('Paste your Google key first (see “Get the free Google key”).');return}
+  if(gem&&!HELP.ver){aMsg('Add the DAF Helper add-on first (step 4), then reload this page. No computer handy? Use the Gemini app by hand below.');return}
   if(g)LS.set('dantes.gkey',$('#aremember').checked?key:'');
-  const prompt=aPrompt(),sc=SCENES.find(s=>s.id===aSt.scene);
-  aSt.busy=true;$('#agen').disabled=true;$('#astatus').classList.add('busy');
+  const prompt=aPrompt(),sc=SCENES.find(s=>s.id===aSt.scene),
+    det=aSt.det&&$('#aname').value===DET.ai.auto['#aname']?aSt.det:null;
+  aSt.busy=true;aSt.stop=false;$('#astatus').classList.add('busy');
+  if(gem)$('#agen').textContent='Stop';else $('#agen').disabled=true;
   let made=0;
   try{
-    for(let i=0;i<aSt.n;i++){
+    for(let i=0;i<aSt.n&&!aSt.stop;i++){
       aMsg('Making image '+(i+1)+' of '+aSt.n+'… this usually takes 10–40 seconds.');
-      const blob=g?await aGoogle(key,m.google,prompt):await aPuter(m.puter,prompt);
-      await aAdd(blob,sc.name,!!sc.clean);made++;
+      const blob=g?await aGoogle(key,m.google,prompt):gem?await aGemini(prompt,i):await aPuter(m.puter,prompt);
+      await aAdd(blob,sc.name,!!sc.clean,det);made++;
     }
-    aMsg(made>1?'Done. Tap a thumbnail to compare, then send your favorite to an ad.'
+    aMsg(aSt.stop?'Stopped.'+(made?' '+made+' made.':''):made>1?'Done. Tap a thumbnail to compare, then send your favorite to an ad.'
       :'Done. Send it to an ad, or generate again for another take.');
-  }catch(err){aMsg((made?made+' made, then: ':'')+err.message)}
-  finally{aSt.busy=false;$('#agen').disabled=false;$('#astatus').classList.remove('busy')}
+  }catch(err){aMsg(aSt.stop?'Stopped.':(made?made+' made, then: ':'')+err.message)}
+  finally{aSt.busy=false;$('#agen').disabled=false;$('#astatus').classList.remove('busy');aSync()}
 }
 
 /* ----- AI Studio bindings ----- */
@@ -2419,13 +2604,13 @@ aChips('#afmts','f',v=>{aSt.fmt=v});
 aChips('#amodels','m',v=>{aSt.model=v});
 aChips('#asizes','s',v=>{aSt.size=v});
 aChips('#acount','n',v=>{aSt.n=+v});
-aChips('#aengines','e',v=>{aSt.engine=v;LS.set('dantes.aengine',v);
+aChips('#aengines','e',v=>{aSt.engine=v;LS.set('dantes.engine',v);
   if(v==='puter')aPuterLoad().then(aPuterStatus).catch(()=>{})});
 aChips('#akinds','k',v=>{aSt.kind=v;LS.set('dantes.gkind',v)});
 ['#aname','#aextra'].forEach(id=>$(id).addEventListener('input',aSync));
 $('#apick').addEventListener('click',()=>$('#afile').click());
 $('#afile').addEventListener('change',e=>{aLoadFile(e.target.files[0]);e.target.value=''});
-$('#aclear').addEventListener('click',()=>{aSt.ref=null;aSt.refURL='';$('#athumb').hidden=true;
+$('#aclear').addEventListener('click',()=>{aSt.ref=null;aSt.refURL='';aSt.det=null;DET.ai.seq++;$('#adet').hidden=true;$('#athumb').hidden=true;
   $('#apick').textContent='Upload bottle photo';aSync()});
 $('#aremember').addEventListener('change',e=>{if(!e.target.checked)LS.set('dantes.gkey','')});
 $('#aPuterIn').addEventListener('click',async()=>{
@@ -2435,9 +2620,21 @@ $('#aPuterIn').addEventListener('click',async()=>{
 $('#agen').addEventListener('click',aGenerate);
 $('#agal').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;aSt.sel=+b.dataset.i;aRender()});
 $('#aToSocial').addEventListener('click',()=>{const r=aSt.res[aSt.sel];if(!r)return;
-  if(!photoLayout())setLayout('single');setFmt(r.fmt);setSocialImage(r.img);showTab('social');window.scrollTo(0,0)});
+  if(!photoLayout())setLayout('single');setFmt(r.fmt);setSocialImage(r.img);showTab('social');window.scrollTo(0,0);
+  if(st.layout==='single')dFrom('social',r)});
 $('#aToWindow').addEventListener('click',()=>{const r=aSt.res[aSt.sel];if(!r)return;
-  setWindowImage(r.img);setMStyle(r.clean?'classic':'cine');showTab('monitor');window.scrollTo(0,0)});
+  setWindowImage(r.img);setMStyle(r.clean?'classic':'cine');showTab('monitor');window.scrollTo(0,0);dFrom('monitor',r)});
+$('#aaddon').addEventListener('click',addonZip);
+$('#aopengem').addEventListener('click',helperShow);
+$('#ashowgem').addEventListener('change',e=>LS.set('dantes.showgem',e.target.checked?'1':''));
+$('#aauto').addEventListener('change',e=>LS.set('dantes.aauto',e.target.checked?'1':''));
+$('#apaste').addEventListener('click',async()=>{
+  try{const items=await navigator.clipboard.read();
+    for(const it of items){const t=it.types.find(x=>x.startsWith('image/'));
+      if(t){await aAdd(await it.getType(t),'Pasted',null);aMsg('Pasted image added. Send it to an ad below.');return}}
+    aMsg('No picture on the clipboard. In Gemini, right-click the picture and choose Copy image first.');
+  }catch(e){aMsg('The browser blocked reading the clipboard. Press Ctrl+V on this page instead.')}
+});
 $('#asave').addEventListener('click',()=>{const r=aSt.res[aSt.sel];if(!r)return;
   const base=($('#aname').value||r.label).toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||'ai';
   dl(r.blob,'dantes_ai_'+base+'_'+(aSt.sel+1)+(r.blob.type==='image/jpeg'?'.jpg':'.png'))});
@@ -2455,16 +2652,139 @@ $('#aimp').addEventListener('change',async e=>{const f=e.target.files[0];e.targe
 function aInit(){
   $('#ascenes').innerHTML=SCENES.map(s=>'<button class="scene'+(s.id===aSt.scene?' on':'')+'" data-s="'+s.id+
     '" type="button"><b>'+s.name+'</b><span>'+s.sub+'</span></button>').join('');
-  const key=LS.get('dantes.gkey'),eng=LS.get('dantes.aengine'),kind=LS.get('dantes.gkind');
+  const key=LS.get('dantes.gkey'),eng=LS.get('dantes.engine'),kind=LS.get('dantes.gkind');
   if(key)$('#akey').value=key;
-  if(eng==='google'||eng==='puter'){aSt.engine=eng;
-    [...$('#aengines').children].forEach(b=>b.classList.toggle('on',b.dataset.e===eng))}
+  if(eng==='google'||eng==='puter'||eng==='gemini')aSt.engine=eng;
+  [...$('#aengines').children].forEach(b=>b.classList.toggle('on',b.dataset.e===aSt.engine));
+  $('#aauto').checked=LS.get('dantes.aauto')==='1';$('#ashowgem').checked=LS.get('dantes.showgem')==='1';
   if(kind==='studio'||kind==='vertex'){aSt.kind=kind;
     [...$('#akinds').children].forEach(b=>b.classList.toggle('on',b.dataset.k===kind))}
   aSync();
+  window.postMessage({dafHelper:'to-ext',kind:'ping'},'*');
   /* preload Puter so its sign-in popup opens straight from the tap */
   if(aSt.engine==='puter')setTimeout(()=>aPuterLoad().then(aPuterStatus).catch(()=>{}),1200);
 }
+
+/* ================= Bottle detection =================
+   When a product photo comes in (AI Studio, Social, Window), Gemini reads the label and the
+   name, size and any visible price tag fill in. Through a Google key (fast, free tier), the
+   DAF Helper add-on, or Puter if already signed in. Fields the user typed are never overwritten
+   unasked: only empty fields, the page's sample text or our own earlier fill get replaced. */
+const DPROMPT='Identify the main product (bottle, can or box) in this photo for a liquor store ad. Read the label carefully and only report what you can see. '+
+  'Reply with JSON only, no markdown, with exactly these keys: {"found":true,"brand":"","product":"","category":"","size":"","price":"","confidence":0}. '+
+  'brand: the brand as printed, e.g. "Casamigos". product: the expression or variety without the brand, e.g. "Blanco", "Reposado", "Single Barrel", "12 Year"; empty for the flagship bottle. '+
+  'category: the drink in plain English, e.g. "Tequila", "Bourbon", "Vodka", "Cognac", "Rum", "Red Wine", "Champagne", "Beer". '+
+  'size: the volume if printed or obvious, e.g. "750 mL", "1 L", "1.75 L", "375 mL", else "". '+
+  'price: only if a price tag or sticker for this product is clearly visible, e.g. "39.99", else "". confidence: 0 to 1. If there is no product, set found to false.';
+const DET={ai:{seq:0,auto:{}},social:{seq:0,auto:{}},monitor:{seq:0,auto:{}}},DETEL={ai:'#adet',social:'#sdet',monitor:'#mdet'};
+const dOn=()=>LS.get('dantes.autodet')!=='0';
+function dEngines(){ /* fastest first; the next one is tried if one fails */
+  const e=[];
+  if($('#akey').value.trim())e.push('google');
+  if(HELP.ver)e.push('gemini');
+  try{if(window.puter&&puter.auth&&puter.auth.isSignedIn())e.push('puter')}catch(err){}
+  return e;
+}
+const DMODELS=['gemini-flash-latest','gemini-3-flash','gemini-3-flash-preview','gemini-2.5-flash'];
+async function gText(key,img,prompt){ /* a quick text answer from Gemini Flash (free tier on AI Studio keys) */
+  let why='';
+  for(const m of DMODELS){
+    const url=aSt.kind==='studio'?'https://generativelanguage.googleapis.com/v1beta/models/'+m+':generateContent'
+      :'https://aiplatform.googleapis.com/v1/publishers/google/models/'+m+':generateContent';
+    let res;
+    try{res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},
+      body:JSON.stringify({contents:[{role:'user',parts:[{inlineData:{mimeType:'image/jpeg',data:img.split(',')[1]}},{text:prompt}]}],
+        generationConfig:{temperature:0.1,responseMimeType:'application/json'}})})}
+    catch(e){throw new Error('could not reach Google')}
+    const j=await res.json().catch(()=>null),msg=(j&&j.error&&j.error.message)||('HTTP '+res.status);
+    if(res.status===404||res.status===400&&/not (found|supported)|unknown model|is not available/i.test(msg)){why=msg;continue}
+    if(!res.ok)throw new Error(gErr(res.status,msg));
+    return ((j&&j.candidates)||[]).flatMap(c=>(c.content&&c.content.parts)||[]).filter(p=>p.text&&!p.thought).map(p=>p.text).join('');
+  }
+  throw new Error('no Gemini text model answered ('+why+')');
+}
+async function dAsk(eng,img){
+  if(eng==='google')return gText($('#akey').value.trim(),img,DPROMPT);
+  if(eng==='gemini')return (await helperJob('ask',DPROMPT,[{name:'photo.jpg',type:'image/jpeg',data:img}],{})).text;
+  const P=await aPuterLoad();return chatText(await P.ai.chat(DPROMPT,img));
+}
+function dParse(t){
+  const s=String(t||''),a=s.indexOf('{'),b=s.lastIndexOf('}');
+  if(a<0||b<a)throw new Error('the answer had no product details');
+  const o=JSON.parse(s.slice(a,b+1)),c=v=>String(v==null?'':v).replace(/\s+/g,' ').trim();
+  let brand=c(o.brand),product=c(o.product),cat=c(o.category),size=c(o.size);
+  if(brand&&product.toLowerCase().startsWith(brand.toLowerCase()))product=product.slice(brand.length).trim();
+  size=size.replace(/(\d)\s*(?:ml|mls|milliliters?|millilitres?)\b\.?/i,'$1 mL').replace(/(\d)\s*(?:l|lt|ltr|liters?|litres?)\b\.?/i,'$1 L');
+  if(!/\d/.test(size))size='';
+  const pm=/(\d{1,4})(?:[.,](\d{1,2}))?/.exec(c(o.price));
+  return {found:o.found!==false&&!!(brand||product),brand,product,cat,size,
+    dol:pm?pm[1]:'',cts:pm?((pm[2]||'00')+'0').slice(0,2):'',name:[brand,product].filter(Boolean).join(' ')};
+}
+function dShot(img){ /* a small JPEG of the photo, enough to read a label */
+  const W=img.naturalWidth||img.width,H=img.naturalHeight||img.height,k=Math.min(1,1024/Math.max(W,H));
+  const c=document.createElement('canvas');c.width=Math.max(1,Math.round(W*k));c.height=Math.max(1,Math.round(H*k));
+  const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);
+  return c.toDataURL('image/jpeg',0.88);
+}
+function dPairs(tab,d){
+  if(tab==='ai')return [['#aname',[d.name,d.cat&&!d.name.toLowerCase().includes(d.cat.toLowerCase())?d.cat:'',d.size].filter(Boolean).join(' ').slice(0,60)]];
+  if(tab==='monitor')return [['#ml2',d.name.slice(0,34)],['#ml1',d.size],['#mdol',d.dol],['#mcts',d.cts]];
+  return [['#n1',(d.brand||d.name).toUpperCase()],['#n2',(d.brand?d.product||d.cat:d.cat).toUpperCase()],
+    ['#sub',[d.brand&&d.product?d.cat:'',d.size].filter(Boolean).join(' · ')],['#dol',d.dol],['#cts',d.cts]];
+}
+function dFill(tab,d,force){ /* returns how many fields kept the user's own text */
+  const D=DET[tab],undo=[];let kept=0;
+  for(const [id,v] of dPairs(tab,d)){
+    if(!v)continue;const el=$(id);
+    if(el.value===v){D.auto[id]=v;continue}
+    if(!force&&el.value.trim()&&el.value!==el.defaultValue&&el.value!==D.auto[id]){kept++;continue}
+    undo.push([id,el.value]);el.value=v;D.auto[id]=v;el.dispatchEvent(new Event('input',{bubbles:true}));
+  }
+  D.undo=undo;return kept;
+}
+const dEsc=v=>String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function dNote(tab,html,busy,tip){
+  const el=$(DETEL[tab]);el.innerHTML=html;el.hidden=false;el.classList.toggle('busy',!!busy);
+  if(tip)el.dataset.tip='1';else el.removeAttribute('data-tip');
+}
+function dShow(tab,d,kept){
+  const D=DET[tab],bits=[d.cat,d.size,d.dol?'$'+d.dol+'.'+d.cts+' tag':''].filter(Boolean);
+  dNote(tab,'Detected: <b>'+dEsc(d.name||d.cat)+'</b>'+(bits.length?' · '+dEsc(bits.join(' · ')):'')+'. '+
+    (kept?'Your own text was kept. <button type="button" data-act="use">Use these instead</button>'
+      :D.undo&&D.undo.length?'<button type="button" data-act="undo">Undo</button>':''));
+}
+async function dRun(tab,img){
+  const D=DET[tab],seq=++D.seq;
+  if(!dOn()){$(DETEL[tab]).hidden=true;return null}
+  const engs=dEngines();
+  if(!engs.length){dNote(tab,'Tip: add the DAF Helper add-on or a Google key (AI Studio, step 4) and the product name fills in by itself.',false,true);return null}
+  dNote(tab,'Reading the label…',true);
+  try{
+    let d=null,err=null;
+    for(const eng of engs){try{d=dParse(await dAsk(eng,img));break}catch(e){err=e}}
+    if(!d)throw err;
+    if(seq!==D.seq)return null;
+    if(!d.found){dNote(tab,'Couldn’t tell which product this is. Type the name in.');return null}
+    D.last=d;if(tab==='ai')aSt.det=d;
+    dShow(tab,d,dFill(tab,d));
+    return d;
+  }catch(e){if(seq===D.seq)dNote(tab,'Couldn’t read the label: '+dEsc(e.message));return null}
+}
+function dFrom(tab,r){ /* an AI Studio picture going to an ad: reuse its bottle if known, else read it */
+  if(!dOn())return;
+  if(r.det){const D=DET[tab];D.seq++;D.last=r.det;dShow(tab,r.det,dFill(tab,r.det))}
+  else dRun(tab,dShot(r.img));
+}
+Object.keys(DETEL).forEach(tab=>$(DETEL[tab]).addEventListener('click',e=>{
+  const b=e.target.closest('button[data-act]'),D=DET[tab];if(!b)return;
+  if(b.dataset.act==='use'&&D.last){dFill(tab,D.last,true);dShow(tab,D.last,0)}
+  else if(b.dataset.act==='undo'&&D.undo){
+    D.undo.forEach(([id,v])=>{const el=$(id);el.value=v;delete D.auto[id];el.dispatchEvent(new Event('input',{bubbles:true}))});
+    D.undo=null;dNote(tab,'Undone. Detected: <b>'+dEsc(D.last.name||D.last.cat)+'</b>. <button type="button" data-act="use">Fill it in again</button>')}
+}));
+document.querySelectorAll('.dauto').forEach(cb=>{cb.checked=dOn();cb.addEventListener('change',()=>{
+  LS.set('dantes.autodet',cb.checked?'':'0');document.querySelectorAll('.dauto').forEach(x=>x.checked=cb.checked);
+  if(!cb.checked)Object.values(DETEL).forEach(id=>$(id).hidden=true)})});
 
 /* ---------- tabs ---------- */
 let activeTab='ai';
@@ -2474,7 +2794,7 @@ function showTab(t){
   $('#tab-ai').hidden=t!=='ai';
   $('#tab-social').hidden=t!=='social';
   $('#tab-monitor').hidden=t!=='monitor';
-  if(t==='monitor')mDraw();
+  if(t==='monitor'){mDraw();mFontsLoad().then(()=>document.fonts&&document.fonts.ready).then(()=>mDraw())}
 }
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
 
@@ -2495,7 +2815,11 @@ $('#hdrlogo').innerHTML=logoSVG('light');
 initEmbers(stage.width,stage.height);
 lRender();blurUI();setLayout('single');
 draw();
+mSt.font=LS.get('dantes.mfont')||'baloo';mSt.fontPrice=LS.get('dantes.mfontPrice')!=='0';
+if(!MFONTS.some(f=>f.id===mSt.font))mSt.font='baloo';
+mFontUI();
 mDraw();
+if(mSt.font!=='baloo')mFontReady().then(()=>mDraw());
 aInit();
 if(document.fonts){
   ['100px Anton','700 100px Oswald','600 100px Oswald','400 100px Oswald','700 100px "Zilla Slab"','800 100px "Baloo 2"']
